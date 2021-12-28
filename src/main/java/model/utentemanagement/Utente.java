@@ -14,6 +14,7 @@ public class Utente {
     private ArrayList<Prestito> prestiti;
     private ArrayList<Prenotazione> prenotazioni;
 
+    public Utente(){}
     public Utente(String email, String password, String nome, String cognome) {
         this.email = email;
         this.password = password;
