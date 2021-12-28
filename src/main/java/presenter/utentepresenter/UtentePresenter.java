@@ -26,6 +26,7 @@ public class UtentePresenter extends presenter {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("ok");
         String path=getPath(req);
         switch(path){
             case "/": break;
@@ -45,7 +46,7 @@ public class UtentePresenter extends presenter {
                     Gson gson=new Gson();
                     JSONObject jsonObject=new JSONObject();
                     try {
-                        jsonObject.put("Utente",gson.toJson(u));
+                        jsonObject.put("Utente", u.toJson());
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }

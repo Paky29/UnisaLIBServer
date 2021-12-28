@@ -1,7 +1,10 @@
 package model.utentemanagement;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
@@ -121,5 +124,12 @@ public class Utente {
 
     public void setPrenotazioni(ArrayList<Prenotazione> prenotazioni) {
         this.prenotazioni = prenotazioni;
+    }
+
+    public String toJson(){
+        Gson gson = new Gson();
+        Type fooType = new TypeToken<Utente>() {}.getType();
+        String json = gson.toJson(this,fooType);
+        return json;
     }
 }
