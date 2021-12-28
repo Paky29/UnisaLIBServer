@@ -2,7 +2,7 @@ package model.posizionemanagement;
 
 import java.util.ArrayList;
 
-import model.postazionimanagement.Postazione;
+import model.postazionemanagement.Postazione;
 
 public class Posizione {
     private String id;

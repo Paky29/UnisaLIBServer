@@ -3,7 +3,7 @@ package model.libromanagement;
 import java.util.ArrayList;
 
 import model.posizionemanagement.Posizione;
-import model.prestitimanagement.Prestito;
+import model.prestitomanagement.Prestito;
 
 public class Libro {
     private String isbn, titolo, autore, editore, urlCopertina, categoria;
