@@ -2,8 +2,10 @@ package model.utentemanagement;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.prenotazionemanagement.Prenotazione;
@@ -12,39 +14,16 @@ import model.prestitomanagement.Prestito;
 public class Utente {
     private String email, password, nome, cognome, matricola, genere;
     private int eta;
-    private boolean admin;
+    private boolean admin, nuovo;
     private ArrayList<Libro> interessi;
     private ArrayList<Prestito> prestiti;
     private ArrayList<Prenotazione> prenotazioni;
-
-    public Utente(){}
-    public Utente(String email, String password, String nome, String cognome) {
-        this.email = email;
-        this.password = password;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.admin = true;
-    }
-
-    public Utente(String email, String password, String nome, String cognome, String matricola) {
-        this.email = email;
-        this.password = password;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.matricola = matricola;
-        this.admin = false;
-        interessi = new ArrayList<>();
-        prestiti = new ArrayList<>();
-        prenotazioni = new ArrayList<>();
-    }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     public String getNome() {
         return nome;
@@ -70,6 +49,8 @@ public class Utente {
         return admin;
     }
 
+    public boolean isNuovo() { return nuovo; }
+
     public ArrayList<Libro> getInteressi() {
         return interessi;
     }
@@ -85,7 +66,7 @@ public class Utente {
     public static class UtenteBuilder{
         private String email, password, nome, cognome, matricola, genere;
         private int eta;
-        private boolean admin;
+        private boolean admin, nuovo;
         private ArrayList<Libro> interessi;
         private ArrayList<Prestito> prestiti;
         private ArrayList<Prenotazione> prenotazioni;
@@ -130,6 +111,11 @@ public class Utente {
             return this;
         }
 
+        public UtenteBuilder nuovo(boolean nuovo){
+            this.nuovo=nuovo;
+            return this;
+        }
+
         public UtenteBuilder interessi(ArrayList<Libro> interessi){
             this.interessi=interessi;
             return this;
@@ -161,16 +147,22 @@ public class Utente {
         this.genere=ub.genere;
         this.eta=ub.eta;
         this.admin=ub.admin;
+        this.nuovo=ub.nuovo;
         this.interessi=ub.interessi;
         this.prestiti=ub.prestiti;
         this.prenotazioni=ub.prenotazioni;
 
     }
 
-    public String toJson(){
+    public static String toJson(Utente u){
         Gson gson = new Gson();
         Type fooType = new TypeToken<Utente>() {}.getType();
-        String json = gson.toJson(this,fooType);
+        String json = gson.toJson(u,fooType);
         return json;
+    }
+
+    public static String toJson(List<Utente> utenti){
+        Gson gson = new Gson();
+        return gson.toJson(utenti);
     }
 }

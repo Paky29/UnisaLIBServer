@@ -46,7 +46,7 @@ public class UtentePresenter extends presenter {
                     Gson gson=new Gson();
                     JSONObject jsonObject=new JSONObject();
                     try {
-                        jsonObject.put("Utente", u.toJson());
+                        jsonObject.put("Utente", Utente.toJson(u));
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
