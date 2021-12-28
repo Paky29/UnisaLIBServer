@@ -42,19 +42,14 @@ public class UtentePresenter extends presenter {
                     ex.printStackTrace();
                 }
                 if(u!=null) {
-                    System.out.println("Login successful");
-                    Gson gson=new Gson();
                     JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("Utente", Utente.toJson(u));
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
-                    System.out.println(gson.toJson(u));
                     PrintWriter pw=resp.getWriter();
                     pw.write(jsonObject.toString());
-                    pw.print(jsonObject.toString());
-                    System.out.println("Login successful "+jsonObject.toString());
                 }
                 break;
             }

@@ -11,6 +11,7 @@ public class UtenteExtractor {
                 nome(rs.getString("u.nome")).
                 cognome(rs.getString("u.cognome")).
                 admin(rs.getBoolean("u.is_admin")).
+                nuovo(rs.getBoolean("u.is_nuovo")).
                 eta(rs.getInt("u.eta")).
                 genere(rs.getString("u.genere")).
                 matricola(rs.getString("u.matricola")).

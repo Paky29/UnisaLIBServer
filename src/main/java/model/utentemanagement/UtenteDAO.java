@@ -12,7 +12,7 @@ import java.util.List;
 public class UtenteDAO {
     public Utente doRetrieveByEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.email, u.pword, u.nome, u.cognome, u.is_admin, u.eta, u.genere, u.matricola FROM Utente u WHERE u.email=? AND u.pword=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.email, u.pword, u.nome, u.cognome, u.is_admin, u.is_nuovo, u.eta, u.genere, u.matricola FROM Utente u WHERE u.email=? AND u.pword=?");
             ps.setString(1, email);
             ps.setString(2, password);
 
