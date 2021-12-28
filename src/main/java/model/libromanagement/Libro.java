@@ -16,87 +16,128 @@ public class Libro {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
     public String getTitolo() {
         return titolo;
-    }
-
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
     }
 
     public String getAutore() {
         return autore;
     }
 
-    public void setAutore(String autore) {
-        this.autore = autore;
-    }
-
     public String getEditore() {
         return editore;
-    }
-
-    public void setEditore(String editore) {
-        this.editore = editore;
     }
 
     public String getUrlCopertina() {
         return urlCopertina;
     }
 
-    public void setUrlCopertina(String urlCopertina) {
-        this.urlCopertina = urlCopertina;
-    }
-
     public String getCategoria() {
         return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
     }
 
     public int getnCopie() {
         return nCopie;
     }
 
-    public void setnCopie(int nCopie) {
-        this.nCopie = nCopie;
-    }
-
     public int getAnnoPubbl() {
         return annoPubbl;
-    }
-
-    public void setAnnoPubbl(int annoPubbl) {
-        this.annoPubbl = annoPubbl;
     }
 
     public float getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
     public Posizione getPosizione() {
         return posizione;
-    }
-
-    public void setPosizione(Posizione posizione) {
-        this.posizione = posizione;
     }
 
     public ArrayList<Prestito> getPrestiti() {
         return prestiti;
     }
 
-    public void setPrestiti(ArrayList<Prestito> prestiti) {
-        this.prestiti = prestiti;
+    public static class LibroBuilder{
+        private String isbn, titolo, autore, editore, urlCopertina, categoria;
+        private int nCopie, annoPubbl;
+        private float rating;
+        private Posizione posizione;
+        private ArrayList<Prestito> prestiti;
+
+
+        public LibroBuilder isbn(String isbn){
+            this.isbn=isbn;
+            return this;
+        }
+
+        public LibroBuilder titolo(String titolo){
+            this.titolo=titolo;
+            return this;
+        }
+
+        public LibroBuilder autore(String autore){
+            this.autore=autore;
+            return this;
+        }
+
+        public LibroBuilder editore(String editore){
+            this.editore=editore;
+            return this;
+        }
+
+        public LibroBuilder urlCopertina(String urlCopertina){
+            this.urlCopertina=urlCopertina;
+            return this;
+        }
+
+        public LibroBuilder categoria(String categoria){
+            this.categoria=categoria;
+            return this;
+        }
+
+        public LibroBuilder nCopie(int nCopie){
+            this.nCopie=nCopie;
+            return this;
+        }
+
+        public LibroBuilder annoPubbl(int annoPubbl){
+            this.annoPubbl=annoPubbl;
+            return this;
+        }
+
+        public LibroBuilder rating(float rating){
+            this.rating=rating;
+            return this;
+        }
+
+        public LibroBuilder posizione(Posizione posizione){
+            this.posizione=posizione;
+            return this;
+        }
+
+        public LibroBuilder prestiti(ArrayList<Prestito> prestiti){
+            this.prestiti=prestiti;
+            return this;
+        }
+
+
+        public Libro build(){
+            return new Libro(this);
+        }
+
+
+    }
+
+    private Libro(LibroBuilder lb){
+        this.isbn = lb.isbn;
+        this.titolo = lb.titolo;
+        this.autore = lb.autore;
+        this.editore = lb.editore;
+        this.urlCopertina = lb.urlCopertina;
+        this.categoria = lb.categoria;
+        this.nCopie = lb.nCopie;
+        this.annoPubbl = lb.annoPubbl;
+        this.rating = lb.rating;
+        this.posizione = lb.posizione;
+        this.prestiti = lb.prestiti;
     }
 }
