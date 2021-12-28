@@ -26,14 +26,12 @@ public class UtentePresenter extends presenter {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("ok");
         String path=getPath(req);
         switch(path){
             case "/": break;
             case "/login": {
                 String e=req.getParameter("email");
                 String p=req.getParameter("pass");
-
                 UtenteDAO utenteDAO=new UtenteDAO();
                 Utente u=null;
                 try {
