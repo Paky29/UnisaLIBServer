@@ -147,4 +147,9 @@ public class Libro {
         Gson gson = new Gson();
         return gson.toJson(categorie);
     }
+
+    public static String toJson(ArrayList<Libro> libri) {
+        Gson gson = new Gson();
+        return gson.toJson(libri);
+    }
 }

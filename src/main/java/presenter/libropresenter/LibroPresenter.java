@@ -30,25 +30,39 @@ public class LibroPresenter extends presenter {
     switch (path){
             case "/mostra-ricerca-libri":{
                 String admin=req.getParameter("is_admin");
-                System.out.println(admin);
                 PrintWriter pw=resp.getWriter();
                 LibroDAO service=new LibroDAO();
                 try {
                     ArrayList<String> categorie=service.doRetrieveAllCategorie();
-                    if(!categorie.isEmpty()) {
+                    if(categorie!=null) {
                         if (categorie.contains("Consigliati") && admin.equals("true"))
                             categorie.remove("Consigliati");
-                        System.out.println(Libro.toJsonCategorie(categorie));
                         pw.write(Libro.toJsonCategorie(categorie));
                     }
                     else
-                        pw.write("Caetgorie non trovate");
+                        pw.write("Categorie non trovate");
 
                 } catch (SQLException e) {
                     pw.write("Errore del server");
                 }
                 break;
             }
+        case "/ricerca-libri":{
+            String ricerca=req.getParameter("ricerca");
+            PrintWriter pw=resp.getWriter();
+            LibroDAO service=new LibroDAO();
+            try {
+                ArrayList<Libro> libri=service.doRetrieveByTitoloAutore(ricerca);
+                if(libri!=null){
+                    pw.write(Libro.toJson(libri));
+                }
+                else
+                    pw.write("Nessun libro trovato");
+            } catch (SQLException e) {
+                pw.write("Errore del server");
+            }
+            break;
+        }
         }
     }
 }
