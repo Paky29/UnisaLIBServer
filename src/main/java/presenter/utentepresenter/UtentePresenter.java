@@ -42,7 +42,7 @@ public class UtentePresenter extends presenter {
                         try {
                             jsonObject.put("Utente", Utente.toJson(u));
                         } catch (JSONException ex) {
-                            ex.printStackTrace();
+                            pw.write("Errore del server");
                         }
                         pw.write(jsonObject.toString());
                     }
@@ -50,7 +50,7 @@ public class UtentePresenter extends presenter {
                         pw.write("Utente non trovato");
                     }
                 } catch (SQLException ex) {
-                    pw.write("Errore ricerca");
+                    pw.write("Errore del server");
                 }
                 break;
             }
