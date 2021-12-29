@@ -1,26 +1,25 @@
-/*package model.prestitomanagement;
+package model.prestitomanagement;
 
+import model.libromanagement.LibroDAO;
+import model.utentemanagement.UtenteDAO;
 import utility.SwitchDate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.GregorianCalendar;
 
 public class PrestitoExtractor {
     public static Prestito extract(ResultSet rs) throws SQLException {
-        SwitchDate sw = new SwitchDate();
-
-        GregorianCalendar dInizio =  sw.toGregorianCalendar(rs.getDate("p.data_inizio"));
-        GregorianCalendar dFine = sw.toGregorianCalendar(rs.getDate("p.data_fine"));
-        GregorianCalendar dConsegna = sw.toGregorianCalendar(rs.getDate("p.data_consegna"));
-        String libro = rs.getString("p.libro_fk");
-        String utente = rs.getString("p.utente_fk");
-        int voto = rs.getInt("p.voto");
-        boolean attivo = rs.getBoolean("p.is_attivo");
-
-        Prestito p = new Prestito(dInizio, libro, utente, dFine, dConsegna, voto, attivo);
+        Prestito p=new Prestito.PrestitoBuilder().
+                dataInizio(SwitchDate.toGregorianCalendar(rs.getDate("p.data_inizio"))).
+                dataFine(SwitchDate.toGregorianCalendar(rs.getDate("p.data_fine"))).
+                attivo(rs.getBoolean("p.is_attivo")).
+                dataConsegna(SwitchDate.toGregorianCalendar(rs.getDate("p.data_consegna"))).
+                libro(new LibroDAO().doRetrieveByCodiceISBN("p.libro_fk")).
+                utente(new UtenteDAO().doRetrieveByEmail("p.utente_fk")).
+                voto(rs.getInt("p.voto")).
+                commento(rs.getString("p.commento")).
+                build();
 
         return p;
     }
 }
-*/

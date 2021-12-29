@@ -1,9 +1,11 @@
 package model.prestitomanagement;
 
-import java.sql.Date;
-import java.util.Calendar;
+import java.lang.reflect.Type;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.utentemanagement.Utente;
 
@@ -11,80 +13,102 @@ public class Prestito {
     private GregorianCalendar dataInizio, dataFine, dataConsegna;
     private Utente utente;
     private Libro libro;
+    private String commento;
     private int voto;
     private boolean attivo=false;
 
-    public Prestito(GregorianCalendar dataInizio, Utente utente, Libro libro, GregorianCalendar dataFine, GregorianCalendar dataConsegna, int voto, boolean attivo) {
-        this.dataInizio = dataInizio;
-        this.dataFine = dataFine;
-        this.dataConsegna = dataConsegna;
-        this.utente = utente;
-        this.libro = libro;
-        this.voto = voto;
-        this.attivo = attivo;
-    }
+    public GregorianCalendar getDataInizio() { return dataInizio; }
 
-    public Prestito(GregorianCalendar dataInizio, Utente utente, Libro libro) {
-        this.dataInizio = dataInizio;
-        this.dataFine = dataInizio;
-        dataFine.roll(GregorianCalendar.DATE, 31);
-        this.utente = utente;
-        this.libro = libro;
-    }
+    public GregorianCalendar getDataFine() { return dataFine; }
 
-    public GregorianCalendar getDataInizio() {
-        return dataInizio;
-    }
+    public Utente getUtente() { return utente; }
 
-    public GregorianCalendar getDataFine() {
-        return dataFine;
-    }
+    public Libro getLibro() { return libro; }
 
-    public void setDataFine(GregorianCalendar dataFine) {
-        this.dataFine = dataFine;
-    }
+    public int getVoto() { return voto; }
 
-    public Utente getUtente() {
-        return utente;
-    }
+    public GregorianCalendar getDataConsegna() { return dataConsegna;}
 
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-    }
+    public String getCommento() {return commento;}
 
-    public Libro getLibro() {
-        return libro;
-    }
+    public boolean isAttivo() { return attivo; }
 
-    public void setLibro(Libro libro) {
-        this.libro = libro;
-    }
+    public static class PrestitoBuilder{
+        private GregorianCalendar dataInizio, dataFine, dataConsegna;
+        private Utente utente;
+        private Libro libro;
+        private String commento;
+        private int voto;
+        private boolean attivo=false;
 
-    public int getVoto() {
-        return voto;
-    }
-
-    public boolean setVoto(int voto) {
-        if (voto>0 && voto<=5) {
-            this.voto = voto;
-            return true;
+        public Prestito.PrestitoBuilder dataInizio(GregorianCalendar dataInizio){
+            this.dataInizio=dataInizio;
+            dataFine.roll(GregorianCalendar.DATE, 31);
+            return this;
         }
-        return false;
+
+        public Prestito.PrestitoBuilder dataFine(GregorianCalendar dataFine){
+            this.dataFine=dataFine;
+            return this;
+        }
+
+        public Prestito.PrestitoBuilder dataConsegna(GregorianCalendar dataConsegna){
+            this.dataConsegna=dataConsegna;
+            this.attivo=false;
+            return this;
+        }
+
+        public Prestito.PrestitoBuilder utente(Utente utente){
+            this.utente=utente;
+            return this;
+        }
+
+        public Prestito.PrestitoBuilder libro(Libro libro){
+            this.libro=libro;
+            return this;
+        }
+
+        public Prestito.PrestitoBuilder commento(String commento){
+            this.commento=commento;
+            return this;
+        }
+
+        public Prestito.PrestitoBuilder voto(int voto){
+            if (voto>0 && voto<=5)
+                this.voto=voto;
+            return this;
+        }
+
+        public Prestito.PrestitoBuilder attivo(boolean attivo){
+            if(this.dataConsegna == null || attivo == false)
+                this.attivo=attivo;
+            return this;
+        }
+
+        public Prestito build(){
+            return new Prestito(this);
+        }
     }
 
-    public GregorianCalendar getDataConsegna() {
-        return dataConsegna;
+    private Prestito(Prestito.PrestitoBuilder pb){
+        this.dataInizio = pb.dataInizio;
+        this.dataFine = pb.dataFine;
+        this.dataConsegna = pb.dataConsegna;
+        this.utente = pb.utente;
+        this.libro = pb.libro;
+        this.voto = pb.voto;
+        this.attivo = pb.attivo;
     }
 
-    public boolean isAttivo() {
-        return attivo;
+    public static String toJson(Prestito p){
+        Gson gson = new Gson();
+        Type fooType = new TypeToken<Prestito>() {}.getType();
+        String json = gson.toJson(p,fooType);
+        return json;
     }
 
-    public boolean haConsegnato(GregorianCalendar dataConsegna) {
-        if (!this.attivo)
-            return false;
-        this.dataConsegna=dataConsegna;
-        this.attivo=false;
-        return true;
+    public static String toJson(List<Prestito> prestiti){
+        Gson gson = new Gson();
+        return gson.toJson(prestiti);
     }
 }
