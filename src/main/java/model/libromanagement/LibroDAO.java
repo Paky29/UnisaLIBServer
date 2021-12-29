@@ -1,13 +1,17 @@
 package model.libromanagement;
 
+import com.google.gson.Gson;
 import model.libromanagement.Libro;
 import model.libromanagement.LibroExtractor;
+import model.utentemanagement.Utente;
 import utility.ConPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibroDAO {
     public Libro doRetrieveByCodiceISBN(String isbn) throws SQLException {
@@ -61,6 +65,21 @@ public class LibroDAO {
                 l = LibroExtractor.extract(rs);
 
             return l;
+        }
+    }
+
+    public ArrayList<String> doRetrieveAllCategorie() throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT c.nome FROM Categoria c");
+            ResultSet rs=ps.executeQuery();
+            ArrayList<String> categorie=new ArrayList<>();
+            while(rs.next())
+                categorie.add(rs.getString("c.nome"));
+
+            if(categorie.isEmpty())
+                return null;
+
+            return categorie;
         }
     }
 }

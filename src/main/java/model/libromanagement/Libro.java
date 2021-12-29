@@ -1,7 +1,9 @@
 package model.libromanagement;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.google.gson.Gson;
 import model.posizionemanagement.Posizione;
 import model.prestitomanagement.Prestito;
 
@@ -139,5 +141,10 @@ public class Libro {
         this.rating = lb.rating;
         this.posizione = lb.posizione;
         this.prestiti = lb.prestiti;
+    }
+
+    public static String toJsonCategorie(List<String> categorie){
+        Gson gson = new Gson();
+        return gson.toJson(categorie);
     }
 }

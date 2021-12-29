@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="UnisaLIB@localhost" uuid="df1f34a0-594d-4716-996e-1a646e1b7198">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/UnisaLIB</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="UnisaLIB@localhost [2]" uuid="8bb21fc9-00ac-47b8-8460-c32cdd55153b">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
