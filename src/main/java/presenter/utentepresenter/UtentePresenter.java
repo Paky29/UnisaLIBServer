@@ -32,22 +32,25 @@ public class UtentePresenter extends presenter {
             case "/login": {
                 String e=req.getParameter("email");
                 String p=req.getParameter("pass");
+                PrintWriter pw=resp.getWriter();
                 UtenteDAO utenteDAO=new UtenteDAO();
                 Utente u=null;
                 try {
                     u = utenteDAO.doRetrieveByEmailAndPassword(e,p);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                if(u!=null) {
-                    JSONObject jsonObject=new JSONObject();
-                    try {
-                        jsonObject.put("Utente", Utente.toJson(u));
-                    } catch (JSONException ex) {
-                        ex.printStackTrace();
+                    if(u!=null) {
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("Utente", Utente.toJson(u));
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                        pw.write(jsonObject.toString());
                     }
-                    PrintWriter pw=resp.getWriter();
-                    pw.write(jsonObject.toString());
+                    else{
+                        pw.write("Utente non trovato");
+                    }
+                } catch (SQLException ex) {
+                    pw.write("Errore ricerca");
                 }
                 break;
             }
