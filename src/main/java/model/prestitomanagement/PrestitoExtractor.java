@@ -14,8 +14,8 @@ public class PrestitoExtractor {
                 dataFine(SwitchDate.toGregorianCalendar(rs.getDate("p.data_fine"))).
                 attivo(rs.getBoolean("p.is_attivo")).
                 dataConsegna(SwitchDate.toGregorianCalendar(rs.getDate("p.data_consegna"))).
-                libro(new LibroDAO().doRetrieveByCodiceISBN("p.libro_fk")).
-                utente(new UtenteDAO().doRetrieveByEmail("p.utente_fk")).
+                libro(new LibroDAO().doRetrieveByCodiceISBN(rs.getString("p.libro_fk"))).
+                utente(new UtenteDAO().doRetrieveByEmail(rs.getString("p.utente_fk"))).
                 voto(rs.getInt("p.voto")).
                 commento(rs.getString("p.commento")).
                 build();

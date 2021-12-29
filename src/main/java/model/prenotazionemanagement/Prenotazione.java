@@ -20,6 +20,9 @@ public class Prenotazione {
         this.postazione = postazione;
     }
 
+    public Prenotazione() {
+    }
+
     public GregorianCalendar getData() {
         return data;
     }
