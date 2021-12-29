@@ -6,3 +6,5 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/libraries/Maven__org_json_json_20090211.xml
+/libraries/Maven__com_google_code_gson_gson_2_8_0.xml
