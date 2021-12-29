@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import model.postazionemanagement.Postazione;
 
 public class Posizione {
-    private String id;
+    private int id;
     private String biblioteca, zona;
     private ArrayList<Postazione> postazioni;
 
-    public Posizione(String id, String biblioteca, String zona, ArrayList<Postazione> postazioni) {
+    public Posizione() {
+    }
+
+    public Posizione(int id, String biblioteca, String zona, ArrayList<Postazione> postazioni) {
         this.id = id;
         this.biblioteca = biblioteca;
         this.zona = zona;
         this.postazioni = postazioni;
     }
 
-    public Posizione(String id, String biblioteca, String zona) {
+    public Posizione(int id, String biblioteca, String zona) {
         this.id = id;
         this.biblioteca = biblioteca;
         this.zona = zona;
@@ -27,11 +30,11 @@ public class Posizione {
         this.zona = zona;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

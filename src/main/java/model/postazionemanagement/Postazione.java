@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import model.posizionemanagement.Posizione;
 
 public class Postazione {
-    private int id;
+    private String id;
     private boolean disponibile;
     private Posizione posizione;
     private ArrayList<Periodo> blocchi;
 
-    public Postazione(int id, boolean disponibile, Posizione posizione) {
+    public Postazione(String id, boolean disponibile, Posizione posizione) {
         this.id = id;
         this.disponibile = disponibile;
         this.posizione = posizione;
@@ -21,11 +21,11 @@ public class Postazione {
         this.posizione = posizione;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
