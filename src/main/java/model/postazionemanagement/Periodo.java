@@ -19,6 +19,9 @@ public class Periodo {
         this.data = data;
     }
 
+    public Periodo() {
+    }
+
     public int getId() {
         return id;
     }
