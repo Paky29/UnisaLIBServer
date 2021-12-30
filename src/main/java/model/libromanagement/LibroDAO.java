@@ -27,44 +27,70 @@ public class LibroDAO {
         }
     }
 
-    public Libro doRetrieveByTitolo(String titolo) throws SQLException {
+    public ArrayList<Libro> doRetrieveByTitolo(String titolo) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.titolo LIKE ?");
             ps.setString(1,"%"+titolo+"%");
-            Libro l = null;
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
-                l = LibroExtractor.extract(rs);
+            ArrayList<Libro> libri=new ArrayList<>();
+            while(rs.next())
+                libri.add(LibroExtractor.extract(rs));
 
-            return l;
+            if(libri.isEmpty())
+                return null;
+
+            return libri;
+        }
+    }
+
+    public ArrayList<Libro> doRetrieveByTitoloAutore(String ricerca) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.titolo LIKE ? OR l.autore LIKE ?");
+            ps.setString(1,"%"+ricerca+"%");
+            ps.setString(2,"%"+ricerca+"%");
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Libro> libri=new ArrayList<>();
+            while(rs.next())
+                libri.add(LibroExtractor.extract(rs));
+
+            if(libri.isEmpty())
+                return null;
+
+            return libri;
         }
     }
 
 
-    public Libro doRetrieveByCategoria(String categoria) throws SQLException {
+    public ArrayList<Libro> doRetrieveByCategoria(String categoria) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.categoria_fk = ?");
             ps.setString(1,categoria);
-            Libro l = null;
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
-                l = LibroExtractor.extract(rs);
+            ArrayList<Libro> libri=new ArrayList<>();
+            while(rs.next())
+                libri.add(LibroExtractor.extract(rs));
 
-            return l;
+            if(libri.isEmpty())
+                return null;
+
+            return libri;
         }
     }
 
 
-    public Libro doRetrieveByAutore(String autore) throws SQLException {
+    public ArrayList<Libro> doRetrieveByAutore(String autore) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.autore = ?");
             ps.setString(1,autore);
-            Libro l = null;
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
-                l = LibroExtractor.extract(rs);
+            ArrayList<Libro> libri=new ArrayList<>();
+            while(rs.next())
+                libri.add(LibroExtractor.extract(rs));
 
-            return l;
+            if(libri.isEmpty())
+                return null;
+
+            return libri;
         }
     }
 
