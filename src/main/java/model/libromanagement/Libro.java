@@ -1,5 +1,6 @@
 package model.libromanagement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import com.google.gson.Gson;
 import model.posizionemanagement.Posizione;
 import model.prestitomanagement.Prestito;
 
-public class Libro {
+public class Libro implements Serializable {
     private String isbn, titolo, autore, editore, urlCopertina, categoria;
     private int nCopie, annoPubbl;
     private float rating;
