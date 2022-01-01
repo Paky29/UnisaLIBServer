@@ -3,6 +3,7 @@ package model.posizionemanagement;
 import utility.ConPool;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class PosizioneDAO {
 
@@ -20,12 +21,28 @@ public class PosizioneDAO {
         }
     }
 
+    public ArrayList<Posizione> doRetrieveByBiblioteca(String biblioteca) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT p.posizione_id, p.biblioteca, p.zona FROM posizione p WHERE p.biblioteca=?");
+            ps.setString(1, biblioteca);
+            ArrayList<Posizione> posizioni = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next())
+                posizioni.add(PosizioneExtractor.extract(rs));
+
+            if (posizioni.isEmpty())
+                return null;
+
+            return posizioni;
+        }
+    }
+
     public boolean insert(Posizione p) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("INSERT into posizione (posizione_id, biblioteca, zona) VALUES (?, ?, ?)");
-            ps.setInt(1,p.getId());
-            ps.setString(2, p.getBiblioteca());
-            ps.setString(3, p.getZona());
+            PreparedStatement ps = conn.prepareStatement("INSERT into posizione (biblioteca, zona) VALUES (?, ?)");
+            ps.setString(1, p.getBiblioteca());
+            ps.setString(2, p.getZona());
 
             if (ps.executeUpdate() != 1)
                 throw new RuntimeException("INSERT error");

@@ -51,20 +51,4 @@ public class UtenteDAO {
         }
     }
 
-
-
-    /*public List<Utente> doRetrieveByLibro(Libro b) throws SQLException{
-        try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.email, u.pword, u.nome, u.cognome, u.is_admin, u.eta, u.genere, u.matricola FROM Utente u WHERE u.email=? AND u.pw=?");
-            ps.setString(1, email);
-            ps.setString(2, password);
-
-            Utente u=null;
-            ResultSet rs = ps.executeQuery();
-            if(rs.next())
-                u=UtenteExtractor.extract(rs);
-
-            return u;
-        }
-    }*/
 }

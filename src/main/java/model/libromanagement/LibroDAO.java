@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibroDAO {
+
     public Libro doRetrieveByCodiceISBN(String isbn) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.isbn=?");
@@ -45,7 +46,8 @@ public class LibroDAO {
 
     public ArrayList<Libro> doRetrieveByTitoloAutore(String ricerca) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.titolo LIKE ? OR l.autore LIKE ?");
+            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.titolo LIKE ? OR l.autore LIKE ?");
             ps.setString(1,"%"+ricerca+"%");
             ps.setString(2,"%"+ricerca+"%");
             ResultSet rs = ps.executeQuery();
@@ -63,7 +65,8 @@ public class LibroDAO {
 
     public ArrayList<Libro> doRetrieveByCategoria(String categoria) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.categoria_fk = ?");
+            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.categoria_fk = ?");
             ps.setString(1,categoria);
             ResultSet rs = ps.executeQuery();
             ArrayList<Libro> libri=new ArrayList<>();
@@ -80,7 +83,8 @@ public class LibroDAO {
 
     public ArrayList<Libro> doRetrieveByAutore(String autore) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.autore = ?");
+            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.autore = ?");
             ps.setString(1,autore);
             ResultSet rs = ps.executeQuery();
             ArrayList<Libro> libri=new ArrayList<>();

@@ -16,14 +16,28 @@ public class PrestitoDAO {
 
     public boolean insert(Prestito p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
+            conn.setAutoCommit(false);
             PreparedStatement ps = conn.prepareStatement("INSERT into prestito (data_inizio, libro_fk, utente_fk, data_fine) VALUES (?, ?, ?, ?)");
             ps.setDate(1, SwitchDate.toDate(p.getDataInizio()));
             ps.setString(2, p.getLibro().getIsbn());
             ps.setString(3, p.getUtente().getEmail());
             ps.setDate(4, SwitchDate.toDate(p.getDataFine()));
+            if (ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
+                return false;
+            }
 
-            if (ps.executeUpdate() != 1)
-                throw new RuntimeException("INSERT error");
+            ps = conn.prepareStatement("UPDATE libro l SET l.n_copie=? WHERE l.isbn=?");
+            ps.setInt(1, (p.getLibro().getnCopie()-1));
+            ps.setString(2, p.getLibro().getIsbn());
+            if (ps.executeUpdate() != 1) {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
+
+            conn.commit();
+            conn.setAutoCommit(true);
 
             return true;
         }
@@ -45,14 +59,29 @@ public class PrestitoDAO {
 
     public boolean concludiPrestito(Prestito p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("UPDATE prestito p SET p.data_consegna=?,p.is_attivo=true WHERE p.data_inizio=? AND p.libro_fk=? AND p.utente_fk=?");
+            conn.setAutoCommit(false);
+            PreparedStatement ps = conn.prepareStatement("UPDATE prestito p SET p.data_consegna=?,p.is_attivo=true " +
+                    "WHERE p.data_inizio=? AND p.libro_fk=? AND p.utente_fk=?");
             ps.setDate(1, SwitchDate.toDate(p.getDataConsegna()));
             ps.setDate(2, SwitchDate.toDate(p.getDataInizio()));
             ps.setString(3, p.getLibro().getIsbn());
             ps.setString(4, p.getUtente().getEmail());
+            if (ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
+                return false;
+            }
 
-            if (ps.executeUpdate() != 1)
-                throw new RuntimeException("Chiusura prestito error");
+            ps = conn.prepareStatement("UPDATE libro l SET l.n_copie=? WHERE l.isbn=?");
+            ps.setInt(1, (p.getLibro().getnCopie()+1));
+            ps.setString(2, p.getLibro().getIsbn());
+            if (ps.executeUpdate() != 1) {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
+
+            conn.commit();
+            conn.setAutoCommit(true);
 
             return true;
         }
