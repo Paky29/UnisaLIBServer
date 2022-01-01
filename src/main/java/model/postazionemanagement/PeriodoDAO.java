@@ -56,9 +56,6 @@ public class PeriodoDAO {
             while (rs.next())
                 p.add(PeriodoExtractor.extract(rs));
 
-            if (p.isEmpty())
-                return null;
-
             return p;
         }
     }
@@ -73,9 +70,6 @@ public class PeriodoDAO {
 
             while (rs.next())
                 p.add(PeriodoExtractor.extract(rs));
-
-            if (p.isEmpty())
-                return null;
 
             return p;
         }

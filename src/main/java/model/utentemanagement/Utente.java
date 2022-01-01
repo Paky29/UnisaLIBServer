@@ -67,9 +67,9 @@ public class Utente {
         private String email, password, nome, cognome, matricola, genere;
         private int eta;
         private boolean admin, nuovo;
-        private ArrayList<Libro> interessi;
-        private ArrayList<Prestito> prestiti;
-        private ArrayList<Prenotazione> prenotazioni;
+        private ArrayList<Libro> interessi=new ArrayList<>();
+        private ArrayList<Prestito> prestiti=new ArrayList<>();
+        private ArrayList<Prenotazione> prenotazioni=new ArrayList<>();
 
         public UtenteBuilder email(String email){
             this.email=email;

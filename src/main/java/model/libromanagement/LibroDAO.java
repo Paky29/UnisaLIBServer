@@ -3,6 +3,8 @@ package model.libromanagement;
 import com.google.gson.Gson;
 import model.libromanagement.Libro;
 import model.libromanagement.LibroExtractor;
+import model.prestitomanagement.Prestito;
+import model.prestitomanagement.PrestitoExtractor;
 import model.utentemanagement.Utente;
 import utility.ConPool;
 
@@ -37,9 +39,6 @@ public class LibroDAO {
             while(rs.next())
                 libri.add(LibroExtractor.extract(rs));
 
-            if(libri.isEmpty())
-                return null;
-
             return libri;
         }
     }
@@ -54,9 +53,6 @@ public class LibroDAO {
             ArrayList<Libro> libri=new ArrayList<>();
             while(rs.next())
                 libri.add(LibroExtractor.extract(rs));
-
-            if(libri.isEmpty())
-                return null;
 
             return libri;
         }
@@ -73,9 +69,6 @@ public class LibroDAO {
             while(rs.next())
                 libri.add(LibroExtractor.extract(rs));
 
-            if(libri.isEmpty())
-                return null;
-
             return libri;
         }
     }
@@ -91,8 +84,19 @@ public class LibroDAO {
             while(rs.next())
                 libri.add(LibroExtractor.extract(rs));
 
-            if(libri.isEmpty())
-                return null;
+            return libri;
+        }
+    }
+
+    public ArrayList<Libro> doRetrieveInteresse(Utente u) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM utente u, interesse i, libro l, posizione p WHERE u.email=i.utente_fk AND l.isbn=i.libro_fk AND p.posizione_id = l.posizione_fk AND u.email=?");
+            ps.setString(1, u.getEmail());
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Libro> libri=new ArrayList<>();
+            while(rs.next())
+                libri.add(LibroExtractor.extract(rs));
 
             return libri;
         }
@@ -105,9 +109,6 @@ public class LibroDAO {
             ArrayList<String> categorie=new ArrayList<>();
             while(rs.next())
                 categorie.add(rs.getString("c.nome"));
-
-            if(categorie.isEmpty())
-                return null;
 
             return categorie;
         }
