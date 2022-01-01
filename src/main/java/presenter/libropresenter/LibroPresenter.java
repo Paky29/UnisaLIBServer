@@ -47,12 +47,28 @@ public class LibroPresenter extends presenter {
                 }
                 break;
             }
-        case "/ricerca-libri":{
-            String ricerca=req.getParameter("ricerca");
+            case "/ricerca-libri":{
+                String ricerca=req.getParameter("ricerca");
+                PrintWriter pw=resp.getWriter();
+                LibroDAO service=new LibroDAO();
+                try {
+                    ArrayList<Libro> libri=service.doRetrieveByTitoloAutore(ricerca);
+                    if(libri!=null){
+                        pw.write(Libro.toJson(libri));
+                    }
+                    else
+                        pw.write("Nessun libro trovato");
+                } catch (SQLException e) {
+                    pw.write("Errore del server");
+                }
+                break;
+            }
+        case "/ricerca-libri-categoria":{
+            String categoria=req.getParameter("categoria");
             PrintWriter pw=resp.getWriter();
             LibroDAO service=new LibroDAO();
             try {
-                ArrayList<Libro> libri=service.doRetrieveByTitoloAutore(ricerca);
+                ArrayList<Libro> libri=service.doRetrieveByCategoria(categoria);
                 if(libri!=null){
                     pw.write(Libro.toJson(libri));
                 }
