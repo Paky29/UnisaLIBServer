@@ -103,7 +103,7 @@ public class PrestitoDAO {
         }
     }
 
-    public List<Prestito> doRetrieveByLibro(Libro l) throws SQLException {
+    public ArrayList<Prestito> doRetrieveByLibro(Libro l) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
                     "FROM prestito p WHERE p.libro_fk=?");
@@ -118,7 +118,7 @@ public class PrestitoDAO {
         }
     }
 
-    public List<Prestito> doRetrieveValidByLibro(Libro l) throws SQLException {
+    public ArrayList<Prestito> doRetrieveValidByLibro(Libro l) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
                     "FROM prestito p WHERE p.libro_fk=? AND p.is_attivo=true");
@@ -133,7 +133,7 @@ public class PrestitoDAO {
         }
     }
 
-    public List<Prestito> doRetrieveByUtente(Utente u) throws SQLException {
+    public ArrayList<Prestito> doRetrieveByUtente(Utente u) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
                     "FROM prestito p WHERE p.utente_fk=?");
@@ -162,6 +162,7 @@ public class PrestitoDAO {
             return p;
         }
     }
+
 
     public Prestito doRetrieveByKey(GregorianCalendar dataInizio, String isbnLibro, String emailUtente) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {

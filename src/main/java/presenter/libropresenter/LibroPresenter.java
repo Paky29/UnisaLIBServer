@@ -34,7 +34,7 @@ public class LibroPresenter extends presenter {
                 LibroDAO service=new LibroDAO();
                 try {
                     ArrayList<String> categorie=service.doRetrieveAllCategorie();
-                    if(categorie!=null) {
+                    if(!categorie.isEmpty()) {
                         if (categorie.contains("Consigliati") && admin.equals("true"))
                             categorie.remove("Consigliati");
                         pw.write(Libro.toJsonCategorie(categorie));
@@ -42,7 +42,7 @@ public class LibroPresenter extends presenter {
                     else
                         pw.write("Categorie non trovate");
 
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     pw.write("Errore del server");
                 }
                 break;
@@ -53,12 +53,12 @@ public class LibroPresenter extends presenter {
                 LibroDAO service=new LibroDAO();
                 try {
                     ArrayList<Libro> libri=service.doRetrieveByTitoloAutore(ricerca);
-                    if(libri!=null){
+                    if(!libri.isEmpty()){
                         pw.write(Libro.toJson(libri));
                     }
                     else
                         pw.write("Nessun libro trovato");
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     pw.write("Errore del server");
                 }
                 break;
@@ -69,12 +69,12 @@ public class LibroPresenter extends presenter {
             LibroDAO service=new LibroDAO();
             try {
                 ArrayList<Libro> libri=service.doRetrieveByCategoria(categoria);
-                if(libri!=null){
+                if(!libri.isEmpty()){
                     pw.write(Libro.toJson(libri));
                 }
                 else
                     pw.write("Nessun libro trovato");
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 pw.write("Errore del server");
             }
             break;

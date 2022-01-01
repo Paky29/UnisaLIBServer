@@ -31,9 +31,6 @@ public class PosizioneDAO {
             while(rs.next())
                 posizioni.add(PosizioneExtractor.extract(rs));
 
-            if (posizioni.isEmpty())
-                return null;
-
             return posizioni;
         }
     }

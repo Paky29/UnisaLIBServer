@@ -31,7 +31,7 @@ public class PrenotazioneDAO {
         }
     }
 
-    public List<Prenotazione> doRetrieveByPostazione(Postazione post) throws SQLException{
+    public ArrayList<Prenotazione> doRetrieveByPostazione(Postazione post) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
                     "FROM prenotazione p WHERE p.postazione_fk=?");
@@ -46,7 +46,7 @@ public class PrenotazioneDAO {
         }
     }
 
-    public List<Prenotazione> doRetrieveValidByPostazione(Postazione post) throws SQLException{
+    public ArrayList<Prenotazione> doRetrieveValidByPostazione(Postazione post) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
                     "FROM prenotazione p WHERE p.postazione_fk=? AND data_p>=?");
@@ -62,7 +62,7 @@ public class PrenotazioneDAO {
         }
     }
 
-    public List<Prenotazione> doRetrieveByUtente(Utente u) throws SQLException{
+    public ArrayList<Prenotazione> doRetrieveByUtente(Utente u) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
                     "FROM prenotazione p WHERE p.utente_fk=?");
@@ -77,7 +77,7 @@ public class PrenotazioneDAO {
         }
     }
 
-    public List<Prenotazione> doRetrieveValidByUtente(Utente u) throws SQLException{
+    public ArrayList<Prenotazione> doRetrieveValidByUtente(Utente u) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
                     "FROM prenotazione p WHERE p.utente_fk=? AND data_p>=?");
