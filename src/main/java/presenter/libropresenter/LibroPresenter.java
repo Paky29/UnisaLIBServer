@@ -116,7 +116,7 @@ public class LibroPresenter extends presenter {
                     pw.write(Utente.toJson(u));
                 }
                 else
-                    pw.write("Rimozione fallita, riprova");
+                    pw.write("Rimozione fallita, riprova.");
 
             } catch (Exception e) {
                 pw.write("Errore del server");
