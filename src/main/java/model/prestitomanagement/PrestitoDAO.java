@@ -150,7 +150,7 @@ public class PrestitoDAO {
 
     public ArrayList<Prestito> doRetrieveByUtente(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
+            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
                     "FROM prestito p WHERE p.utente_fk=?");
             ps.setString(1, email);
 
@@ -181,7 +181,7 @@ public class PrestitoDAO {
 
     public Prestito doRetrieveByKey(GregorianCalendar dataInizio, String isbnLibro, String emailUtente) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
+            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
                     "FROM prestito p WHERE p.data_inizio=? AND p.libro_fk=? AND p.utente_fk=?");
             ps.setDate(1, SwitchDate.toDate(dataInizio));
             ps.setString(2, isbnLibro);

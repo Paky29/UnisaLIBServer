@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet(name="utentepresenter", value = "/UtentePresenter/*")
+@WebServlet(name="prestitopresenter", value = "/PrestitoPresenter/*")
 public class PrestitoPresenter extends presenter {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,28 +35,46 @@ public class PrestitoPresenter extends presenter {
         String path=getPath(req);
         switch(path){
             case "/": break;
-            case "/login": {
-                String e=req.getParameter("email");
-                String p=req.getParameter("pass");
+            case "/crea-prestito": {
+                System.out.println("Sono nella servlet");
+                String p=req.getParameter("prestito");
                 PrintWriter pw=resp.getWriter();
+                PrestitoDAO prestitoDAO=new PrestitoDAO();
                 UtenteDAO utenteDAO=new UtenteDAO();
-                Utente u=null;
-                try {
-                    u = utenteDAO.doRetrieveByEmailAndPasswordAll(e,p);
-                    if(u!=null) {
-                        JSONObject jsonObject=new JSONObject();
-                        try {
-                            jsonObject.put("Utente", Utente.toJson(u));
-                        } catch (JSONException ex) {
-                            pw.write("Errore del server");
+                Prestito prestito=Prestito.fromJsonToPrestito(p);
+                if(prestito.getLibro().getnCopie()>0) {
+                    try {
+                        Utente utentePrestito=prestito.getUtente();
+                        ArrayList<Prestito> prestitiAttivi= utenteDAO.doRetrieveByEmailAndPasswordAll(utentePrestito.getEmail(), utentePrestito.getPassword()).getPrestiti();
+                        if (prestitiAttivi.isEmpty()) {
+                            if (prestitoDAO.insert(prestito)) {
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject.put("Prestito", Prestito.toJson(prestito));
+                                    System.out.println("Json successo");
+                                } catch (JSONException ex) {
+                                    System.out.println("Errore JSON");
+                                    pw.write("Errore del server");
+                                }
+                                pw.write(jsonObject.toString());
+                                System.out.println("Scritto in risposta oggetto");
+                            } else {
+                                System.out.println("Errore Salvataggio");
+                                pw.write("Salvataggio non andato a buon fine");
+                            }
+                        } else {
+                            System.out.println("Errore libro gia in prestito");
+                            pw.write("Limite prestiti ecceduto: puoi prendere in prestito solo un libro alla volta");
                         }
-                        pw.write(jsonObject.toString());
+                    } catch (Exception ex) {
+                        pw.write("Errore del server");
+                        System.out.println("Errore" + ex.getMessage());
+                        ex.printStackTrace();
                     }
-                    else{
-                        pw.write("Utente non trovato");
-                    }
-                } catch (Exception ex) {
-                    pw.write("Errore del server");
+                }
+                else{
+                    System.out.println("Errore libro gia in prestito");
+                    pw.write("Non ci sono copie disponibili");
                 }
                 break;
             }

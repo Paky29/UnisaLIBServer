@@ -46,7 +46,7 @@ public class LibroDAO {
     public ArrayList<Libro> doRetrieveByTitoloAutore(String ricerca) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
-                    "FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.titolo LIKE ? OR l.autore LIKE ?");
+                    "FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND (l.titolo LIKE ? OR l.autore LIKE ?)");
             ps.setString(1,"%"+ricerca+"%");
             ps.setString(2,"%"+ricerca+"%");
             ResultSet rs = ps.executeQuery();

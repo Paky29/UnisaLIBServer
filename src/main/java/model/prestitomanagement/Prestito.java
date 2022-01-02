@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.utentemanagement.Utente;
@@ -43,6 +44,7 @@ public class Prestito {
 
         public Prestito.PrestitoBuilder dataInizio(GregorianCalendar dataInizio){
             this.dataInizio=dataInizio;
+            dataFine=dataInizio;
             dataFine.roll(GregorianCalendar.DATE, 31);
             return this;
         }
@@ -98,6 +100,12 @@ public class Prestito {
         this.libro = pb.libro;
         this.voto = pb.voto;
         this.attivo = pb.attivo;
+    }
+
+    public static Prestito fromJsonToPrestito(String json) throws JsonSyntaxException {
+        Gson gson = new Gson();
+        Prestito prestito= gson.fromJson(json, Prestito.class);
+        return prestito;
     }
 
     public static String toJson(Prestito p){
