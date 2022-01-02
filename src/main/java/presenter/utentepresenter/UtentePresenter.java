@@ -52,7 +52,7 @@ public class UtentePresenter extends presenter {
                     if(u!=null) {
                         prenotazioni=prenotazioneDAO.doRetrieveByUtente(u);
                         prestiti=prestitoDAO.doRetrieveByUtente(u);
-                        interesse= libroDAO.doRetrieveInteresse(u);
+                        interesse= libroDAO.doRetrieveInteresse(u.getEmail());
                         u.getInteressi().addAll(interesse);
                         u.getPrestiti().addAll(prestiti);
                         u.getPrenotazioni().addAll(prenotazioni);

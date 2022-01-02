@@ -2,7 +2,12 @@ package presenter.libropresenter;
 
 import model.libromanagement.Libro;
 import model.libromanagement.LibroDAO;
+import model.prenotazionemanagement.Prenotazione;
+import model.prenotazionemanagement.PrenotazioneDAO;
+import model.prestitomanagement.Prestito;
+import model.prestitomanagement.PrestitoDAO;
 import model.utentemanagement.Utente;
+import model.utentemanagement.UtenteDAO;
 import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
@@ -77,6 +82,46 @@ public class LibroPresenter extends presenter {
             } catch (Exception e) {
                 pw.write("Errore del server");
             }
+            break;
+        }
+        case "/rimuovi-interesse":{
+            String emailUtente=req.getParameter("email");
+            String isbnLibro=req.getParameter("isbn");
+            PrintWriter pw=resp.getWriter();
+            PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
+            PrestitoDAO prestitoDAO=new PrestitoDAO();
+            UtenteDAO utenteDAO=new UtenteDAO();
+            LibroDAO libroDAO=new LibroDAO();
+            ArrayList<Prestito> prestiti;
+            ArrayList<Prenotazione> prenotazioni;
+            ArrayList<Libro> interesse;
+            try {
+                Libro l = libroDAO.doRetrieveByCodiceISBN(isbnLibro);
+                ArrayList<Libro> interessi = libroDAO.doRetrieveInteresse(emailUtente);
+                if(interessi.isEmpty()){
+                    pw.write("Nessun libro in interessi");
+
+                }
+                if(!interessi.contains(l))
+                    pw.write("Libro non presente in interesse");
+
+                if(libroDAO.doDeleteInteresse(emailUtente, isbnLibro)) {
+                    Utente u = utenteDAO.doRetrieveByEmail(emailUtente);
+                    prenotazioni = prenotazioneDAO.doRetrieveByUtente(u);
+                    prestiti = prestitoDAO.doRetrieveByUtente(u);
+                    interesse = libroDAO.doRetrieveInteresse(u.getEmail());
+                    u.getInteressi().addAll(interesse);
+                    u.getPrestiti().addAll(prestiti);
+                    u.getPrenotazioni().addAll(prenotazioni);
+                    pw.write(Utente.toJson(u));
+                }
+                else
+                    pw.write("Rimozione fallita, riprova");
+
+            } catch (Exception e) {
+                pw.write("Errore del server");
+            }
+
             break;
         }
         }
