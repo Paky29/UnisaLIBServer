@@ -10,6 +10,9 @@ public class Postazione {
     private Posizione posizione;
     private ArrayList<Periodo> blocchi;
 
+    public Postazione(){
+
+    }
     public Postazione(String id, boolean disponibile, Posizione posizione) {
         this.id = id;
         this.disponibile = disponibile;
