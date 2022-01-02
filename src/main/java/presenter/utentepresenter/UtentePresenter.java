@@ -40,22 +40,10 @@ public class UtentePresenter extends presenter {
                 String p=req.getParameter("pass");
                 PrintWriter pw=resp.getWriter();
                 UtenteDAO utenteDAO=new UtenteDAO();
-                PrestitoDAO prestitoDAO=new PrestitoDAO();
-                LibroDAO libroDAO=new LibroDAO();
-                PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
                 Utente u=null;
-                ArrayList<Prestito> prestiti;
-                ArrayList<Prenotazione> prenotazioni;
-                ArrayList<Libro> interesse;
                 try {
-                    u = utenteDAO.doRetrieveByEmailAndPassword(e,p);
+                    u = utenteDAO.doRetrieveByEmailAndPasswordAll(e,p);
                     if(u!=null) {
-                        prenotazioni=prenotazioneDAO.doRetrieveByUtente(u);
-                        prestiti=prestitoDAO.doRetrieveByUtente(u);
-                        interesse= libroDAO.doRetrieveInteresse(u.getEmail());
-                        u.getInteressi().addAll(interesse);
-                        u.getPrestiti().addAll(prestiti);
-                        u.getPrenotazioni().addAll(prenotazioni);
                         JSONObject jsonObject=new JSONObject();
                         try {
                             jsonObject.put("Utente", Utente.toJson(u));
