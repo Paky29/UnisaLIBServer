@@ -129,4 +129,16 @@ public class LibroDAO {
     }
 
 
+    public boolean doAddInteresse(String email, String isbn) throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Interesse VALUES(?,?)");
+            ps.setString(1, email);
+            ps.setString(2, isbn);
+
+            if (ps.executeUpdate() != 1)
+                throw new RuntimeException("DELETE error");
+
+            return true;
+        }
+    }
 }

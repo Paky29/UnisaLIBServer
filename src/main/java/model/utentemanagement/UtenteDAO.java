@@ -53,6 +53,27 @@ public class UtenteDAO {
         }
     }
 
+    public Utente doRetrieveByEmailAll(String email) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT u.email, u.pword, u.nome, u.cognome, u.is_admin, u.is_nuovo, u.eta, u.genere, u.matricola FROM Utente u" +
+                    " WHERE u.email=?");
+            ps.setString(1, email);
+
+            Utente u=null;
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                PrestitoDAO prestitoDAO=new PrestitoDAO();
+                LibroDAO libroDAO=new LibroDAO();
+                PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
+                ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(email);;
+                ArrayList<Prenotazione> prenotazioni=prenotazioneDAO.doRetrieveValidByUtente(email);
+                ArrayList<Libro> interesse= libroDAO.doRetrieveInteresse(email);;
+                u = UtenteExtractor.extract(rs,prestiti, prenotazioni, interesse);
+            }
+            return u;
+        }
+    }
+
     public Utente doRetrieveByEmail(String email) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT u.email, u.pword, u.nome, u.cognome, u.is_admin, u.is_nuovo, u.eta, u.genere, u.matricola FROM Utente u WHERE u.email=?");

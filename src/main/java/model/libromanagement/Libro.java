@@ -135,7 +135,7 @@ public class Libro implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Libro)) return false;
         Libro libro = (Libro) o;
-        return  getIsbn().equals(libro.getIsbn()) && getTitolo().equals(libro.getTitolo()) && getAutore().equals(libro.getAutore()) && getEditore().equals(libro.getEditore()) && getCategoria().equals(libro.getCategoria()) && getPosizione().equals(libro.getPosizione()) ;
+        return  getIsbn().equals(libro.getIsbn());
     }
 
     private Libro(LibroBuilder lb){
