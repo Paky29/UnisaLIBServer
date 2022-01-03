@@ -60,4 +60,17 @@ public class PosizioneDAO {
         }
     }
 
+    public ArrayList<Posizione> doRetrieveAll() throws SQLException {
+        try(Connection conn= ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT p.posizione_id, p.biblioteca, p.zona FROM posizione p");
+
+            ArrayList<Posizione> posizioni = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+                posizioni.add(PosizioneExtractor.extract(rs));
+
+            return posizioni;
+        }
+    }
 }

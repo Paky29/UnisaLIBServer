@@ -1,5 +1,6 @@
 package model.postazionemanagement;
 
+import model.posizionemanagement.Posizione;
 import utility.ConPool;
 
 import java.sql.Connection;
@@ -9,31 +10,54 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class PostazioneDAO {
+
     public ArrayList<Postazione> doRetrieveByNotDisponibile() throws SQLException {
-        ArrayList<Postazione> nonDisponibili = new ArrayList<>();
         try(Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk FROM postazione ps WHERE is_disponibile = 0");
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM postazione ps AND posizione p WHERE p.posizione_id=ps.posizione_fk AND is_disponibile = 0");
+
+            ArrayList<Postazione> nonDisponibili = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                Postazione pst = PostazioneExtractor.extract(rs);
-                nonDisponibili.add(pst);
-            }
+
+            while(rs.next())
+                nonDisponibili.add(PostazioneExtractor.extract(rs));
+
+            return nonDisponibili;
         }
-        return nonDisponibili;
     }
 
 
-public Postazione doRetrieveById(String id) throws SQLException{
-    Postazione pst = null;
-    try(Connection conn = ConPool.getConnection()){
-        PreparedStatement ps = conn.prepareStatement("SELECT ps.is_disponibile, ps.posizione_fk FROM postazione ps WHERE postazione_id = ?");
-        ps.setString(1,id);
-        ResultSet rs = ps.executeQuery();
-        if(rs.next()) {
-            pst = PostazioneExtractor.extract(rs);
+    public Postazione doRetrieveById(String id) throws SQLException{
+
+        try(Connection conn = ConPool.getConnection()){
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk , p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM postazione ps AND posizione p WHERE p.posizione_id=ps.posizione_fk AND ps.postazione_id = ?");
+            ps.setString(1,id);
+
+            ResultSet rs = ps.executeQuery();
+            Postazione pst = null;
+
+            if(rs.next())
+                pst = PostazioneExtractor.extract(rs);
+            return pst;
         }
     }
-    return pst;
-}
+
+    public Postazione doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
+        try(Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona " +
+                    "FROM postazione ps AND posizione p WHERE p.posizione_id=ps.posizione_fk AND p.biblioteca=? AND p.zona=?");
+            ps.setString(1, biblioteca);
+            ps.setString(2, zona);
+            ResultSet rs = ps.executeQuery();
+
+            Postazione p=null;
+
+            if(rs.next())
+                p = PostazioneExtractor.extract(rs);
+
+            return p;
+        }
+    }
 
 }

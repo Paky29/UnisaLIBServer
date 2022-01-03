@@ -2,6 +2,7 @@ package model.posizionemanagement;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
 import model.postazionemanagement.Postazione;
 
 public class Posizione {
@@ -28,6 +29,11 @@ public class Posizione {
     public Posizione(String biblioteca, String zona) {
         this.biblioteca = biblioteca;
         this.zona = zona;
+    }
+
+    public static String toJson(ArrayList<Posizione> posizioni) {
+        Gson gson = new Gson();
+        return gson.toJson(posizioni);
     }
 
     public int getId() {
