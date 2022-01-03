@@ -58,6 +58,7 @@ public class LibroPresenter extends presenter {
                 try {
                     ArrayList<Libro> libri = service.doRetrieveByTitoloAutore(ricerca);
                     if (!libri.isEmpty()) {
+                        System.out.println(Libro.toJson(libri));
                         pw.write(Libro.toJson(libri));
                     } else
                         pw.write("Nessun libro trovato");
@@ -72,6 +73,7 @@ public class LibroPresenter extends presenter {
                 LibroDAO service = new LibroDAO();
                 try {
                     ArrayList<Libro> libri = service.doRetrieveByCategoria(categoria);
+                    System.out.println(categoria);
                     if (!libri.isEmpty()) {
                         pw.write(Libro.toJson(libri));
                     } else

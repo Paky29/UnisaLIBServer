@@ -48,14 +48,14 @@ public class PostazioneDAO {
     public ArrayList<Postazione> doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=p.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?");
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
 
-            Map<Integer,Postazione> pos=new LinkedHashMap<>();
+            Map<String,Postazione> pos=new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                int codicepos=rs.getInt("ps.postazione_id");
+                String codicepos=rs.getString("ps.postazione_id");
                 if(!pos.containsKey(codicepos)){
                     pos.put(codicepos,PostazioneExtractor.extract(rs));
                 }
@@ -66,6 +66,7 @@ public class PostazioneDAO {
         }
     }
 
+    /*
     public ArrayList<Postazione> doRetrieveByPosizione(Posizione p) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk " +
@@ -81,5 +82,6 @@ public class PostazioneDAO {
             return postazioni;
         }
     }
+     */
 
 }
