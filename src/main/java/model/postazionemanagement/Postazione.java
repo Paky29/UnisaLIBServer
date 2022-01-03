@@ -1,8 +1,11 @@
 package model.postazionemanagement;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.google.gson.Gson;
 import model.posizionemanagement.Posizione;
+import model.utentemanagement.Utente;
 
 public class Postazione {
     private String id;
@@ -54,5 +57,10 @@ public class Postazione {
 
     public void setBlocchi(ArrayList<Periodo> blocchi) {
         this.blocchi = blocchi;
+    }
+
+    public static String toJson(List<Postazione> pos){
+        Gson gson = new Gson();
+        return gson.toJson(pos);
     }
 }

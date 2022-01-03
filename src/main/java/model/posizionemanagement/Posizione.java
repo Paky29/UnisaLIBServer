@@ -3,6 +3,7 @@ package model.posizionemanagement;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import model.postazionemanagement.Postazione;
 
 public class Posizione {
@@ -11,6 +12,7 @@ public class Posizione {
     private ArrayList<Postazione> postazioni;
 
     public Posizione() {
+        this.postazioni=new ArrayList<>();
     }
 
     public Posizione(int id, String biblioteca, String zona, ArrayList<Postazione> postazioni) {
@@ -24,6 +26,7 @@ public class Posizione {
         this.id = id;
         this.biblioteca = biblioteca;
         this.zona = zona;
+        this.postazioni=new ArrayList<>();
     }
 
     public Posizione(String biblioteca, String zona) {
@@ -66,5 +69,11 @@ public class Posizione {
 
     public void setPostazioni(ArrayList<Postazione> postazioni) {
         this.postazioni = postazioni;
+    }
+
+    public static Posizione fromJson(String json) throws JsonSyntaxException {
+        Gson gson = new Gson();
+        Posizione libro= gson.fromJson(json, Posizione.class);
+        return libro;
     }
 }

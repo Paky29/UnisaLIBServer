@@ -8,13 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class PostazioneDAO {
 
     public ArrayList<Postazione> doRetrieveByNotDisponibile() throws SQLException {
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona " +
-                    "FROM postazione ps AND posizione p WHERE p.posizione_id=ps.posizione_fk AND is_disponibile = 0");
+                    "FROM postazione ps, posizione p WHERE p.posizione_id=ps.posizione_fk AND is_disponibile = 0");
 
             ArrayList<Postazione> nonDisponibili = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
@@ -31,7 +33,7 @@ public class PostazioneDAO {
 
         try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk , p.posizione_id, p.biblioteca, p.zona " +
-                    "FROM postazione ps AND posizione p WHERE p.posizione_id=ps.posizione_fk AND ps.postazione_id = ?");
+                    "FROM postazione ps, posizione p WHERE p.posizione_id=ps.posizione_fk AND ps.postazione_id = ?");
             ps.setString(1,id);
 
             ResultSet rs = ps.executeQuery();
@@ -43,20 +45,40 @@ public class PostazioneDAO {
         }
     }
 
-    public Postazione doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
+    public ArrayList<Postazione> doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona " +
-                    "FROM postazione ps AND posizione p WHERE p.posizione_id=ps.posizione_fk AND p.biblioteca=? AND p.zona=?");
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=p.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
+
+            Map<Integer,Postazione> pos=new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int codicepos=rs.getInt("ps.postazione_id");
+                if(!pos.containsKey(codicepos)){
+                    pos.put(codicepos,PostazioneExtractor.extract(rs));
+                }
+                if(rs.getDate("pe.data_p")!=null)
+                    pos.get(codicepos).getBlocchi().add(PeriodoExtractor.extract(rs));
+            }
+            return new ArrayList<>(pos.values());
+        }
+    }
 
-            Postazione p=null;
+    public ArrayList<Postazione> doRetrieveByPosizione(Posizione p) throws SQLException{
+        try(Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk " +
+                    "FROM postazione ps, posizione p WHERE p.posizione_id=ps.posizione_fk AND p.biblioteca=? AND p.zona=?");
+            ps.setString(1, p.getBiblioteca());
+            ps.setString(2, p.getZona());
 
-            if(rs.next())
-                p = PostazioneExtractor.extract(rs);
+            ArrayList<Postazione> postazioni=new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+            while(rs.next())
+                postazioni.add(PostazioneExtractor.extract(rs));
 
-            return p;
+            return postazioni;
         }
     }
 

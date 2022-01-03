@@ -11,6 +11,7 @@ public class PostazioneExtractor {
         Posizione p = PosizioneExtractor.extract(rs);
         Postazione ps= new Postazione();
         ps.setId(rs.getString("ps.postazione_id"));
+        if(p!=null)
         ps.setPosizione(p);
         ps.setDisponibile(rs.getBoolean("ps.is_disponibile"));
 

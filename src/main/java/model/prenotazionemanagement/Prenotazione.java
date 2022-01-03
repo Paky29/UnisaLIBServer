@@ -1,7 +1,9 @@
 package model.prenotazionemanagement;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import com.google.gson.Gson;
 import model.posizionemanagement.Posizione;
 import model.postazionemanagement.Postazione;
 import model.utentemanagement.Utente;
@@ -61,6 +63,11 @@ public class Prenotazione {
 
     public void setPostazione(Postazione postazione) {
         this.postazione = postazione;
+    }
+
+    public static String toJson(List<Prenotazione> prenotazioni){
+        Gson gson = new Gson();
+        return gson.toJson(prenotazioni);
     }
 }
 
