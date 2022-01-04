@@ -63,7 +63,7 @@ public class PostazionePresenter extends presenter{
                 PostazioneDAO postazioneDAO=new PostazioneDAO();
                 PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
                 try {
-                    ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveByPosizione(p.getBiblioteca(),p.getZona());
+                    ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveDisponibiliByPosizione(p.getBiblioteca(),p.getZona());
                     if(!postazioni.isEmpty()) {
                         ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
                         JSONArray pos = new JSONArray();
