@@ -39,7 +39,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;
@@ -55,7 +55,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;
@@ -71,7 +71,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;
@@ -86,7 +86,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;
@@ -101,7 +101,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;
@@ -117,7 +117,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;
@@ -133,7 +133,7 @@ public class PrenotazioneDAO {
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if(rs.next())
+            while(rs.next())
                 prenotazioni.add(PrenotazioneExtractor.extract(rs));
 
             return prenotazioni;

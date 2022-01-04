@@ -54,7 +54,9 @@ public class PostazionePresenter extends presenter{
                 String giorno=req.getParameter("giorno");
                 String mese=req.getParameter("mese");
                 String anno=req.getParameter("anno");
-                Date d=new Date(Integer.valueOf(anno),Integer.valueOf(mese),Integer.valueOf(giorno));
+                System.out.println(anno);
+                Date d=new Date(Integer.valueOf(anno)-1900,Integer.valueOf(mese),Integer.valueOf(giorno));
+                System.out.println(d.getYear());
                 String posizione=req.getParameter("posizione");
                 Posizione p=Posizione.fromJson(posizione);
                 PrintWriter pw=resp.getWriter();
