@@ -44,8 +44,8 @@ public class Prestito {
 
         public Prestito.PrestitoBuilder dataInizio(GregorianCalendar dataInizio){
             this.dataInizio=dataInizio;
-            dataFine=dataInizio;
-            dataFine.roll(GregorianCalendar.DATE, 31);
+            dataFine = (GregorianCalendar) dataInizio.clone();
+            dataFine.add(GregorianCalendar.DATE, +31);
             return this;
         }
 
