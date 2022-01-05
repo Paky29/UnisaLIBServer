@@ -45,12 +45,13 @@ public class PrestitoPresenter extends presenter {
                 if(prestito.getLibro().getnCopie()>0) {
                     try {
                         Utente utentePrestito=prestito.getUtente();
-                        ArrayList<Prestito> prestitiAttivi= utenteDAO.doRetrieveByEmailAndPasswordAll(utentePrestito.getEmail(), utentePrestito.getPassword()).getPrestiti();
+                        ArrayList<Prestito> prestitiAttivi= utenteDAO.doRetrieveByEmailAll(utentePrestito.getEmail()).getPrestiti();
                         if (prestitiAttivi.isEmpty()) {
                             if (prestitoDAO.insert(prestito)) {
+                                Utente utente = utenteDAO.doRetrieveByEmailAll(prestito.getUtente().getEmail());
                                 JSONObject jsonObject = new JSONObject();
                                 try {
-                                    jsonObject.put("Prestito", Prestito.toJson(prestito));
+                                    jsonObject.put("Utente", Utente.toJson(utente));
                                     System.out.println("Json successo");
                                 } catch (JSONException ex) {
                                     System.out.println("Errore JSON");
