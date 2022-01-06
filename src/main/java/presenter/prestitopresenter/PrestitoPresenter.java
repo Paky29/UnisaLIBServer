@@ -35,6 +35,21 @@ public class PrestitoPresenter extends presenter {
         String path=getPath(req);
         switch(path){
             case "/": break;
+            case "all-prestiti":{
+                String u=req.getParameter("utente");
+                PrintWriter pw=resp.getWriter();
+                PrestitoDAO prestitoDAO=new PrestitoDAO();
+                try {
+                    ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(u);
+                    if(!prestiti.isEmpty())
+                        pw.write(Prestito.toJson(prestiti));
+                    else
+                        pw.write("Non sono presenti prestiti");
+                } catch (SQLException e) {
+                    pw.write("Errore del server");
+                }
+                break;
+            }
             case "/crea-prestito": {
                 System.out.println("Sono nella servlet");
                 String p=req.getParameter("prestito");
