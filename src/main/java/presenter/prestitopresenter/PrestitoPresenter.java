@@ -45,8 +45,8 @@ public class PrestitoPresenter extends presenter {
                 if(prestito.getLibro().getnCopie()>0) {
                     try {
                         Utente utentePrestito=prestito.getUtente();
-                        ArrayList<Prestito> prestitiAttivi= utenteDAO.doRetrieveByEmailAll(utentePrestito.getEmail()).getPrestiti();
-                        if (prestitiAttivi.isEmpty()) {
+                        Prestito prestitoAttivo= prestitoDAO.doRetrieveValidByUtente(prestito.getUtente().getEmail());
+                        if (prestitoAttivo==null) {
                             if (prestitoDAO.insert(prestito)) {
                                 Utente utente = utenteDAO.doRetrieveByEmailAll(prestito.getUtente().getEmail());
                                 JSONObject jsonObject = new JSONObject();

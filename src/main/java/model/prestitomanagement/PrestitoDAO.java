@@ -121,7 +121,7 @@ public class PrestitoDAO {
     public ArrayList<Prestito> doRetrieveValidByLibro(Libro l) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
-                    "FROM prestito p WHERE p.libro_fk=? AND p.is_attivo=true");
+                    "FROM prestito p WHERE p.libro_fk=? AND p.data_consegna is null");
             ps.setString(1, l.getIsbn());
 
             ArrayList<Prestito> prestiti = new ArrayList<>();
@@ -163,11 +163,11 @@ public class PrestitoDAO {
         }
     }
 
-    public Prestito doRetrieveValidByUtente(Utente u) throws SQLException {
+    public Prestito doRetrieveValidByUtente(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
-                    "FROM prestito p WHERE p.utente_fk=? AND p.is_attivo=true");
-            ps.setString(1, u.getEmail());
+            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
+                    "FROM prestito p WHERE p.utente_fk=? AND p.data_consegna is null");
+            ps.setString(1, email);
 
             Prestito p = null;
             ResultSet rs = ps.executeQuery();
