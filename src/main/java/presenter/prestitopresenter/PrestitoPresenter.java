@@ -33,16 +33,20 @@ public class PrestitoPresenter extends presenter {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
+        System.out.println(path);
         switch(path){
             case "/": break;
-            case "all-prestiti":{
+            case "/all-prestiti":{
                 String u=req.getParameter("utente");
+                System.out.println(u);
                 PrintWriter pw=resp.getWriter();
                 PrestitoDAO prestitoDAO=new PrestitoDAO();
                 try {
                     ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(u);
-                    if(!prestiti.isEmpty())
+                    if(!prestiti.isEmpty()) {
+                        System.out.println("okkkk");
                         pw.write(Prestito.toJson(prestiti));
+                    }
                     else
                         pw.write("Non sono presenti prestiti");
                 } catch (SQLException e) {
@@ -80,7 +84,10 @@ public class PrestitoPresenter extends presenter {
                             }
                         } else {
                             System.out.println("Errore libro gia in prestito");
-                            pw.write("Limite prestiti ecceduto: puoi prendere in prestito solo un libro alla volta");
+                            if(prestitoAttivo.getLibro().equals(prestito.getLibro()))
+                                pw.write("Hai il libro in prestito. Controlla nella sezione Miei Prestiti");
+                            else
+                                pw.write("Limite prestiti ecceduto: puoi prendere in prestito solo un libro alla volta");
                         }
                     } catch (Exception ex) {
                         pw.write("Errore del server");

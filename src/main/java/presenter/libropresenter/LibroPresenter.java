@@ -127,7 +127,6 @@ public class LibroPresenter extends presenter {
                         Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
                         JSONObject jsonObject=new JSONObject();
                         try {
-                            System.out.println(Utente.toJson(u));
                             jsonObject.put("Utente", Utente.toJson(u));
                         } catch (JSONException ex) {
                             pw.write("Errore del server");

@@ -111,7 +111,7 @@ public class PrestitoDAO {
 
             ArrayList<Prestito> prestiti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
+            while (rs.next())
                 prestiti.add(PrestitoExtractor.extract(rs));
 
             return prestiti;
@@ -126,7 +126,7 @@ public class PrestitoDAO {
 
             ArrayList<Prestito> prestiti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
+            while (rs.next())
                 prestiti.add(PrestitoExtractor.extract(rs));
 
             return prestiti;
@@ -141,7 +141,7 @@ public class PrestitoDAO {
 
             ArrayList<Prestito> prestiti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
+            while (rs.next())
                 prestiti.add(PrestitoExtractor.extract(rs));
 
             return prestiti;
@@ -156,7 +156,7 @@ public class PrestitoDAO {
 
             ArrayList<Prestito> prestiti = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
+            while (rs.next())
                 prestiti.add(PrestitoExtractor.extract(rs));
 
             return prestiti;

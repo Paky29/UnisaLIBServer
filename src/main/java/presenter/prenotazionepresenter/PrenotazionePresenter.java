@@ -1,4 +1,4 @@
-package presenter.PrenotazionePresenter;
+package presenter.prenotazionepresenter;
 
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
