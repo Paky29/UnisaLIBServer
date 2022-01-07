@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
 @WebServlet(name="prenotazionepresenter", value = "/PrenotazionePresenter/*")
 public class PrenotazionePresenter extends presenter {
     @Override
