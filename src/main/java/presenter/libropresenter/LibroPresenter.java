@@ -2,12 +2,16 @@ package presenter.libropresenter;
 
 import model.libromanagement.Libro;
 import model.libromanagement.LibroDAO;
+import model.posizionemanagement.Posizione;
+import model.posizionemanagement.PosizioneDAO;
+import model.postazionemanagement.Postazione;
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
 import model.prestitomanagement.Prestito;
 import model.prestitomanagement.PrestitoDAO;
 import model.utentemanagement.Utente;
 import model.utentemanagement.UtenteDAO;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
@@ -136,6 +140,40 @@ public class LibroPresenter extends presenter {
                     else
                         pw.write("Rimozione fallita, riprova.");
 
+                } catch (Exception e) {
+                    pw.write("Errore del server");
+                }
+                break;
+            }
+            case "/informazioni-aggiunta":{
+                PrintWriter pw= resp.getWriter();
+                LibroDAO libroDAO=new LibroDAO();
+                PosizioneDAO posizioneDAO=new PosizioneDAO();
+                try {
+                    ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
+                    ArrayList<Posizione> posizioni=posizioneDAO.doRetrieveAll();
+                    if((!categorie.isEmpty()) && (!posizioni.isEmpty())) {
+                        JSONArray cat = new JSONArray();
+                        for (String c: categorie) {
+                            JSONObject obj=new JSONObject();
+                            obj.put("categoria",Libro.toJsonCategoria(c));
+                            cat.put(obj);
+                        }
+
+                        JSONArray pos= new JSONArray();
+                        for(Posizione p:posizioni){
+                            JSONObject obj=new JSONObject();
+                            obj.put("posizione",Posizione.toJson(p));
+                            pos.put(obj);
+                        }
+
+                        JSONObject response= new JSONObject();
+                        response.put("categorie", cat);
+                        response.put("posizioni", pos);
+                        pw.write(response.toString());
+                    }
+                    else
+                        pw.write("Informazioni non trovate");
                 } catch (Exception e) {
                     pw.write("Errore del server");
                 }

@@ -161,4 +161,9 @@ public class Libro implements Serializable {
         Gson gson = new Gson();
         return gson.toJson(libri);
     }
+
+    public static String toJsonCategoria(String c) {
+        Gson gson = new Gson();
+        return gson.toJson(c);
+    }
 }

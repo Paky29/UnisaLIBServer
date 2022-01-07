@@ -39,6 +39,11 @@ public class Posizione {
         return gson.toJson(posizioni);
     }
 
+    public static String toJson(Posizione p) {
+        Gson gson = new Gson();
+        return gson.toJson(p);
+    }
+
     public int getId() {
         return id;
     }
