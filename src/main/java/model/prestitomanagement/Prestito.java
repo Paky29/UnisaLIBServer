@@ -99,6 +99,7 @@ public class Prestito {
         this.utente = pb.utente;
         this.libro = pb.libro;
         this.voto = pb.voto;
+        this.commento=pb.commento;
         this.attivo = pb.attivo;
     }
 

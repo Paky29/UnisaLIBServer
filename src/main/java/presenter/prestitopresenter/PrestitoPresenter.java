@@ -32,22 +32,22 @@ public class PrestitoPresenter extends presenter {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
+        String path = getPath(req);
         System.out.println(path);
-        switch(path){
-            case "/": break;
-            case "/all-prestiti":{
-                String u=req.getParameter("utente");
+        switch (path) {
+            case "/":
+                break;
+            case "/all-prestiti": {
+                String u = req.getParameter("utente");
                 System.out.println(u);
-                PrintWriter pw=resp.getWriter();
-                PrestitoDAO prestitoDAO=new PrestitoDAO();
+                PrintWriter pw = resp.getWriter();
+                PrestitoDAO prestitoDAO = new PrestitoDAO();
                 try {
-                    ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(u);
-                    if(!prestiti.isEmpty()) {
+                    ArrayList<Prestito> prestiti = prestitoDAO.doRetrieveByUtente(u);
+                    if (!prestiti.isEmpty()) {
                         System.out.println("okkkk");
                         pw.write(Prestito.toJson(prestiti));
-                    }
-                    else
+                    } else
                         pw.write("Non sono presenti prestiti");
                 } catch (SQLException e) {
                     pw.write("Errore del server");
@@ -56,16 +56,16 @@ public class PrestitoPresenter extends presenter {
             }
             case "/crea-prestito": {
                 System.out.println("Sono nella servlet");
-                String p=req.getParameter("prestito");
-                PrintWriter pw=resp.getWriter();
-                PrestitoDAO prestitoDAO=new PrestitoDAO();
-                UtenteDAO utenteDAO=new UtenteDAO();
-                Prestito prestito=Prestito.fromJsonToPrestito(p);
-                if(prestito.getLibro().getnCopie()>0) {
+                String p = req.getParameter("prestito");
+                PrintWriter pw = resp.getWriter();
+                PrestitoDAO prestitoDAO = new PrestitoDAO();
+                UtenteDAO utenteDAO = new UtenteDAO();
+                Prestito prestito = Prestito.fromJsonToPrestito(p);
+                if (prestito.getLibro().getnCopie() > 0) {
                     try {
-                        Utente utentePrestito=prestito.getUtente();
-                        Prestito prestitoAttivo= prestitoDAO.doRetrieveValidByUtente(prestito.getUtente().getEmail());
-                        if (prestitoAttivo==null) {
+                        Utente utentePrestito = prestito.getUtente();
+                        Prestito prestitoAttivo = prestitoDAO.doRetrieveValidByUtente(prestito.getUtente().getEmail());
+                        if (prestitoAttivo == null) {
                             if (prestitoDAO.insert(prestito)) {
                                 Utente utente = utenteDAO.doRetrieveByEmailAll(prestito.getUtente().getEmail());
                                 JSONObject jsonObject = new JSONObject();
@@ -84,7 +84,7 @@ public class PrestitoPresenter extends presenter {
                             }
                         } else {
                             System.out.println("Errore libro gia in prestito");
-                            if(prestitoAttivo.getLibro().equals(prestito.getLibro()))
+                            if (prestitoAttivo.getLibro().equals(prestito.getLibro()))
                                 pw.write("Hai il libro in prestito. Controlla nella sezione Miei Prestiti");
                             else
                                 pw.write("Limite prestiti ecceduto: puoi prendere in prestito solo un libro alla volta");
@@ -94,10 +94,42 @@ public class PrestitoPresenter extends presenter {
                         System.out.println("Errore" + ex.getMessage());
                         ex.printStackTrace();
                     }
-                }
-                else{
+                } else {
                     System.out.println("Errore libro gia in prestito");
                     pw.write("Non ci sono copie disponibili");
+                }
+                break;
+            }
+
+            case "/valuta-prestito": {
+                String p = req.getParameter("prestito");
+                PrintWriter pw = resp.getWriter();
+                PrestitoDAO prestitoDAO = new PrestitoDAO();
+                UtenteDAO utenteDAO = new UtenteDAO();
+                Prestito prestito = Prestito.fromJsonToPrestito(p);
+                try {
+                    Utente utentePrestito = prestito.getUtente();
+                    if(prestitoDAO.valutaPrestito(prestito)) {
+                        Utente utente = utenteDAO.doRetrieveByEmailAll(prestito.getUtente().getEmail());
+
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("Utente", Utente.toJson(utente));
+                            System.out.println("Json successo");
+                        } catch (JSONException ex) {
+                            System.out.println("Errore JSON");
+                            pw.write("Errore del server");
+                        }
+                        pw.write(jsonObject.toString());
+                        System.out.println("Scritto in risposta oggetto");
+                    }
+                    else{
+                        pw.write("Errore del server");
+                    }
+                } catch (Exception ex) {
+                    pw.write("Errore del server");
+                    System.out.println("Errore" + ex.getMessage());
+                    ex.printStackTrace();
                 }
                 break;
             }
