@@ -140,4 +140,17 @@ public class PrenotazioneDAO {
         }
     }
 
+    public boolean removeByPostazione(Postazione post) throws SQLException{
+        try(Connection conn = ConPool.getConnection()){
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.postazione_fk = ?");
+            ps.setString(1,post.getId());
+            if (ps.executeUpdate() != 1)
+                throw new RuntimeException("INSERT error");
+
+            return true;
+
+        }
+
+    }
+
 }
