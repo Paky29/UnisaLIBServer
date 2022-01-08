@@ -2,8 +2,6 @@ package presenter.prenotazionepresenter;
 
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
-import model.prestitomanagement.Prestito;
-import model.prestitomanagement.PrestitoDAO;
 import model.utentemanagement.Utente;
 import model.utentemanagement.UtenteDAO;
 import org.json.JSONException;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 
 @WebServlet(name="prenotazionepresenter", value = "/PrenotazionePresenter/*")

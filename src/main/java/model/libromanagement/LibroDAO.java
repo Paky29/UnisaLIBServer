@@ -17,6 +17,27 @@ import java.util.List;
 
 public class LibroDAO {
 
+    public boolean insert(Libro libro) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("INSERT into libro (isbn, titolo, autore, editore, n_copie, anno_pubblicazione, url_copertina, categoria_fk, posizione_fk) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, libro.getIsbn());
+            ps.setString(2, libro.getTitolo());
+            ps.setString(3, libro.getAutore());
+            ps.setString(4, libro.getEditore());
+            ps.setInt(5, libro.getnCopie());
+            ps.setInt(6, libro.getAnnoPubbl());
+            ps.setString(7, libro.getUrlCopertina());
+            ps.setString(8, libro.getCategoria());
+            ps.setInt(9, libro.getPosizione().getId());
+
+            if (ps.executeUpdate() != 1)
+                throw new RuntimeException("INSERT error");
+
+            return true;
+        }
+    }
+
     public Libro doRetrieveByCodiceISBN(String isbn) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.isbn=?");
@@ -141,4 +162,5 @@ public class LibroDAO {
             return true;
         }
     }
+
 }

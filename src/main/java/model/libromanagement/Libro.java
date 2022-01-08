@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import model.posizionemanagement.Posizione;
 import model.prestitomanagement.Prestito;
 
@@ -165,5 +166,11 @@ public class Libro implements Serializable {
     public static String toJsonCategoria(String c) {
         Gson gson = new Gson();
         return gson.toJson(c);
+    }
+
+    public static Libro fromJsonToLibro(String json) throws JsonSyntaxException {
+        Gson gson = new Gson();
+        Libro libro= gson.fromJson(json, Libro.class);
+        return libro;
     }
 }

@@ -179,6 +179,23 @@ public class LibroPresenter extends presenter {
                 }
                 break;
             }
+            case "/crea-libro": {
+                String l = req.getParameter("libro");
+                PrintWriter pw = resp.getWriter();
+                LibroDAO libroDAO = new LibroDAO();
+                Libro libro = Libro.fromJsonToLibro(l);
+                try{
+                    if (libroDAO.insert(libro)){
+                        pw.write("Salvataggio avvenuto con successo");
+                    } else {
+                        System.out.println("Errore Salvataggio");
+                        pw.write("Salvataggio non andato a buon fine");
+                    }
+                } catch (SQLException e) {
+                    pw.write("Errore nel server");
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
