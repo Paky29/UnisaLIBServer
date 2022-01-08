@@ -151,6 +151,8 @@ public class LibroPresenter extends presenter {
                 PosizioneDAO posizioneDAO=new PosizioneDAO();
                 try {
                     ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
+                    if (categorie.contains("Consigliati"))
+                        categorie.remove("Consigliati");
                     ArrayList<Posizione> posizioni=posizioneDAO.doRetrieveAll();
                     if((!categorie.isEmpty()) && (!posizioni.isEmpty())) {
                         JSONArray cat = new JSONArray();
