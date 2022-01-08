@@ -97,6 +97,23 @@ public class PostazionePresenter extends presenter{
                 }
                 break;
             }
+            case "/mostra-elenco-postazioni-admin":{
+                String p=req.getParameter("posizione");
+                Posizione pos=Posizione.fromJson(p);
+                PrintWriter pw=resp.getWriter();
+                PostazioneDAO postazioneDAO=new PostazioneDAO();
+                try {
+                    ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(),pos.getZona());
+                    if(!postazioni.isEmpty()){
+                        pw.write(Postazione.toJson(postazioni));
+                    }
+                    else
+                        pw.write("Non ci sono postazioni");
+                } catch (SQLException e) {
+                    pw.write("Errore del server");
+                }
+                break;
+            }
             /*case "/blocca-postazione":{
                 Postazione pos;
                 PrintWriter pw = resp.getWriter();
@@ -111,7 +128,6 @@ public class PostazionePresenter extends presenter{
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                     pw.write("Errore blocco");
-
                 }
             }*/
         }
