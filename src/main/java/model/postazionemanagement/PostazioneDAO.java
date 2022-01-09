@@ -2,14 +2,11 @@ package model.postazionemanagement;
 
 import model.posizionemanagement.Posizione;
 import utility.ConPool;
+import utility.SwitchDate;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 
 public class PostazioneDAO {
 
@@ -85,6 +82,44 @@ public class PostazioneDAO {
             }
             return new ArrayList<>(pos.values());
         }
+    }
+
+    public boolean bloccaPostazione(String idPos){
+        Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
+
+        try (Connection conn = ConPool.getConnection()) {
+            int counter=0;
+            conn.setAutoCommit(false);
+            PreparedStatement ps = conn.prepareStatement("UPDATE postazione pos SET pos.is_disponibile=false");
+            if (ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
+                return false;
+            }
+            ps = conn.prepareStatement("SELECT COUNT(*) as pren FROM prenotazione p WHERE p.data_p>? AND p.postazione_fk = ?");
+            ps.setDate(1, dataCorrente);
+            ps.setString(2,idPos);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next())
+                counter = rs.getInt("pren");
+
+                ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.data_p> ? AND p.postazione_fk = ?");
+                ps.setDate(1, dataCorrente);
+                ps.setString(2,idPos);
+
+            if (ps.executeUpdate() != counter) {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
+
+            conn.commit();
+            conn.setAutoCommit(true);
+
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return true;
     }
 
     /*

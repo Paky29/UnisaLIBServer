@@ -114,22 +114,16 @@ public class PostazionePresenter extends presenter{
                 }
                 break;
             }
-            /*case "/blocca-postazione":{
+            case "/blocca-postazione":{
                 Postazione pos;
                 PrintWriter pw = resp.getWriter();
                 String idPos = req.getParameter("idPos");
                 PostazioneDAO pdao = new PostazioneDAO();
-                PrenotazioneDAO prdao = new PrenotazioneDAO();
-                try {
-                    pos = pdao.doRetrieveById(idPos);
-                    pos.setDisponibile(false);
-                    prdao.removeByPostazione(pos);
+                if(pdao.bloccaPostazione(idPos))
                     pw.write("Blocco effettuato con successo");
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                    pw.write("Errore blocco");
-                }
-            }*/
+                else
+                    pw.write("Blocco non effettuato");
+            }
         }
     }
 }
