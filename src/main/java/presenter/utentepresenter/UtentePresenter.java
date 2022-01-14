@@ -33,6 +33,7 @@ public class UtentePresenter extends presenter {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
+        System.out.println(path);
         switch(path){
             case "/": break;
             case "/login": {

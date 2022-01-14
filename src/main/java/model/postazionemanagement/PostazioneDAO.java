@@ -85,9 +85,23 @@ public class PostazioneDAO {
         }
     }
 
+    public int isDisponibile(String idPos) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            int counter = 0;
+            boolean isBlock = true;
+            PreparedStatement ps = conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
+            ps.setString(1, idPos);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                isBlock = rs.getBoolean("val");
+                return isBlock==true?1:0;
+            }
+            return -1;
+        }
+    }
+
     public boolean bloccaPostazione(String idPos){
         Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
-
         try (Connection conn = ConPool.getConnection()) {
             int counter=0;
             boolean isBlock = true;

@@ -119,22 +119,34 @@ public class PostazionePresenter extends presenter{
                 Postazione pos;
                 PrintWriter pw = resp.getWriter();
                 String idPos = req.getParameter("idPos");
+                JSONObject string = new JSONObject();
                 PostazioneDAO pdao = new PostazioneDAO();
-                if(pdao.bloccaPostazione(idPos)) {
-                    System.out.println(idPos);
-                    JSONObject string = new JSONObject();
-                    try {
-                        System.out.println("sono nel try, if andato a buon fine");
-                        string.put("messaggio","blocco effettuato con successo");
-                        pw.write(string.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if(pdao.isDisponibile(idPos)==0){
+                        try {
+                            string.put("messaggio","Postazione gia' bloccata");
+                            pw.write(string.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            pw.write("Errore del server");
+                        }
                     }
-                }
-                else{
-                    System.out.println("sono nell'else");
-                    pw.write("Blocco non effettuato");
-
+                    else{
+                        if(pdao.bloccaPostazione(idPos)) {
+                            try {
+                                string.put("messaggio","blocco effettuato con successo");
+                                pw.write(string.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            pw.write("Blocco non effettuato");
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    pw.write("Errore del server");
                 }
             }
         }
