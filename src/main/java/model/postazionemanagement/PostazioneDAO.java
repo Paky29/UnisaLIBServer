@@ -4,6 +4,7 @@ import model.posizionemanagement.Posizione;
 import utility.ConPool;
 import utility.SwitchDate;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -89,37 +90,58 @@ public class PostazioneDAO {
 
         try (Connection conn = ConPool.getConnection()) {
             int counter=0;
+            boolean isBlock = true;
+            ResultSet rs;
             conn.setAutoCommit(false);
-            PreparedStatement ps = conn.prepareStatement("UPDATE postazione pos SET pos.is_disponibile=false");
-            if (ps.executeUpdate() != 1) {
-                conn.setAutoCommit(true);
-                return false;
+            PreparedStatement ps;
+            ps =conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
+            ps.setString(1,idPos);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                isBlock = rs.getBoolean("val");
+                if(!isBlock) {
+                    conn.setAutoCommit(true);
+                    return false;
+                }
             }
-            ps = conn.prepareStatement("SELECT COUNT(*) as pren FROM prenotazione p WHERE p.data_p>? AND p.postazione_fk = ?");
+
+                ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = false WHERE pos.postazione_id = ?");
+                ps.setString(1, idPos);
+                if (ps.executeUpdate() != 1) {
+                    conn.setAutoCommit(true);
+                    System.out.println("fallita la prima query");
+                    return false;
+                }
+            ps = conn.prepareStatement("SELECT COUNT(*) as pren FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");
             ps.setDate(1, dataCorrente);
-            ps.setString(2,idPos);
-            ResultSet rs = ps.executeQuery();
+            ps.setInt(2,Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            System.out.print(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            ps.setString(3,idPos);
+            rs = ps.executeQuery();
             if(rs.next())
                 counter = rs.getInt("pren");
 
-                ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.data_p> ? AND p.postazione_fk = ?");
+                ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");
                 ps.setDate(1, dataCorrente);
-                ps.setString(2,idPos);
+                ps.setInt(2, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                ps.setString(3,idPos);
 
             if (ps.executeUpdate() != counter) {
                 conn.rollback();
                 conn.setAutoCommit(true);
+                System.out.println("fallita la seconda query");
                 return false;
             }
 
             conn.commit();
             conn.setAutoCommit(true);
+            System.out.println("torno true");
 
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     /*

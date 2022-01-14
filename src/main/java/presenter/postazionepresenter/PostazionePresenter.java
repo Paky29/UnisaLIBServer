@@ -7,6 +7,7 @@ import model.postazionemanagement.PostazioneDAO;
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
 
@@ -114,15 +115,27 @@ public class PostazionePresenter extends presenter{
                 }
                 break;
             }
-            case "/blocca-postazione":{
+            case "/blocco-indeterminato":{
                 Postazione pos;
                 PrintWriter pw = resp.getWriter();
                 String idPos = req.getParameter("idPos");
                 PostazioneDAO pdao = new PostazioneDAO();
-                if(pdao.bloccaPostazione(idPos))
-                    pw.write("Blocco effettuato con successo");
-                else
+                if(pdao.bloccaPostazione(idPos)) {
+                    System.out.println(idPos);
+                    JSONObject string = new JSONObject();
+                    try {
+                        System.out.println("sono nel try, if andato a buon fine");
+                        string.put("messaggio","blocco effettuato con successo");
+                        pw.write(string.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    System.out.println("sono nell'else");
                     pw.write("Blocco non effettuato");
+
+                }
             }
         }
     }
