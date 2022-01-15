@@ -133,6 +133,21 @@ public class PrestitoDAO {
         }
     }
 
+    public ArrayList<Prestito> doRetrieveValidByLibro(String isbn) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
+                    "FROM prestito p WHERE p.libro_fk=? AND p.data_consegna is null");
+            ps.setString(1, isbn);
+
+            ArrayList<Prestito> prestiti = new ArrayList<>();
+            ResultSet rs = ps.executeQuery();
+            while (rs.next())
+                prestiti.add(PrestitoExtractor.extract(rs));
+
+            return prestiti;
+        }
+    }
+
     public ArrayList<Prestito> doRetrieveByUtente(Utente u) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +

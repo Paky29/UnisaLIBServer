@@ -44,6 +44,11 @@ public class PrestitoPresenter extends presenter {
                 cercaPrestitiPerUtente(u);
                 break;
             }
+            case "/lista-prestiti-libro": {
+                String isbn = req.getParameter("libro");
+                cercaPrestitiAttiviPerLibro(isbn);
+                break;
+            }
             case "/crea-prestito": {
                 System.out.println("Sono nella servlet");
                 String p = req.getParameter("prestito");
@@ -72,6 +77,23 @@ public class PrestitoPresenter extends presenter {
                 pw.write("Non sono presenti prestiti");
         } catch (SQLException e) {
             pw.write("Errore del server");
+        }
+    }
+
+    public void cercaPrestitiAttiviPerLibro(String codiceISBN){
+        PrestitoDAO prestitoDAO = new PrestitoDAO();
+        System.out.println("Sono in metodo cercaPAttivi");
+        try {
+            ArrayList<Prestito> prestiti = prestitoDAO.doRetrieveValidByLibro(codiceISBN);
+            if (!prestiti.isEmpty()) {
+                System.out.println("okkkk");
+                pw.write(Prestito.toJson(prestiti));
+            } else
+                pw.write("Non sono presenti prestiti");
+        } catch (SQLException e) {
+            pw.write("Errore del server");
+            System.out.println("SQL Exception");
+            e.printStackTrace();
         }
     }
 
