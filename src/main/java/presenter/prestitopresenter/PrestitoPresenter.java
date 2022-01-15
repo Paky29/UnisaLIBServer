@@ -1,6 +1,7 @@
 package presenter.prestitopresenter;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import model.libromanagement.Libro;
 import model.libromanagement.LibroDAO;
 import model.prenotazionemanagement.Prenotazione;
@@ -63,10 +64,25 @@ public class PrestitoPresenter extends presenter {
                 valutaPrestito(prestito);
                 break;
             }
+
+            case "/attiva-prestito": {
+                String p = req.getParameter("prestito");
+                Prestito prestito = Prestito.fromJsonToPrestito(p);
+                attivaPrestito(prestito);
+                break;
+            }
+
+            case "/concludi-prestito": {
+                String p = req.getParameter("prestito");
+                Prestito prestito = Prestito.fromJsonToPrestito(p);
+                System.out.println("DataC prestito: " + prestito.getDataConsegna());
+                concludiPrestito(prestito);
+                break;
+            }
         }
     }
 
-    public void cercaPrestitiPerUtente(String email){
+    private void cercaPrestitiPerUtente(String email){
         PrestitoDAO prestitoDAO = new PrestitoDAO();
         try {
             ArrayList<Prestito> prestiti = prestitoDAO.doRetrieveByUtente(email);
@@ -80,7 +96,7 @@ public class PrestitoPresenter extends presenter {
         }
     }
 
-    public void cercaPrestitiAttiviPerLibro(String codiceISBN){
+    private void cercaPrestitiAttiviPerLibro(String codiceISBN){
         PrestitoDAO prestitoDAO = new PrestitoDAO();
         System.out.println("Sono in metodo cercaPAttivi");
         try {
@@ -97,7 +113,7 @@ public class PrestitoPresenter extends presenter {
         }
     }
 
-    public void creaPrestito(Prestito prestito){
+    private void creaPrestito(Prestito prestito){
         PrestitoDAO prestitoDAO = new PrestitoDAO();
         UtenteDAO utenteDAO = new UtenteDAO();
         Utente utentePrestito = prestito.getUtente();
@@ -168,4 +184,63 @@ public class PrestitoPresenter extends presenter {
             ex.printStackTrace();
         }
     }
+
+    private void attivaPrestito(Prestito prestito){
+        PrestitoDAO prestitoDAO = new PrestitoDAO();
+        System.out.println("Sono in attiva prestito");
+        try {
+            Libro libro = prestito.getLibro();
+            System.out.println("Ho preso il libro");
+            if(prestitoDAO.attivaPrestito(prestito)) {
+                ArrayList<Prestito> prestitiLibro = prestitoDAO.doRetrieveValidByLibro(libro.getIsbn());
+                System.out.println("Vuoto?" + prestitiLibro.isEmpty());
+                if (!prestitiLibro.isEmpty()) {
+                    System.out.println("ok");
+                    for(Prestito p: prestitiLibro)
+                        System.out.println("Prestito: Ut=" + p.getUtente().getEmail() + " Lib=" + p.getLibro().getIsbn());
+                    pw.write(Prestito.toJson(prestitiLibro));
+                }
+                else
+                    System.out.println("prestiti vuoto");
+                    pw.write("Non sono presenti prestiti");
+            }
+            else{
+                System.out.println("errore in database ");
+                pw.write("Errore del server");
+            }
+        } catch (Exception ex) {
+            pw.write("Errore del server");
+            System.out.println("Errore" + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private void concludiPrestito(Prestito prestito){
+        PrestitoDAO prestitoDAO = new PrestitoDAO();
+        System.out.println("Sono in concludi prestito");
+        try {
+        Libro libro = prestito.getLibro();
+        if(prestitoDAO.concludiPrestito(prestito)) {
+            ArrayList<Prestito> prestitiLibro = prestitoDAO.doRetrieveValidByLibro(libro.getIsbn());
+            System.out.println("Vuoto?" + prestitiLibro.isEmpty());
+            if (!prestitiLibro.isEmpty()) {
+                System.out.println("ok");
+                for(Prestito p: prestitiLibro)
+                    System.out.println("Prestito: Ut=" + p.getUtente().getEmail() + " Lib=" + p.getLibro().getIsbn());
+                pw.write(Prestito.toJson(prestitiLibro));
+            }
+            else {
+                pw.write(Prestito.toJson(new ArrayList<Prestito>()));
+            }
+        }
+        else{
+            System.out.println("errore in database ");
+            pw.write("Errore del server");
+        }
+    } catch (Exception ex) {
+        pw.write("Errore del server");
+        System.out.println("Errore" + ex.getMessage());
+        ex.printStackTrace();
+    }
+}
 }
