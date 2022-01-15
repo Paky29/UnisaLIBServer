@@ -14,8 +14,8 @@ public class PeriodoDAO {
 
     public Periodo doRetrieveById(int id) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT p.periodo_id, p.data_p, p.ora_inizio, p.ora_fine " +
-                    "FROM periodo p WHERE p.periodo_id=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM periodo pe WHERE pe.periodo_id=?");
             ps.setInt(1, id);
             Periodo p = null;
             ResultSet rs = ps.executeQuery();
@@ -27,19 +27,21 @@ public class PeriodoDAO {
         }
     }
 
-    private static Periodo doRetrieveByInfo(GregorianCalendar date, int oraInizio, int oraFine) throws SQLException {
+    public  Periodo doRetrieveByInfo(GregorianCalendar date, int oraInizio, int oraFine) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT p.periodo_id, p.data_p, p.ora_inizio, p.ora_fine " +
-                    "FROM periodo p WHERE p.data=? AND p.ora_inizio=? AND p.ora_fine=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM periodo pe WHERE pe.data_p=? AND pe.ora_inizio=? AND pe.ora_fine=?");
+            System.out.println(oraInizio+oraFine);
             ps.setDate(1, SwitchDate.toDate(date));
-            ps.setInt(1, oraInizio);
-            ps.setInt(1, oraFine);
+            ps.setInt(2, oraInizio);
+            ps.setInt(3, oraFine);
 
             Periodo p = null;
             ResultSet rs = ps.executeQuery();
-
+            System.out.println("non trovato vabbe");
             if(rs.next())
                 p = PeriodoExtractor.extract(rs);
+
 
             return p;
         }
@@ -47,8 +49,8 @@ public class PeriodoDAO {
 
     public ArrayList<Periodo> doRetrieveByPostazione(String idPostazione) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT p.periodo_id, p.data_p, p.ora_inizio, p.ora_fine " +
-                    "FROM periodo p AND blocco b WHERE b.postazione_fk=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM periodo pe AND blocco b WHERE b.postazione_fk=?");
             ps.setString(1, idPostazione);
             ArrayList<Periodo> p = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
@@ -62,8 +64,8 @@ public class PeriodoDAO {
 
     public ArrayList<Periodo> doRetrieveAll() throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT p.periodo_id, p.data_p, p.ora_inizio, p.ora_fine " +
-                    "FROM periodo p");
+            PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM periodo pe");
 
             ArrayList<Periodo> p = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
@@ -75,30 +77,34 @@ public class PeriodoDAO {
         }
     }
 
-    public void insertBlocco(GregorianCalendar date, int oraInizio, int oraFine, Postazione p) throws SQLException {
+    public Periodo doRetrieveByInfo(Periodo periodo) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            for (int start = oraInizio; start < oraFine; start+=2) {
-                PreparedStatement ps = conn.prepareStatement("INSERT into blocco (postazione_fk, periodo_fk) VALUES ( ?, ?)");
-                ps.setString(1, p.getId());
-                ps.setInt(2, PeriodoDAO.doRetrieveByInfo(date, start, (start+2)).getId());
+            PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM periodo pe WHERE pe.data=? AND pe.ora_inizio=? AND pe.ora_fine=?");
+            ps.setDate(1, SwitchDate.toDate(periodo.getData()));
+            ps.setInt(1, periodo.getOraInizio());
+            ps.setInt(1, periodo.getOraFine());
 
-                if (ps.executeUpdate() != 1)
-                    throw new RuntimeException("INSERT error");
-            }
+            Periodo p = null;
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+                p = PeriodoExtractor.extract(rs);
+
+            return p;
         }
     }
 
-    // da inserire in PostazioneDAO
-    public void insertBloccoIndeterminato(Postazione p) throws SQLException {
+    public boolean insertPeriodo(Periodo p) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps = conn.prepareStatement("UPDATE postazione p SET is_disponibile=? WHERE p.postazione_id=?");
-            ps.setBoolean(1, p.isDisponibile());
-            ps.setString(2, p.getId());
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO periodo(data_p,ora_inizio,ora_fine) VALUES(?,?,?)");
+            ps.setDate(1,SwitchDate.toDate(p.getData()));
+            ps.setInt(2,p.getOraInizio());
+            ps.setInt(3,p.getOraFine());
 
-            if (ps.executeUpdate() != 1)
-                throw new RuntimeException("INSERT error");
+            if(ps.executeUpdate()!=1)
+                return true;
+            return false;
         }
     }
-
-
 }

@@ -2,6 +2,8 @@ package presenter.postazionepresenter;
 
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneDAO;
+import model.postazionemanagement.Periodo;
+import model.postazionemanagement.PeriodoDAO;
 import model.postazionemanagement.Postazione;
 import model.postazionemanagement.PostazioneDAO;
 import model.prenotazionemanagement.Prenotazione;
@@ -20,6 +22,7 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 @WebServlet(name="postazionepresenter", value = "/PostazionePresenter/*")
 public class PostazionePresenter extends presenter{
@@ -94,6 +97,7 @@ public class PostazionePresenter extends presenter{
                     else
                         pw.write("Nessuna postazione trovata");
                 } catch (Exception e) {
+                    e.printStackTrace();
                     pw.write("Errore del server");
                 }
                 break;
@@ -101,16 +105,19 @@ public class PostazionePresenter extends presenter{
             case "/mostra-elenco-postazioni-admin":{
                 String p=req.getParameter("posizione");
                 Posizione pos=Posizione.fromJson(p);
+                System.out.println(p);
                 PrintWriter pw=resp.getWriter();
                 PostazioneDAO postazioneDAO=new PostazioneDAO();
                 try {
                     ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(),pos.getZona());
                     if(!postazioni.isEmpty()){
+                        System.out.println("okokokookok");
                         pw.write(Postazione.toJson(postazioni));
                     }
                     else
                         pw.write("Non ci sono postazioni");
                 } catch (SQLException e) {
+                    e.printStackTrace();
                     pw.write("Errore del server");
                 }
                 break;
@@ -145,6 +152,28 @@ public class PostazionePresenter extends presenter{
                         }
                     }
                 } catch (SQLException e) {
+                    e.printStackTrace();
+                    pw.write("Errore del server");
+                }
+            }
+            case "/blocco-determinato":{
+                String idpos=req.getParameter("idPos");
+                PrintWriter pw=resp.getWriter();
+                JSONObject rsp=new JSONObject();
+                try{
+                    Periodo per=Periodo.fromJson(req.getParameter("periodo"));
+                    PostazioneDAO postazioneDAO=new PostazioneDAO();
+                    Postazione pos=postazioneDAO.doRetrieveById(idpos);
+                    if(pos.isDisponibile()){
+                        System.out.println("dentro");
+                        String str=postazioneDAO.bloccoDeterminato(per,pos);
+                            rsp.put("messaggio",str);
+                        pw.write(rsp.toString());
+                    }
+                    else
+                        pw.write("Postazione bloccata in modo indeterminato");
+                }catch (Exception e){
+                    resp.setStatus(505);
                     e.printStackTrace();
                     pw.write("Errore del server");
                 }

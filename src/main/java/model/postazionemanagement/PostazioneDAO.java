@@ -30,22 +30,26 @@ public class PostazioneDAO {
     public Postazione doRetrieveById(String id) throws SQLException{
 
         try(Connection conn = ConPool.getConnection()){
-            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk , p.posizione_id, p.biblioteca, p.zona " +
-                    "FROM postazione ps, posizione p WHERE p.posizione_id=ps.posizione_fk AND ps.postazione_id = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE ps.postazione_id = ?");
             ps.setString(1,id);
 
             ResultSet rs = ps.executeQuery();
             Postazione pst = null;
 
-            if(rs.next())
-                pst = PostazioneExtractor.extract(rs);
+            while(rs.next()) {
+                if(pst==null)
+                    pst = PostazioneExtractor.extract(rs);
+                if(rs.getDate("pe.data_p")!=null)
+                    pst.getBlocchi().add(PeriodoExtractor.extract(rs));
+            }
             return pst;
         }
     }
 
     public ArrayList<Postazione> doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id,pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
@@ -66,7 +70,7 @@ public class PostazioneDAO {
 
     public ArrayList<Postazione> doRetrieveDisponibiliByPosizione(String biblioteca, String zona) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.data_p, pe.ora_inizio, pe.ora_fine " +
+            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=? AND ps.is_disponibile=true");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
@@ -105,12 +109,10 @@ public class PostazioneDAO {
         try (Connection conn = ConPool.getConnection()) {
             int counter=0;
             boolean isBlock = true;
-            ResultSet rs;
             conn.setAutoCommit(false);
-            PreparedStatement ps;
-            ps =conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
+            PreparedStatement ps=conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
             ps.setString(1,idPos);
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 isBlock = rs.getBoolean("val");
                 if(!isBlock) {
@@ -134,11 +136,10 @@ public class PostazioneDAO {
             rs = ps.executeQuery();
             if(rs.next())
                 counter = rs.getInt("pren");
-
-                ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");
-                ps.setDate(1, dataCorrente);
-                ps.setInt(2, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-                ps.setString(3,idPos);
+            ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");
+            ps.setDate(1, dataCorrente);
+            ps.setInt(2, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            ps.setString(3,idPos);
 
             if (ps.executeUpdate() != counter) {
                 conn.rollback();
@@ -156,6 +157,64 @@ public class PostazioneDAO {
             throwables.printStackTrace();
         }
         return false;
+    }
+
+    public String bloccoDeterminato(Periodo per, Postazione pos) throws SQLException {
+        PeriodoDAO periodoDAO=new PeriodoDAO();
+        String resp=null;
+        ResultSet rs;
+        PreparedStatement ps;
+        try(Connection conn= ConPool.getConnection()){
+            conn.setAutoCommit(false);
+            for (int start = per.getOraInizio(); start < per.getOraFine(); start+=2) {
+                int oraFinePeriodo=start+2;
+                Periodo periodo=periodoDAO.doRetrieveByInfo(per.getData(),start,oraFinePeriodo);
+                if(periodo==null){
+                    periodoDAO.insertPeriodo (new Periodo(start,oraFinePeriodo,per.getData()));
+                    periodo=periodoDAO.doRetrieveByInfo(per.getData(),start,oraFinePeriodo);
+                }
+                if(!pos.getBlocchi().contains(periodo)) {
+                    ps = conn.prepareStatement("INSERT INTO blocco (postazione_fk, periodo_fk) VALUES (?, ?)");
+                    ps.setString(1, pos.getId());
+                    ps.setInt(2, periodo.getId());
+
+                    if (ps.executeUpdate() != 1) {
+                        conn.rollback();
+                        conn.setAutoCommit(true);
+                        return "Errore inserimento blocchi";
+                    }
+                    ps = conn.prepareStatement("SELECT * FROM prenotazione p WHERE p.data_p=? AND p.ora_inizio=? AND p.postazione_fk = ?");
+                    ps.setDate(1, SwitchDate.toDate(per.getData()));
+                    ps.setInt(2,start);
+                    ps.setString(3,pos.getId());
+                    rs = ps.executeQuery();
+                    if(rs.next()) {
+                        ps = conn.prepareStatement("DELETE FROM prenotazione p WHERE p.data_p=? AND p.ora_inizio=? AND p.postazione_fk = ?");
+                        ps.setDate(1, SwitchDate.toDate(per.getData()));
+                        ps.setInt(2, start);
+                        ps.setString(3, pos.getId());
+
+                        if (ps.executeUpdate() != 1) {
+                            conn.rollback();
+                            conn.setAutoCommit(true);
+                            System.out.println("fallita la seconda query");
+                            return "Errore cancellazione prenotazioni";
+                        }
+                    }
+                }
+                else{
+                    if(resp==null)
+                        resp="Blocchi gia' presenti: ";
+                    resp += start + "-" + oraFinePeriodo + ";";
+                }
+            }
+            conn.commit();
+            conn.setAutoCommit(true);
+            if(resp==null)
+                return "Blocchi inseriti correttamente";
+            else
+                 return resp;
+        }
     }
 
     /*
