@@ -1,5 +1,6 @@
 package presenter.postazionepresenter;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneDAO;
 import model.postazionemanagement.Periodo;
@@ -72,6 +73,11 @@ public class PostazionePresenter extends presenter {
                 String idPos = req.getParameter("idPos");
                 Periodo per=Periodo.fromJson(req.getParameter("periodo"));
                 bloccoDeterminato(idPos, per, resp);
+                break;
+            }
+            case "/sblocca-postazione": {
+                String idPos = req.getParameter("idPos");
+                sbloccaPostazione(idPos);
                 break;
             }
         }
@@ -166,13 +172,40 @@ public class PostazionePresenter extends presenter {
                     }
                 } else {
                     pw.write("Blocco non effettuato");
+
                 }
+
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
             pw.write("Errore del server");
         }
     }
+
+    private void sbloccaPostazione(String idPos) {
+        Postazione pos;
+        JSONObject string = new JSONObject();
+        PostazioneDAO pdao = new PostazioneDAO();
+        if(pdao.sbloccaPostazione(idPos)){
+            try{
+                string.put("messaggio", "sblocco effettuato con successo");
+                pw.write(string.toString());
+            }
+            catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                string.put("messaggio","sblocco non effettuato");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     private void bloccoDeterminato(String idPos, Periodo per, HttpServletResponse resp) {
         JSONObject rsp=new JSONObject();

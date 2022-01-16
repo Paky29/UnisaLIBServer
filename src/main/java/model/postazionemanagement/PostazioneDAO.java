@@ -219,6 +219,44 @@ public class PostazioneDAO {
         }
     }
 
+    public boolean sbloccaPostazione(String idPos){
+        Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
+
+        try (Connection conn = ConPool.getConnection()) {
+            int counter=0;
+            boolean isBlock = true;
+            ResultSet rs;
+            conn.setAutoCommit(false);
+            PreparedStatement ps;
+            ps =conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
+            ps.setString(1,idPos);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                isBlock = rs.getBoolean("val");
+                if(isBlock) {
+                    conn.setAutoCommit(true);
+                    return false;
+                }
+            }
+
+            ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = true WHERE pos.postazione_id = ?");
+            ps.setString(1, idPos);
+            if (ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
+                System.out.println("fallita la prima query");
+                return false;
+            }
+            conn.commit();
+            conn.setAutoCommit(true);
+            System.out.println("torno true");
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+
     /*
     public ArrayList<Postazione> doRetrieveByPosizione(Posizione p) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
