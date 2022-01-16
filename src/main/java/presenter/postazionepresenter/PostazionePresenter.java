@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 @WebServlet(name="postazionepresenter", value = "/PostazionePresenter/*")
-public class PostazionePresenter extends presenter{
+public class PostazionePresenter extends presenter {
+    private PrintWriter pw;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -33,151 +35,165 @@ public class PostazionePresenter extends presenter{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
+        String path = getPath(req);
+        pw = resp.getWriter();
         System.out.println(path);
-        switch(path){
-            case "/":{
+        switch (path) {
+            case "/": {
                 break;
             }
             case "/mostra-ricerca-postazioni": {
                 String admin = req.getParameter("is_admin");
-                PrintWriter pw = resp.getWriter();
-                PosizioneDAO posizioneDAO=new PosizioneDAO();
-                try {
-                    ArrayList<Posizione> posizioni = posizioneDAO.doRetrieveAll();
-                    if (!posizioni.isEmpty()) {
-                        pw.write(Posizione.toJson(posizioni));
-                    } else
-                        pw.write("Posizioni non trovate");
-                } catch (SQLException e) {
-                    pw.write("Errore del server");
-                }
+                mostraRicercaPostazioni(admin);
                 break;
             }
-            case "/mostra-elenco-postazioni":{
-                String giorno=req.getParameter("giorno");
-                String mese=req.getParameter("mese");
-                String anno=req.getParameter("anno");
-                System.out.println(anno);
-                Date d=new Date(Integer.valueOf(anno)-1900,Integer.valueOf(mese),Integer.valueOf(giorno));
-                System.out.println(d.getYear());
-                String posizione=req.getParameter("posizione");
-                Posizione p=Posizione.fromJson(posizione);
-                PrintWriter pw=resp.getWriter();
-                PostazioneDAO postazioneDAO=new PostazioneDAO();
-                PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
-                try {
-                    ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveDisponibiliByPosizione(p.getBiblioteca(),p.getZona());
-                    if(!postazioni.isEmpty()) {
-                        ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
-                        JSONArray pos = new JSONArray();
-                        for (Postazione pt : postazioni) {
-                            prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt,d));
-                            JSONObject obj=new JSONObject();
-                            obj.put("postazione",Postazione.toJson(pt));
-                            pos.put(obj);
-                        }
-                        System.out.println(pos.getJSONObject(0));
-
-                        JSONArray pren= new JSONArray();
-                        for(Prenotazione pr: prenotazioni){
-                            JSONObject obj=new JSONObject();
-                            obj.put("prenotazione",Prenotazione.toJson(pr));
-                            pren.put(obj);
-                        }
-
-                        JSONObject response= new JSONObject();
-                        response.put("postazioni", pos);
-                        response.put("prenotazioni", pren);
-                        System.out.println(response.toString());
-                        pw.write(response.toString());
-                        if(prenotazioni.isEmpty())
-                            System.out.println("non ci sono prenotazioni");
-                    }
-                    else
-                        pw.write("Nessuna postazione trovata");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    pw.write("Errore del server");
-                }
+            case "/mostra-elenco-postazioni": {
+                String giorno = req.getParameter("giorno");
+                String mese = req.getParameter("mese");
+                String anno = req.getParameter("anno");
+                String posizione = req.getParameter("posizione");
+                mostraElencoPostazioni(giorno, mese, anno, posizione);
                 break;
             }
-            case "/mostra-elenco-postazioni-admin":{
-                String p=req.getParameter("posizione");
-                Posizione pos=Posizione.fromJson(p);
-                System.out.println(p);
-                PrintWriter pw=resp.getWriter();
-                PostazioneDAO postazioneDAO=new PostazioneDAO();
-                try {
-                    ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(),pos.getZona());
-                    if(!postazioni.isEmpty()){
-                        System.out.println("okokokookok");
-                        pw.write(Postazione.toJson(postazioni));
-                    }
-                    else
-                        pw.write("Non ci sono postazioni");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    pw.write("Errore del server");
-                }
+            case "/mostra-elenco-postazioni-admin": {
+                String p = req.getParameter("posizione");
+                mostraElencoPostazioniAdmin(p);
                 break;
             }
-            case "/blocco-indeterminato":{
-                Postazione pos;
-                PrintWriter pw = resp.getWriter();
+            case "/blocco-indeterminato": {
                 String idPos = req.getParameter("idPos");
-                JSONObject string = new JSONObject();
-                PostazioneDAO pdao = new PostazioneDAO();
+                bloccoIndeterminato(idPos);
+                break;
+            }
+            case "/blocco-determinato": {
+                String idpos = req.getParameter("idPos");
+                Periodo per=Periodo.fromJson(req.getParameter("periodo"));
+                bloccoDeterminato(idpos, per, resp);
+                break;
+            }
+        }
+    }
+
+    private void mostraRicercaPostazioni(String admin){
+        PosizioneDAO posizioneDAO=new PosizioneDAO();
+        try {
+            ArrayList<Posizione> posizioni = posizioneDAO.doRetrieveAll();
+            if (!posizioni.isEmpty()) {
+                pw.write(Posizione.toJson(posizioni));
+            } else
+                pw.write("Posizioni non trovate");
+        } catch (SQLException e) {
+            pw.write("Errore del server");
+        }
+    }
+
+    private void mostraElencoPostazioni(String giorno, String mese, String anno, String posizione) {
+        Date d=new Date(Integer.valueOf(anno)-1900,Integer.valueOf(mese),Integer.valueOf(giorno));
+        System.out.println(d.getYear());
+        Posizione p=Posizione.fromJson(posizione);
+        PostazioneDAO postazioneDAO=new PostazioneDAO();
+        PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
+        try {
+            ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveDisponibiliByPosizione(p.getBiblioteca(),p.getZona());
+            if(!postazioni.isEmpty()) {
+                ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
+                JSONArray pos = new JSONArray();
+                for (Postazione pt : postazioni) {
+                    prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt,d));
+                    JSONObject obj=new JSONObject();
+                    obj.put("postazione",Postazione.toJson(pt));
+                    pos.put(obj);
+                }
+                System.out.println(pos.getJSONObject(0));
+
+                JSONArray pren= new JSONArray();
+                for(Prenotazione pr: prenotazioni){
+                    JSONObject obj=new JSONObject();
+                    obj.put("prenotazione",Prenotazione.toJson(pr));
+                    pren.put(obj);
+                }
+
+                JSONObject response= new JSONObject();
+                response.put("postazioni", pos);
+                response.put("prenotazioni", pren);
+                System.out.println(response.toString());
+                pw.write(response.toString());
+                if(prenotazioni.isEmpty())
+                    System.out.println("non ci sono prenotazioni");
+            }
+            else
+                pw.write("Nessuna postazione trovata");
+        } catch (Exception e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
+        }
+    }
+
+    private void mostraElencoPostazioniAdmin(String p) {
+        Posizione pos = Posizione.fromJson(p);
+        System.out.println(p);
+        PostazioneDAO postazioneDAO = new PostazioneDAO();
+        try {
+            ArrayList<Postazione> postazioni = postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(), pos.getZona());
+            if (!postazioni.isEmpty()) {
+                System.out.println("okokokookok");
+                pw.write(Postazione.toJson(postazioni));
+            } else
+                pw.write("Non ci sono postazioni");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
+        }
+    }
+
+    private void bloccoIndeterminato(String idPos) {
+        Postazione pos;
+        JSONObject string = new JSONObject();
+        PostazioneDAO pdao = new PostazioneDAO();
+        try {
+            if (pdao.isDisponibile(idPos) == 0) {
                 try {
-                    if(pdao.isDisponibile(idPos)==0){
-                        try {
-                            string.put("messaggio","Postazione gia' bloccata");
-                            pw.write(string.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            pw.write("Errore del server");
-                        }
-                    }
-                    else{
-                        if(pdao.bloccaPostazione(idPos)) {
-                            try {
-                                string.put("messaggio","blocco effettuato con successo");
-                                pw.write(string.toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else{
-                            pw.write("Blocco non effettuato");
-                        }
-                    }
-                } catch (SQLException e) {
+                    string.put("messaggio", "Postazione gia' bloccata");
+                    pw.write(string.toString());
+                } catch (JSONException e) {
                     e.printStackTrace();
                     pw.write("Errore del server");
                 }
-            }
-            case "/blocco-determinato":{
-                String idpos=req.getParameter("idPos");
-                PrintWriter pw=resp.getWriter();
-                JSONObject rsp=new JSONObject();
-                try{
-                    Periodo per=Periodo.fromJson(req.getParameter("periodo"));
-                    PostazioneDAO postazioneDAO=new PostazioneDAO();
-                    Postazione pos=postazioneDAO.doRetrieveById(idpos);
-                    if(pos.isDisponibile()){
-                        System.out.println("dentro");
-                        String str=postazioneDAO.bloccoDeterminato(per,pos);
-                            rsp.put("messaggio",str);
-                        pw.write(rsp.toString());
+            } else {
+                if (pdao.bloccaPostazione(idPos)) {
+                    try {
+                        string.put("messaggio", "blocco effettuato con successo");
+                        pw.write(string.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    else
-                        pw.write("Postazione bloccata in modo indeterminato");
-                }catch (Exception e){
-                    resp.setStatus(505);
-                    e.printStackTrace();
-                    pw.write("Errore del server");
+                } else {
+                    pw.write("Blocco non effettuato");
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
+        }
+    }
+
+    private void bloccoDeterminato(String idpos, Periodo per, HttpServletResponse resp) {
+        JSONObject rsp=new JSONObject();
+        try{
+            PostazioneDAO postazioneDAO=new PostazioneDAO();
+            Postazione pos=postazioneDAO.doRetrieveById(idpos);
+            if(pos.isDisponibile()){
+                System.out.println("dentro");
+                String str=postazioneDAO.bloccoDeterminato(per,pos);
+                rsp.put("messaggio",str);
+                pw.write(rsp.toString());
+            }
+            else
+                pw.write("Postazione bloccata in modo indeterminato");
+        }catch (Exception e) {
+            resp.setStatus(505);
+            e.printStackTrace();
+            pw.write("Errore del server");
         }
     }
 }

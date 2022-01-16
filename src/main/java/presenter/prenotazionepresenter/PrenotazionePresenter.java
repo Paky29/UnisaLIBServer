@@ -19,6 +19,8 @@ import java.sql.SQLException;
 
 @WebServlet(name="prenotazionepresenter", value = "/PrenotazionePresenter/*")
 public class PrenotazionePresenter extends presenter {
+    private PrintWriter pw;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
@@ -27,36 +29,42 @@ public class PrenotazionePresenter extends presenter {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = getPath(req);
+        pw = resp.getWriter();
         switch (path) {
-            case "/": break;
+            case "/":
+                break;
             case "/crea-prenotazione": {
                 String p = req.getParameter("prenotazione");
-                PrintWriter pw=resp.getWriter();
-                PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
-                UtenteDAO utenteDAO=new UtenteDAO();
-                Prenotazione prenotazione = Prenotazione.fromJsonToPrenotazione(p);
-                try {
-                    if (prenotazioneDAO.insert(prenotazione)){
-                        Utente utenteAggiornato = utenteDAO.doRetrieveByEmail(prenotazione.getUtente().getEmail());
-                        JSONObject jsonObject = new JSONObject();
-                        try{
-                            jsonObject.put("utente", Utente.toJson(utenteAggiornato));
-                            System.out.println("Json successo");
-                            pw.write(jsonObject.toString());
-                            System.out.println("Scritto in risposta oggetto");
-                        } catch (JSONException ex) {
-                            System.out.println("Errore JSON");
-                            pw.write("Errore del server");
-                        }
-                    } else {
-                        System.out.println("Errore Salvataggio");
-                        pw.write("Salvataggio non andato a buon fine");
-                    }
-                } catch (SQLException e) {
-                    pw.write("Errore nel server");
-                    e.printStackTrace();
-                }
+                creaPrenotazione(p);
+                break;
             }
+        }
+    }
+
+    private void creaPrenotazione(String p){
+        PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
+        UtenteDAO utenteDAO = new UtenteDAO();
+        Prenotazione prenotazione = Prenotazione.fromJsonToPrenotazione(p);
+        try {
+            if (prenotazioneDAO.insert(prenotazione)) {
+                Utente utenteAggiornato = utenteDAO.doRetrieveByEmail(prenotazione.getUtente().getEmail());
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("utente", Utente.toJson(utenteAggiornato));
+                    System.out.println("Json successo");
+                    pw.write(jsonObject.toString());
+                    System.out.println("Scritto in risposta oggetto");
+                } catch (JSONException ex) {
+                    System.out.println("Errore JSON");
+                    pw.write("Errore del server");
+                }
+            } else {
+                System.out.println("Errore Salvataggio");
+                pw.write("Salvataggio non andato a buon fine");
+            }
+        } catch (SQLException e) {
+            pw.write("Errore nel server");
+            e.printStackTrace();
         }
     }
 }
