@@ -35,16 +35,16 @@ public class PrenotazionePresenter extends presenter {
                 break;
             case "/crea-prenotazione": {
                 String p = req.getParameter("prenotazione");
-                creaPrenotazione(p);
+                Prenotazione prenotazione = Prenotazione.fromJsonToPrenotazione(p);
+                creaPrenotazione(prenotazione);
                 break;
             }
         }
     }
 
-    private void creaPrenotazione(String p){
+    private void creaPrenotazione(Prenotazione prenotazione){
         PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
         UtenteDAO utenteDAO = new UtenteDAO();
-        Prenotazione prenotazione = Prenotazione.fromJsonToPrenotazione(p);
         try {
             if (prenotazioneDAO.insert(prenotazione)) {
                 Utente utenteAggiornato = utenteDAO.doRetrieveByEmail(prenotazione.getUtente().getEmail());

@@ -51,13 +51,16 @@ public class PostazionePresenter extends presenter {
                 String giorno = req.getParameter("giorno");
                 String mese = req.getParameter("mese");
                 String anno = req.getParameter("anno");
+                GregorianCalendar gc = new GregorianCalendar(Integer.valueOf(anno), Integer.valueOf(mese), Integer.valueOf(giorno));
                 String posizione = req.getParameter("posizione");
-                mostraElencoPostazioni(giorno, mese, anno, posizione);
+                Posizione p=Posizione.fromJson(posizione);
+                mostraElencoPostazioni(gc, p);
                 break;
             }
             case "/mostra-elenco-postazioni-admin": {
                 String p = req.getParameter("posizione");
-                mostraElencoPostazioniAdmin(p);
+                Posizione pos = Posizione.fromJson(p);
+                mostraElencoPostazioniAdmin(pos);
                 break;
             }
             case "/blocco-indeterminato": {
@@ -66,9 +69,9 @@ public class PostazionePresenter extends presenter {
                 break;
             }
             case "/blocco-determinato": {
-                String idpos = req.getParameter("idPos");
+                String idPos = req.getParameter("idPos");
                 Periodo per=Periodo.fromJson(req.getParameter("periodo"));
-                bloccoDeterminato(idpos, per, resp);
+                bloccoDeterminato(idPos, per, resp);
                 break;
             }
         }
@@ -87,10 +90,7 @@ public class PostazionePresenter extends presenter {
         }
     }
 
-    private void mostraElencoPostazioni(String giorno, String mese, String anno, String posizione) {
-        Date d=new Date(Integer.valueOf(anno)-1900,Integer.valueOf(mese),Integer.valueOf(giorno));
-        System.out.println(d.getYear());
-        Posizione p=Posizione.fromJson(posizione);
+    private void mostraElencoPostazioni(GregorianCalendar gc, Posizione p) {
         PostazioneDAO postazioneDAO=new PostazioneDAO();
         PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
         try {
@@ -99,7 +99,7 @@ public class PostazionePresenter extends presenter {
                 ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
                 JSONArray pos = new JSONArray();
                 for (Postazione pt : postazioni) {
-                    prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt,d));
+                    prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt, gc));
                     JSONObject obj=new JSONObject();
                     obj.put("postazione",Postazione.toJson(pt));
                     pos.put(obj);
@@ -129,9 +129,7 @@ public class PostazionePresenter extends presenter {
         }
     }
 
-    private void mostraElencoPostazioniAdmin(String p) {
-        Posizione pos = Posizione.fromJson(p);
-        System.out.println(p);
+    private void mostraElencoPostazioniAdmin(Posizione pos) {
         PostazioneDAO postazioneDAO = new PostazioneDAO();
         try {
             ArrayList<Postazione> postazioni = postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(), pos.getZona());
@@ -147,7 +145,6 @@ public class PostazionePresenter extends presenter {
     }
 
     private void bloccoIndeterminato(String idPos) {
-        Postazione pos;
         JSONObject string = new JSONObject();
         PostazioneDAO pdao = new PostazioneDAO();
         try {
@@ -177,11 +174,11 @@ public class PostazionePresenter extends presenter {
         }
     }
 
-    private void bloccoDeterminato(String idpos, Periodo per, HttpServletResponse resp) {
+    private void bloccoDeterminato(String idPos, Periodo per, HttpServletResponse resp) {
         JSONObject rsp=new JSONObject();
         try{
             PostazioneDAO postazioneDAO=new PostazioneDAO();
-            Postazione pos=postazioneDAO.doRetrieveById(idpos);
+            Postazione pos=postazioneDAO.doRetrieveById(idPos);
             if(pos.isDisponibile()){
                 System.out.println("dentro");
                 String str=postazioneDAO.bloccoDeterminato(per,pos);

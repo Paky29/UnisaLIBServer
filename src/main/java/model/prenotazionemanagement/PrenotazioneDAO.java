@@ -62,12 +62,12 @@ public class PrenotazioneDAO {
         }
     }
 
-    public ArrayList<Prenotazione> doRetrieveValidByPostazioneDate(Postazione post, Date d) throws SQLException{
+    public ArrayList<Prenotazione> doRetrieveValidByPostazioneDate(Postazione post, GregorianCalendar gc) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
                     "FROM prenotazione p WHERE p.postazione_fk=? AND data_p=?");
             ps.setString(1, post.getId());
-            ps.setDate(2, d);
+            ps.setDate(2, SwitchDate.toDate(gc));
 
             ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
