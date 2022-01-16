@@ -167,6 +167,8 @@ public class PostazioneDAO {
         try(Connection conn= ConPool.getConnection()){
             conn.setAutoCommit(false);
             for (int start = per.getOraInizio(); start < per.getOraFine(); start+=2) {
+                if(start==13)
+                    ++start;
                 int oraFinePeriodo=start+2;
                 Periodo periodo=periodoDAO.doRetrieveByInfo(per.getData(),start,oraFinePeriodo);
                 if(periodo==null){
