@@ -80,6 +80,23 @@ public class PostazionePresenter extends presenter {
                 sbloccaPostazione(idPos);
                 break;
             }
+            case "/cerca-blocchi":{
+                String idPos=req.getParameter("idPos");
+                cercaBlocchi(idPos);
+            }
+        }
+    }
+
+    private void cercaBlocchi(String idPos) {
+        PostazioneDAO postazioneDAO=new PostazioneDAO();
+        try {
+            Postazione p=postazioneDAO.doRetrieveById(idPos);
+            JSONObject string = new JSONObject();
+            string.put("postazione",Postazione.toJson(p));
+            pw.write(string.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
         }
     }
 

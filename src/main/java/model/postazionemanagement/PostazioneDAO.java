@@ -28,11 +28,12 @@ public class PostazioneDAO {
 
 
     public Postazione doRetrieveById(String id) throws SQLException{
-
+        Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE ps.postazione_id = ?");
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE ps.postazione_id = ? AND pe.data_p>=?");
             ps.setString(1,id);
+            ps.setDate(2,dataCorrente);
 
             ResultSet rs = ps.executeQuery();
             Postazione pst = null;
@@ -48,11 +49,13 @@ public class PostazioneDAO {
     }
 
     public ArrayList<Postazione> doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
+        Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id,pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?");
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?  AND pe.data_p>=?");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
+            ps.setDate(3,dataCorrente);
 
             Map<String,Postazione> pos=new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
