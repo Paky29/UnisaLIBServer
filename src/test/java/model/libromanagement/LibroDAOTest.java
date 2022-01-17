@@ -57,7 +57,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904451C")
+                .isbn("9788891904454C")
                 .nCopie(5)
                 .build();
         libroDAO.insert(l);
@@ -99,8 +99,8 @@ public class LibroDAOTest {
     }
 
     @Test
-    public void doRetrieveByCodiceISBNTest() throws SQLException {
-        String isbn="9788891904451C";
+    public void doRetrieveByCodiceISBNTest() {
+        String isbn="9788891904454C";
         final Libro[] libro_test = new Libro[1];
         assertDoesNotThrow(() -> libro_test[0] =libroDAO.doRetrieveByCodiceISBN(isbn));
         assertEquals(isbn, libro_test[0].getIsbn());
@@ -143,7 +143,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904451C")
+                .isbn("9788891904454C")
                 .nCopie(5)
                 .build();
         interessi.add(l);
@@ -166,6 +166,46 @@ public class LibroDAOTest {
                 .isbn("9788891904454C")
                 .nCopie(5)
                 .build();
+        assertDoesNotThrow(()->libroDAO.doAddInteresse(email,l.getIsbn()));
+        ArrayList<Libro> libri_test=libroDAO.doRetrieveInteresse(email);
+        assertTrue(libri_test.contains(l));
+    }
+
+    @Test(expected = SQLException.class)
+    public void doAddInteresseIncorretISBNTest() throws SQLException {
+        String email="ps";
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        Libro l= new Libro.LibroBuilder()
+                .annoPubbl(1980)
+                .autore("Alessandro Manzoni")
+                .categoria("lettere")
+                .editore("Mondadori")
+                .posizione(p)
+                .urlCopertina("ciao")
+                .titolo("Promessi Sposi")
+                .isbn("9788891904454A")
+                .nCopie(5)
+                .build();
+        libroDAO.doAddInteresse(email,l.getIsbn());
+        ArrayList<Libro> libri_test=libroDAO.doRetrieveInteresse(email);
+        assertTrue(libri_test.contains(l));
+    }
+
+    @Test(expected = SQLException.class)
+    public void doAddInteresseIncorretEmailTest() throws SQLException {
+        String email="pss";
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        Libro l= new Libro.LibroBuilder()
+                .annoPubbl(1980)
+                .autore("Alessandro Manzoni")
+                .categoria("lettere")
+                .editore("Mondadori")
+                .posizione(p)
+                .urlCopertina("ciao")
+                .titolo("Promessi Sposi")
+                .isbn("9788891904454C")
+                .nCopie(5)
+                .build();
         libroDAO.doAddInteresse(email,l.getIsbn());
         ArrayList<Libro> libri_test=libroDAO.doRetrieveInteresse(email);
         assertTrue(libri_test.contains(l));
@@ -174,6 +214,46 @@ public class LibroDAOTest {
     @Test
     public void doDeleteInteresseTest() throws SQLException {
         String email="ps";
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        Libro l= new Libro.LibroBuilder()
+                .annoPubbl(1980)
+                .autore("Alessandro Manzoni")
+                .categoria("lettere")
+                .editore("Mondadori")
+                .posizione(p)
+                .urlCopertina("ciao")
+                .titolo("Promessi Sposi")
+                .isbn("9788891904454C")
+                .nCopie(5)
+                .build();
+        assertDoesNotThrow(()->libroDAO.doDeleteInteresse(email,l.getIsbn()));
+        ArrayList<Libro> libri_test=libroDAO.doRetrieveInteresse(email);
+        assertFalse(libri_test.contains(l));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void doDeleteInteresseIncorrectISBNTest() throws SQLException {
+        String email="ps";
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        Libro l= new Libro.LibroBuilder()
+                .annoPubbl(1980)
+                .autore("Alessandro Manzoni")
+                .categoria("lettere")
+                .editore("Mondadori")
+                .posizione(p)
+                .urlCopertina("ciao")
+                .titolo("Promessi Sposi")
+                .isbn("9788891904454A")
+                .nCopie(5)
+                .build();
+        libroDAO.doDeleteInteresse(email,l.getIsbn());
+        ArrayList<Libro> libri_test=libroDAO.doRetrieveInteresse(email);
+        assertFalse(libri_test.contains(l));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void doDeleteInteresseIncorrectEmailTest() throws SQLException {
+        String email="pss";
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder()
                 .annoPubbl(1980)
