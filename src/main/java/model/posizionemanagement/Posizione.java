@@ -1,6 +1,7 @@
 package model.posizionemanagement;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -80,5 +81,13 @@ public class Posizione {
         Gson gson = new Gson();
         Posizione libro= gson.fromJson(json, Posizione.class);
         return libro;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Posizione posizione = (Posizione) o;
+        return biblioteca.equals(posizione.biblioteca) && zona.equals(posizione.zona);
     }
 }

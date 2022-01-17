@@ -44,9 +44,9 @@ public class UtenteDAO {
                 PrestitoDAO prestitoDAO=new PrestitoDAO();
                 LibroDAO libroDAO=new LibroDAO();
                 PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
-                ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(email);;
+                ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(email);
                 ArrayList<Prenotazione> prenotazioni=prenotazioneDAO.doRetrieveValidByUtente(email);
-                ArrayList<Libro> interesse= libroDAO.doRetrieveInteresse(email);;
+                ArrayList<Libro> interesse= libroDAO.doRetrieveInteresse(email);
                 u = UtenteExtractor.extract(rs,prestiti, prenotazioni, interesse);
             }
             return u;
@@ -65,9 +65,9 @@ public class UtenteDAO {
                 PrestitoDAO prestitoDAO=new PrestitoDAO();
                 LibroDAO libroDAO=new LibroDAO();
                 PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
-                ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(email);;
+                ArrayList<Prestito> prestiti=prestitoDAO.doRetrieveByUtente(email);
                 ArrayList<Prenotazione> prenotazioni=prenotazioneDAO.doRetrieveValidByUtente(email);
-                ArrayList<Libro> interesse= libroDAO.doRetrieveInteresse(email);;
+                ArrayList<Libro> interesse= libroDAO.doRetrieveInteresse(email);
                 u = UtenteExtractor.extract(rs,prestiti, prenotazioni, interesse);
             }
             return u;

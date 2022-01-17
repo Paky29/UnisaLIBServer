@@ -17,18 +17,17 @@ public class PosizioneDAOTest {
 
     @Test
     public void insertTest() throws SQLException {
-        Posizione p = new Posizione("Scientifica", "Piano 3");
+        Posizione p = new Posizione("scientifica", "Piano 7");
         posizioneDAO.insert(p);
         Posizione p1 = posizioneDAO.doRetrieveByBibliotecaZona(p.getBiblioteca(), p.getZona());
-        assertEquals(p.getId(), p1.getId());
         assertEquals(p.getBiblioteca(), p1.getBiblioteca());
         assertEquals(p.getZona(), p1.getZona());
     }
 
     @Test
     public void doRetrieveByBibliotecaZonaTest() throws SQLException {
-        String biblioteca = "Scientifica";
-        String zona = "Piano 2";
+        String biblioteca = "scientifica";
+        String zona = "piano 2";
         Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
         assertEquals(biblioteca, p.getBiblioteca());
         assertEquals(zona, p.getZona());

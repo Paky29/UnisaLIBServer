@@ -51,19 +51,6 @@ public class LibroDAO {
         }
     }
 
-    public ArrayList<Libro> doRetrieveByTitolo(String titolo) throws SQLException {
-        try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.titolo LIKE ?");
-            ps.setString(1,"%"+titolo+"%");
-            ResultSet rs = ps.executeQuery();
-            ArrayList<Libro> libri=new ArrayList<>();
-            while(rs.next())
-                libri.add(LibroExtractor.extract(rs));
-
-            return libri;
-        }
-    }
-
     public ArrayList<Libro> doRetrieveByTitoloAutore(String ricerca) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
@@ -93,22 +80,6 @@ public class LibroDAO {
             return libri;
         }
     }
-
-
-    public ArrayList<Libro> doRetrieveByAutore(String autore) throws SQLException {
-        try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
-                    "FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.autore = ?");
-            ps.setString(1,autore);
-            ResultSet rs = ps.executeQuery();
-            ArrayList<Libro> libri=new ArrayList<>();
-            while(rs.next())
-                libri.add(LibroExtractor.extract(rs));
-
-            return libri;
-        }
-    }
-
 
     public ArrayList<Libro> doRetrieveInteresse(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {

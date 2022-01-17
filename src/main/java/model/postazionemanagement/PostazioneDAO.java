@@ -258,24 +258,4 @@ public class PostazioneDAO {
         }
         return false;
     }
-
-
-    /*
-    public ArrayList<Postazione> doRetrieveByPosizione(Posizione p) throws SQLException{
-        try(Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk " +
-                    "FROM postazione ps, posizione p WHERE p.posizione_id=ps.posizione_fk AND p.biblioteca=? AND p.zona=?");
-            ps.setString(1, p.getBiblioteca());
-            ps.setString(2, p.getZona());
-
-            ArrayList<Postazione> postazioni=new ArrayList<>();
-            ResultSet rs = ps.executeQuery();
-            while(rs.next())
-                postazioni.add(PostazioneExtractor.extract(rs));
-
-            return postazioni;
-        }
-    }
-     */
-
 }
