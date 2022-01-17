@@ -3,11 +3,13 @@ package model.utentemanagement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
+import model.postazionemanagement.Postazione;
 import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
 
@@ -61,6 +63,34 @@ public class Utente {
 
     public ArrayList<Prenotazione> getPrenotazioni() {
         return prenotazioni;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Utente utente = (Utente) o;
+        for(Prestito p: prestiti)
+            if(!utente.getPrestiti().contains(p))
+                return false;
+
+        if(prestiti.size()!=utente.prestiti.size() || prenotazioni.size()!=utente.prenotazioni.size() || interessi.size()!=utente.interessi.size() )
+        for(Prenotazione p: prenotazioni)
+            if(!utente.getPrestiti().contains(p))
+                return false;
+
+        for(Libro l: interessi)
+            if(!utente.getInteressi().contains(l)) {
+                return false;
+            }
+
+        if(matricola!=null)
+            if(!matricola.equals(utente.matricola))
+                return false;
+        if(genere!=null)
+            if(!genere.equals(utente.genere))
+                return false;
+        return email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta && nuovo==utente.nuovo;
     }
 
     public static class UtenteBuilder{
