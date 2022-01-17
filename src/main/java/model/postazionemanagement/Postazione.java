@@ -36,6 +36,8 @@ public class Postazione {
         if (o == null || getClass() != o.getClass()) return false;
         Postazione pos = (Postazione) o;
         boolean bl=true;
+        if(blocchi.size()!=pos.blocchi.size())
+            return false;
         for(Periodo blocco: blocchi)
             if(!pos.blocchi.contains(blocco))
                 return false;
