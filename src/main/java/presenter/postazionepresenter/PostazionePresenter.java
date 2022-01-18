@@ -80,6 +80,12 @@ public class PostazionePresenter extends presenter {
                 sbloccaPostazione(idPos);
                 break;
             }
+            case "/sblocca-postazione-periodo":{
+                String idPos = req.getParameter("idPos");
+                Periodo p=Periodo.fromJson(req.getParameter("periodo"));
+                sbloccaPostazione(idPos,p);
+                break;
+            }
             case "/cerca-blocchi":{
                 String idPos=req.getParameter("idPos");
                 cercaBlocchi(idPos);
@@ -91,9 +97,13 @@ public class PostazionePresenter extends presenter {
         PostazioneDAO postazioneDAO=new PostazioneDAO();
         try {
             Postazione p=postazioneDAO.doRetrieveById(idPos);
+            if(p!=null){
             JSONObject string = new JSONObject();
             string.put("postazione",Postazione.toJson(p));
             pw.write(string.toString());
+            }
+            else
+                pw.write("Postazione non trovata");
         } catch (Exception e) {
             e.printStackTrace();
             pw.write("Errore del server");
@@ -201,28 +211,49 @@ public class PostazionePresenter extends presenter {
     }
 
     private void sbloccaPostazione(String idPos) {
-        Postazione pos;
         JSONObject string = new JSONObject();
         PostazioneDAO pdao = new PostazioneDAO();
-        if(pdao.sbloccaPostazione(idPos)){
-            try{
-                string.put("messaggio", "sblocco effettuato con successo");
-                pw.write(string.toString());
+        try {
+            if(pdao.sbloccaPostazione(idPos)){
+                try{
+                    string.put("messaggio", "sblocco effettuato con successo");
+                    pw.write(string.toString());
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
-            catch (JSONException e){
-                e.printStackTrace();
-            }
-        }
-        else{
-            try {
+            else
                 string.put("messaggio","sblocco non effettuato");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
         }
     }
 
-
+    private void sbloccaPostazione(String idPos, Periodo p) {
+        JSONObject string = new JSONObject();
+        PeriodoDAO periodoDAO=new PeriodoDAO();
+        PostazioneDAO pdao = new PostazioneDAO();
+        try {
+            Periodo periodo=periodoDAO.doRetrieveByInfo(p);
+            System.out.println(idPos+" "+p.getId());
+            if(pdao.sbloccaPostazione(idPos,periodo)){
+                try{
+                    string.put("messaggio", "sblocco effettuato con successo");
+                    pw.write(string.toString());
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            else
+                string.put("messaggio","sblocco non effettuato");
+        } catch (Exception e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
+        }
+    }
 
     private void bloccoDeterminato(String idPos, Periodo per, HttpServletResponse resp) {
         JSONObject rsp=new JSONObject();

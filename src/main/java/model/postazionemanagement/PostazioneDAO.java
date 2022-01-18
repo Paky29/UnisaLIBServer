@@ -31,7 +31,7 @@ public class PostazioneDAO {
         Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE ps.postazione_id = ? AND pe.data_p>=?");
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE ps.postazione_id = ? AND (pe.data_p>=? OR pe.data_p is null)");
             ps.setString(1,id);
             ps.setDate(2,dataCorrente);
 
@@ -39,6 +39,7 @@ public class PostazioneDAO {
             Postazione pst = null;
 
             while(rs.next()) {
+                System.out.println("While");
                 if(pst==null)
                     pst = PostazioneExtractor.extract(rs);
                 if(rs.getDate("pe.data_p")!=null)
@@ -52,7 +53,7 @@ public class PostazioneDAO {
         Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id,pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?  AND pe.data_p>=?");
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=?  AND (pe.data_p>=? OR pe.data_p is null)");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
             ps.setDate(3,dataCorrente);
@@ -74,7 +75,7 @@ public class PostazioneDAO {
     public ArrayList<Postazione> doRetrieveDisponibiliByPosizione(String biblioteca, String zona) throws SQLException{
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=? AND ps.is_disponibile=true");
+                    "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=? AND ps.is_disponibile=true AND (pe.data_p>=? OR pe.data_p is null)");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
 
@@ -222,11 +223,8 @@ public class PostazioneDAO {
         }
     }
 
-    public boolean sbloccaPostazione(String idPos){
-        Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
-
+    public boolean sbloccaPostazione(String idPos) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            int counter=0;
             boolean isBlock = true;
             ResultSet rs;
             conn.setAutoCommit(false);
@@ -249,13 +247,25 @@ public class PostazioneDAO {
                 System.out.println("fallita la prima query");
                 return false;
             }
+
             conn.commit();
             conn.setAutoCommit(true);
             System.out.println("torno true");
             return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        return false;
+    }
+
+    public boolean sbloccaPostazione(String idPos,Periodo p) throws SQLException {
+        System.out.println(idPos+" "+p.getId());
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM blocco b WHERE b.postazione_fk=? AND periodo_fk=?");
+            ps.setString(1,idPos);
+            ps.setInt(2,p.getId());
+            ps.setString(1, idPos);
+            if (ps.executeUpdate() != 1) {
+                return false;
+            }
+            return true;
+        }
     }
 }
