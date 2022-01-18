@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class PosizioneDAOTest {
     PosizioneDAO posizioneDAO;
@@ -24,12 +26,35 @@ public class PosizioneDAOTest {
         assertEquals(p.getZona(), p1.getZona());
     }
 
+    @Test(expected = SQLException.class)
+    public void insertAlreadyExistsPosizioneTest() throws SQLException {
+        Posizione p = new Posizione("scientifica", "Piano 1");
+        posizioneDAO.insert(p);
+    }
+
     @Test
     public void doRetrieveByBibliotecaZonaTest() throws SQLException {
         String biblioteca = "scientifica";
         String zona = "piano 2";
+        final Posizione[] pTest = new Posizione[1];
+        assertDoesNotThrow(() -> pTest[0] = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona));
+        assertEquals(biblioteca, pTest[0].getBiblioteca());
+        assertEquals(zona, pTest[0].getZona());
+    }
+
+    @Test
+    public void doRetrieveByIncorrectBibliotecaZonaTest() throws SQLException {
+        String biblioteca = "linguistica";
+        String zona = "piano 2";
         Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
-        assertEquals(biblioteca, p.getBiblioteca());
-        assertEquals(zona, p.getZona());
+        assertNull(p);
+    }
+
+    @Test
+    public void doRetrieveByBibliotecaIncorrectZonaTest() throws SQLException {
+        String biblioteca = "scientifica";
+        String zona = "piano 20";
+        Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
+        assertNull(p);
     }
 }
