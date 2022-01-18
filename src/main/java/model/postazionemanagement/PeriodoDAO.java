@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 public class PeriodoDAO {
 
-    public Periodo doRetrieveById(int id) throws SQLException {
+ /*   public Periodo doRetrieveById(int id) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM periodo pe WHERE pe.periodo_id=?");
@@ -26,7 +26,7 @@ public class PeriodoDAO {
             return p;
         }
     }
-
+*/
     public  Periodo doRetrieveByInfo(GregorianCalendar date, int oraInizio, int oraFine) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
@@ -47,7 +47,7 @@ public class PeriodoDAO {
         }
     }
 
-    public ArrayList<Periodo> doRetrieveByPostazione(String idPostazione) throws SQLException {
+   /* public ArrayList<Periodo> doRetrieveByPostazione(String idPostazione) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM periodo pe AND blocco b WHERE b.postazione_fk=?");
@@ -61,8 +61,8 @@ public class PeriodoDAO {
             return p;
         }
     }
-
-    public ArrayList<Periodo> doRetrieveAll() throws SQLException {
+*/
+    /*public ArrayList<Periodo> doRetrieveAll() throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM periodo pe");
@@ -76,7 +76,7 @@ public class PeriodoDAO {
             return p;
         }
     }
-
+*/
     public Periodo doRetrieveByInfo(Periodo periodo) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
