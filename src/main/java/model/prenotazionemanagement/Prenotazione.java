@@ -1,10 +1,7 @@
 package model.prenotazionemanagement;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -77,6 +74,16 @@ public class Prenotazione {
 
     public void setPostazione(Postazione postazione) {
         this.postazione = postazione;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Prenotazione that = (Prenotazione) o;
+        if(!(data.get(Calendar.DAY_OF_MONTH)==that.data.get(Calendar.DAY_OF_MONTH) && data.get(Calendar.MONTH)==that.data.get(Calendar.MONTH) && data.get(Calendar.YEAR)==that.data.get(Calendar.YEAR)))
+            return false;
+        return oraInizio == that.oraInizio && oraFine == that.oraFine && data.equals(that.data) && utente.getEmail().equals(that.utente.getEmail()) && postazione.getId().equals(that.postazione.getId());
     }
 
     public static String toJson(List<Prenotazione> prenotazioni){

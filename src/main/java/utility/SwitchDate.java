@@ -16,4 +16,8 @@ public class SwitchDate {
         gc.set(d.getYear()+1900, d.getMonth(), d.getDate());
         return gc;
     }
+
+    public static boolean equalsDate(GregorianCalendar d1, GregorianCalendar d2){
+        return (d1.get(Calendar.YEAR)==d2.get(Calendar.YEAR) && d1.get(Calendar.MONTH)==d2.get(Calendar.MONTH) && d1.get(Calendar.DATE)==d2.get(Calendar.DATE));
+    }
 }

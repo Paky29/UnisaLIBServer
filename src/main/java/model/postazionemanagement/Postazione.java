@@ -3,6 +3,7 @@ package model.postazionemanagement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +28,20 @@ public class Postazione {
     public Postazione(boolean disponibile, Posizione posizione) {
         this.disponibile = disponibile;
         this.posizione = posizione;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Postazione pos = (Postazione) o;
+        boolean bl=true;
+        if(blocchi.size()!=pos.blocchi.size())
+            return false;
+        for(Periodo blocco: blocchi)
+            if(!pos.blocchi.contains(blocco))
+                return false;
+        return disponibile == pos.disponibile && id.equals(pos.id) && posizione.equals(pos.posizione) && bl;
     }
 
     public String getId() {

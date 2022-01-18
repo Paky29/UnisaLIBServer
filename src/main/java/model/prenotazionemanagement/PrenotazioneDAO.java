@@ -31,6 +31,26 @@ public class PrenotazioneDAO {
         }
     }
 
+    public Prenotazione doRetrieveByInfo(GregorianCalendar data, int oraInizio, String postazioneId, String utenteEmail) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
+                    "FROM prenotazione p WHERE  p.data_p=? AND p.ora_inizio=? AND p.postazione_fk=? AND p.utente_fk=?");
+            ps.setDate(1, SwitchDate.toDate(data));
+            ps.setInt(2, oraInizio);
+            ps.setString(3, postazioneId);
+            ps.setString(4, utenteEmail);
+
+            Prenotazione p = null;
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+                p = PrenotazioneExtractor.extract(rs);
+
+            return p;
+        }
+    }
+
+
     public ArrayList<Prenotazione> doRetrieveByPostazione(Postazione post) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT p.data_p, p.ora_inizio, p.postazione_fk, p.utente_fk, p.ora_fine " +
