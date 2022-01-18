@@ -11,6 +11,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.utentemanagement.Utente;
+import utility.SwitchDate;
 
 public class Prestito {
     private GregorianCalendar dataInizio, dataFine, dataConsegna;
@@ -41,14 +42,18 @@ public class Prestito {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Prestito prestito = (Prestito) o;
-        if(!(dataInizio.get(Calendar.DAY_OF_MONTH)==prestito.dataInizio.get(Calendar.DAY_OF_MONTH) && dataInizio.get(Calendar.MONTH)==prestito.dataInizio.get(Calendar.MONTH) && dataInizio.get(Calendar.YEAR)==prestito.dataInizio.get(Calendar.YEAR)))
+        if(!SwitchDate.equalsDate(dataInizio, prestito.dataInizio))
             return false;
-        if(!(dataFine.get(Calendar.DAY_OF_MONTH)==prestito.dataFine.get(Calendar.DAY_OF_MONTH) && dataFine.get(Calendar.MONTH)==prestito.dataFine.get(Calendar.MONTH) && dataFine.get(Calendar.YEAR)==prestito.dataFine.get(Calendar.YEAR)))
+        if(!SwitchDate.equalsDate(dataFine, prestito.dataFine))
             return false;
-        if(!(dataConsegna.get(Calendar.DAY_OF_MONTH)==prestito.dataConsegna.get(Calendar.DAY_OF_MONTH) && dataConsegna.get(Calendar.MONTH)==prestito.dataConsegna.get(Calendar.MONTH) && dataConsegna.get(Calendar.YEAR)==prestito.dataConsegna.get(Calendar.YEAR)))
+        if(dataConsegna!=null && prestito.dataConsegna!=null)
+            return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro) && commento.equals(prestito.commento) && SwitchDate.equalsDate(dataConsegna, prestito.dataConsegna);
+        else if(dataConsegna==null && prestito.dataConsegna==null){
+            return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro) && commento.equals(prestito.commento);
+        }
+        else{
             return false;
-
-        return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro) && commento.equals(prestito.commento);
+        }
     }
 
     public static class PrestitoBuilder{
