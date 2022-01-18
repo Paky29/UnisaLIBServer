@@ -7,6 +7,7 @@ import model.prenotazionemanagement.PrenotazioneDAO;
 import model.prestitomanagement.Prestito;
 import model.prestitomanagement.PrestitoDAO;
 import utility.ConPool;
+import utility.SwitchDate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -70,6 +71,24 @@ public class UtenteDAO {
                 u=UtenteExtractor.extract(rs);
 
             return u;
+        }
+    }
+
+    public boolean doUpdate(Utente u) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("UPDATE utente u SET u.nome=?, u.cognome=?, u.is_nuovo=?, u.eta=?, u.genere=? WHERE u.email=?");
+            ps.setString(1, u.getNome());
+            ps.setString(2, u.getCognome());
+            ps.setBoolean(3, u.isNuovo());
+            ps.setInt(4, u.getEta());
+            ps.setString(5, u.getGenere());
+            ps.setString(6, u.getEmail());
+
+
+            if (ps.executeUpdate() != 1)
+                throw new RuntimeException("Update error");
+
+            return true;
         }
     }
 }
