@@ -38,11 +38,11 @@ public class PrenotazioneDAOTest {
                 admin(false).
                 nuovo(false).
                 build();
-        Postazione postazione = new Postazione("1", true, new Posizione(1, "umanistica" , "piano 1"));
+        Postazione postazione = new Postazione("1", true, new Posizione( "scientifica" , "Piano 1"));
         Prenotazione p = new Prenotazione(new GregorianCalendar(2022, 1, 2), 16, 18, utente, postazione);
         prenotazioneDAO.insert(p);
         Prenotazione pTest = prenotazioneDAO.doRetrieveByInfo(p.getData(), p.getOraInizio(), p.getPostazione().getId(), p.getUtente().getEmail());
-        assertEquals(p.getData(), pTest.getData());
+        assertTrue(SwitchDate.equalsDate(p.getData(), pTest.getData()));
         assertEquals(p.getOraInizio(), pTest.getOraInizio());
         assertEquals(p.getPostazione(), pTest.getPostazione());
         assertEquals(p.getUtente(), pTest.getUtente());

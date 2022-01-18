@@ -28,14 +28,14 @@ public class PosizioneDAOTest {
 
     @Test(expected = SQLException.class)
     public void insertAlreadyExistsPosizioneTest() throws SQLException {
-        Posizione p = new Posizione("scientifica", "Piano 1");
+        Posizione p = new Posizione("scientifica", "Piano 7");
         posizioneDAO.insert(p);
     }
 
     @Test
     public void doRetrieveByBibliotecaZonaTest() throws SQLException {
         String biblioteca = "scientifica";
-        String zona = "piano 2";
+        String zona = "Piano 7";
         final Posizione[] pTest = new Posizione[1];
         assertDoesNotThrow(() -> pTest[0] = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona));
         assertEquals(biblioteca, pTest[0].getBiblioteca());
@@ -45,7 +45,7 @@ public class PosizioneDAOTest {
     @Test
     public void doRetrieveByIncorrectBibliotecaZonaTest() throws SQLException {
         String biblioteca = "linguistica";
-        String zona = "piano 2";
+        String zona = "Piano 7";
         Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
         assertNull(p);
     }
@@ -53,8 +53,16 @@ public class PosizioneDAOTest {
     @Test
     public void doRetrieveByBibliotecaIncorrectZonaTest() throws SQLException {
         String biblioteca = "scientifica";
-        String zona = "piano 20";
+        String zona = "Piano 20";
         Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
         assertNull(p);
+    }
+
+    @Test
+    public void deleteTest() throws SQLException {
+        String biblioteca = "scientifica";
+        String zona = "Piano 7";
+        posizioneDAO.delete(biblioteca, zona);
+        assertNull(posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona));
     }
 }

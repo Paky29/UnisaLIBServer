@@ -75,6 +75,19 @@ public class PosizioneDAO {
         }
     }
 
+    public boolean delete(String biblioteca, String zona) throws SQLException{
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM Posizione p WHERE p.biblioteca=? AND p.zona=?");
+            ps.setString(1, biblioteca);
+            ps.setString(2, zona);
+
+            if (ps.executeUpdate() != 1)
+                throw new RuntimeException("DELETE error");
+
+            return true;
+        }
+    }
+
     public ArrayList<Posizione> doRetrieveAll() throws SQLException {
         try(Connection conn= ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.posizione_id, p.biblioteca, p.zona FROM posizione p");
