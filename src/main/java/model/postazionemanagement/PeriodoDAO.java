@@ -80,10 +80,10 @@ public class PeriodoDAO {
     public Periodo doRetrieveByInfo(Periodo periodo) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
-                    "FROM periodo pe WHERE pe.data=? AND pe.ora_inizio=? AND pe.ora_fine=?");
+                    "FROM periodo pe WHERE pe.data_p=? AND pe.ora_inizio=? AND pe.ora_fine=?");
             ps.setDate(1, SwitchDate.toDate(periodo.getData()));
-            ps.setInt(1, periodo.getOraInizio());
-            ps.setInt(1, periodo.getOraFine());
+            ps.setInt(2, periodo.getOraInizio());
+            ps.setInt(3, periodo.getOraFine());
 
             Periodo p = null;
             ResultSet rs = ps.executeQuery();
