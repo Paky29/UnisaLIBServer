@@ -12,6 +12,7 @@ import model.utentemanagement.Utente;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import utility.SwitchDate;
 
 public class Prenotazione {
     private GregorianCalendar data;
@@ -81,9 +82,7 @@ public class Prenotazione {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Prenotazione that = (Prenotazione) o;
-        if(!(data.get(Calendar.DAY_OF_MONTH)==that.data.get(Calendar.DAY_OF_MONTH) && data.get(Calendar.MONTH)==that.data.get(Calendar.MONTH) && data.get(Calendar.YEAR)==that.data.get(Calendar.YEAR)))
-            return false;
-        return oraInizio == that.oraInizio && oraFine == that.oraFine && data.equals(that.data) && utente.getEmail().equals(that.utente.getEmail()) && postazione.getId().equals(that.postazione.getId());
+        return oraInizio == that.oraInizio && oraFine == that.oraFine && data.equals(that.data) && utente.getEmail().equals(that.utente.getEmail()) && postazione.getId().equals(that.postazione.getId()) && SwitchDate.equalsDate(data, that.data);
     }
 
     public static String toJson(List<Prenotazione> prenotazioni){

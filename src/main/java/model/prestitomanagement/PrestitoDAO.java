@@ -103,7 +103,7 @@ public class PrestitoDAO {
         }
     }
 
-    public ArrayList<Prestito> doRetrieveByLibro(Libro l) throws SQLException {
+    /*public ArrayList<Prestito> doRetrieveByLibro(Libro l) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
                     "FROM prestito p WHERE p.libro_fk=?");
@@ -116,11 +116,11 @@ public class PrestitoDAO {
 
             return prestiti;
         }
-    }
+    }*/
 
-    public ArrayList<Prestito> doRetrieveValidByLibro(Libro l) throws SQLException {
+    /*public ArrayList<Prestito> doRetrieveValidByLibro(Libro l) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
+            PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
                     "FROM prestito p WHERE p.libro_fk=? AND p.data_consegna is null");
             ps.setString(1, l.getIsbn());
 
@@ -131,7 +131,7 @@ public class PrestitoDAO {
 
             return prestiti;
         }
-    }
+    }*/
 
     public ArrayList<Prestito> doRetrieveValidByLibro(String isbn) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
@@ -148,7 +148,7 @@ public class PrestitoDAO {
         }
     }
 
-    public ArrayList<Prestito> doRetrieveByUtente(Utente u) throws SQLException {
+    /*public ArrayList<Prestito> doRetrieveByUtente(Utente u) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.is_attivo " +
                     "FROM prestito p WHERE p.utente_fk=?");
@@ -161,7 +161,7 @@ public class PrestitoDAO {
 
             return prestiti;
         }
-    }
+    }*/
 
     public ArrayList<Prestito> doRetrieveByUtente(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
