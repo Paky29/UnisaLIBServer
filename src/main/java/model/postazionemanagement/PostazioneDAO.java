@@ -140,6 +140,8 @@ public class PostazioneDAO {
                     return false;
                 }
             }
+            else
+                return false;
 
                 ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = false WHERE pos.postazione_id = ?");
                 ps.setString(1, idPos);
@@ -251,6 +253,8 @@ public class PostazioneDAO {
                     return false;
                 }
             }
+            else
+                return false;
 
             ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = true WHERE pos.postazione_id = ?");
             ps.setString(1, idPos);
