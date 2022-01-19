@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.postazionemanagement.Postazione;
@@ -70,19 +71,6 @@ public class Utente {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Utente utente = (Utente) o;
-        for(Prestito p: prestiti)
-            if(!utente.getPrestiti().contains(p))
-                return false;
-
-        if(prestiti.size()!=utente.prestiti.size() || prenotazioni.size()!=utente.prenotazioni.size() || interessi.size()!=utente.interessi.size() )
-        for(Prenotazione p: prenotazioni)
-            if(!utente.getPrestiti().contains(p))
-                return false;
-
-        for(Libro l: interessi)
-            if(!utente.getInteressi().contains(l)) {
-                return false;
-            }
 
         if(matricola!=null)
             if(!matricola.equals(utente.matricola))
@@ -90,7 +78,26 @@ public class Utente {
         if(genere!=null)
             if(!genere.equals(utente.genere))
                 return false;
-        return email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta && nuovo==utente.nuovo;
+        System.out.println("Ret" + (email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta));
+        return email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta && nuovo == utente.nuovo;
+    }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", matricola='" + matricola + '\'' +
+                ", genere='" + genere + '\'' +
+                ", eta=" + eta +
+                ", admin=" + admin +
+                ", nuovo=" + nuovo +
+                ", interessi=" + interessi +
+                ", prestiti=" + prestiti +
+                ", prenotazioni=" + prenotazioni +
+                '}';
     }
 
     public static class UtenteBuilder{
@@ -194,5 +201,11 @@ public class Utente {
     public static String toJson(List<Utente> utenti){
         Gson gson = new Gson();
         return gson.toJson(utenti);
+    }
+
+    public static Utente fromJson(String json) throws JsonSyntaxException {
+        Gson gson = new Gson();
+        Utente p = gson.fromJson(json,Utente.class);
+        return p;
     }
 }

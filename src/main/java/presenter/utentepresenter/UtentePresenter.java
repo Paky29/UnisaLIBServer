@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 @WebServlet(name="utentepresenter", value = "/UtentePresenter/*")
 public class UtentePresenter extends presenter {
-    private PrintWriter pw;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,19 +34,19 @@ public class UtentePresenter extends presenter {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
-        pw=resp.getWriter();
+        PrintWriter pw=resp.getWriter();
         switch(path){
             case "/": break;
             case "/login": {
                 String e=req.getParameter("email");
                 String p=req.getParameter("pass");
-                login(e,p);
+                pw.write(login(e,p));
                 break;
             }
         }
     }
 
-    public void login(String email, String password){
+    public String login(String email, String password){
         UtenteDAO utenteDAO=new UtenteDAO();
         Utente u=null;
         try {
@@ -56,16 +55,16 @@ public class UtentePresenter extends presenter {
                 JSONObject jsonObject=new JSONObject();
                 try {
                     jsonObject.put("Utente", Utente.toJson(u));
-                    pw.write(jsonObject.toString());
+                    return jsonObject.toString();
                 } catch (JSONException ex) {
-                    pw.write("Errore del server");
+                    return"Errore del server";
                 }
             }
             else{
-                pw.write("Utente non trovato");
+                return"Utente non trovato";
             }
         } catch (Exception ex) {
-            pw.write("Errore del server");
+            return"Errore del server";
         }
 
     }
