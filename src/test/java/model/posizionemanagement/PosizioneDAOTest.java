@@ -19,7 +19,7 @@ public class PosizioneDAOTest {
 
     @Test
     public void insertTest() throws SQLException {
-        Posizione p = new Posizione("scientifica", "piano 8");
+        Posizione p = new Posizione("scientifica", "Piano 7");
         posizioneDAO.insert(p);
         Posizione p1 = posizioneDAO.doRetrieveByBibliotecaZona(p.getBiblioteca(), p.getZona());
         assertEquals(p.getBiblioteca(), p1.getBiblioteca());
