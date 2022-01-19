@@ -103,8 +103,8 @@ public class PeriodoDAO {
             ps.setInt(3,p.getOraFine());
 
             if(ps.executeUpdate()!=1)
-                return true;
-            return false;
+                return false;
+            return true;
         }
     }
 }

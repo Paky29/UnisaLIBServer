@@ -29,7 +29,7 @@ public class PosizioneDAO {
             ps.setString(2, p.getZona());
 
             if (ps.executeUpdate() != 1)
-                throw new RuntimeException("INSERT error");
+                return false;
 
             return true;
         }

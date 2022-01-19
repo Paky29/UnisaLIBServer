@@ -27,7 +27,7 @@ public class PeriodoDAOTest {
 
     @Test
     public void insertTest() {
-        GregorianCalendar data = new GregorianCalendar(2022, 1 ,2);
+        GregorianCalendar data = new GregorianCalendar();
         int oraInizio = 11;
         int oraFine = 13;
         Periodo p = new Periodo(oraFine, oraInizio, data);
@@ -49,19 +49,19 @@ public class PeriodoDAOTest {
     }
 
     @Test(expected = SQLException.class)
-    public void insertAlreadyExistsPosizioneTest() throws SQLException {
-        GregorianCalendar data = new GregorianCalendar(2022, Calendar.FEBRUARY ,2);
-        int oraInizio = 13;
-        int oraFine = 11;
+    public void insertAlreadyExistsPeriodoTest() throws SQLException {
+        GregorianCalendar data = new GregorianCalendar();
+        int oraInizio = 11;
+        int oraFine = 13;
         Periodo p = new Periodo(oraFine, oraInizio, data);
         pdao.insertPeriodo(p);
     }
 
     @Test
     public void doRetrieveByInfoTest() throws SQLException {
-        GregorianCalendar data = new GregorianCalendar(2022, Calendar.FEBRUARY,2);
-        int oraInizio = 13;
-        int oraFine = 11;
+        GregorianCalendar data = new GregorianCalendar();
+        int oraInizio = 11;
+        int oraFine = 13;
         final Periodo[] pTest = new Periodo[1];
         assertDoesNotThrow(() -> pTest[0] = pdao.doRetrieveByInfo(data,oraInizio,oraFine));
         assertTrue(SwitchDate.equalsDate(data, pTest[0].getData()));

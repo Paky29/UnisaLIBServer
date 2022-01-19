@@ -23,11 +23,13 @@ public class Postazione {
         this.id = id;
         this.disponibile = disponibile;
         this.posizione = posizione;
+        this.blocchi=new ArrayList<>();
     }
 
     public Postazione(boolean disponibile, Posizione posizione) {
         this.disponibile = disponibile;
         this.posizione = posizione;
+        this.blocchi=new ArrayList<>();
     }
 
     @Override

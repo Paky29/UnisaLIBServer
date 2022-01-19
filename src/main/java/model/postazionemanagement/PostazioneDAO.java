@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.*;
 
 public class PostazioneDAO {
-
+    /*
     public ArrayList<Postazione> doRetrieveByNotDisponibile() throws SQLException {
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona " +
@@ -23,6 +23,20 @@ public class PostazioneDAO {
                 nonDisponibili.add(PostazioneExtractor.extract(rs));
 
             return nonDisponibili;
+        }
+    }*/
+
+    public boolean insert(Postazione p) throws SQLException{
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("INSERT into postazione (postazione_id, is_disponibile, posizione_fk) VALUES (?, ?, ?)");
+            ps.setString(1, p.getId());
+            ps.setBoolean(2, p.isDisponibile());
+            ps.setInt(3,p.getPosizione().getId());
+
+            if (ps.executeUpdate() != 1)
+                return false;
+
+            return true;
         }
     }
 
@@ -73,11 +87,13 @@ public class PostazioneDAO {
     }
 
     public ArrayList<Postazione> doRetrieveDisponibiliByPosizione(String biblioteca, String zona) throws SQLException{
+        Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try(Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT ps.postazione_id, ps.is_disponibile, ps.posizione_fk, p.posizione_id, p.biblioteca, p.zona, pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM postazione ps INNER JOIN posizione p ON p.posizione_id=ps.posizione_fk LEFT JOIN blocco b ON b.postazione_fk=ps.postazione_id LEFT JOIN periodo pe ON b.periodo_fk=pe.periodo_id WHERE p.biblioteca=? AND p.zona=? AND ps.is_disponibile=true AND (pe.data_p>=? OR pe.data_p is null)");
             ps.setString(1, biblioteca);
             ps.setString(2, zona);
+            ps.setDate(3,dataCorrente);
 
             Map<String,Postazione> pos=new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
@@ -135,7 +151,6 @@ public class PostazioneDAO {
             ps = conn.prepareStatement("SELECT COUNT(*) as pren FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");
             ps.setDate(1, dataCorrente);
             ps.setInt(2,Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-            System.out.print(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
             ps.setString(3,idPos);
             rs = ps.executeQuery();
             if(rs.next())
@@ -148,14 +163,11 @@ public class PostazioneDAO {
             if (ps.executeUpdate() != counter) {
                 conn.rollback();
                 conn.setAutoCommit(true);
-                System.out.println("fallita la seconda query");
                 return false;
             }
 
             conn.commit();
             conn.setAutoCommit(true);
-            System.out.println("torno true");
-
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -256,7 +268,6 @@ public class PostazioneDAO {
     }
 
     public boolean sbloccaPostazione(String idPos,Periodo p) throws SQLException {
-        System.out.println(idPos+" "+p.getId());
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM blocco b WHERE b.postazione_fk=? AND periodo_fk=?");
             ps.setString(1,idPos);
