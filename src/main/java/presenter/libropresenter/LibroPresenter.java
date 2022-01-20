@@ -106,7 +106,6 @@ public class LibroPresenter extends presenter {
             if (!categorie.isEmpty()) {
                 if (categorie.contains("Consigliati") && admin==true)
                     categorie.remove("Consigliati");
-                System.out.println(Libro.toJsonCategorie(categorie));
                 pw.write(Libro.toJsonCategorie(categorie));
             } else
                 pw.write("Categorie non trovate");

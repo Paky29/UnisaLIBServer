@@ -8,9 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,7 @@ public class LibroPresenterTest {
     private UtenteDAO utenteDAO;
     private PosizioneDAO posizioneDAO;
     private PrintWriter pw;
-
+    private BufferedReader br;
     @Before
     public void setUp() {
         libroDAO=Mockito.mock(LibroDAO.class);
@@ -37,14 +36,15 @@ public class LibroPresenterTest {
         response= Mockito.mock(HttpServletResponse.class);
         request=Mockito.mock(HttpServletRequest.class);
         try {
-            pw=new PrintWriter("testing.txt");
+            pw=new PrintWriter("src/test/java/testing.txt");
+            br = new BufferedReader(new FileReader("src/test/java/testing.txt"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void mostraRicercaLibri() throws IOException {
+    public void mostraRicercaLibri(){
         when(request.getPathInfo()).thenReturn("/mostra-ricerca-libri");
         when(request.getParameter("is_admin")).thenReturn("true");
         ArrayList<String> categorie=new ArrayList<>();
@@ -53,13 +53,11 @@ public class LibroPresenterTest {
         try {
             when(response.getWriter()).thenReturn(pw);
             when(libroDAO.doRetrieveAllCategorie()).thenReturn(categorie);
-            lp.doPost(request,response);
-            /*FileReader fr =new FileReader("testing.txt");
-            BufferedReader re = new BufferedReader(fr);
-            String linea = re.readLine();
-            assertEquals(linea,Libro.toJsonCategorie(categorie));*/
+            assertDoesNotThrow(()->lp.doPost(request,response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals(linea,Libro.toJsonCategorie(categorie));
         } catch (Exception e) {
-            e.printStackTrace();
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
