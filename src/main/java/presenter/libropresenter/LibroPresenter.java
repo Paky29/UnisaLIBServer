@@ -2,6 +2,7 @@ package presenter.libropresenter;
 
 import model.libromanagement.Libro;
 import model.libromanagement.LibroDAO;
+import model.libromanagement.LibroValidator;
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneDAO;
 import model.postazionemanagement.Postazione;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 @WebServlet(name="libropresenter", value = "/LibroPresenter/*")
 public class LibroPresenter extends presenter {
@@ -253,17 +255,24 @@ public class LibroPresenter extends presenter {
     }
 
     private void creaLibro(Libro libro){
-        try{
-            if (libroDAO.insert(libro)){
-                pw.write("Salvataggio avvenuto con successo");
-            } else {
-                System.out.println("Errore Salvataggio");
-                pw.write("Salvataggio non andato a buon fine");
+        if(LibroValidator.validate(libro)){
+            try{
+                Posizione p=posizioneDAO.doRetrieveByBibliotecaZona(libro.getPosizione().getBiblioteca(),libro.getPosizione().getZona());
+                if(p!=null && libroDAO.existCategoria(libro.getCategoria())) {
+                    if (libroDAO.insert(libro)) {
+                        pw.write("Salvataggio avvenuto con successo");
+                    } else {
+                        System.out.println("Errore Salvataggio");
+                        pw.write("Salvataggio non andato a buon fine");
+                    }
+                }
+            } catch (SQLException e) {
+                pw.write("Errore nel server");
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            pw.write("Errore nel server");
-            e.printStackTrace();
         }
+        else
+            pw.write("Libro non valido");
     }
 
     private void mostraDettagliLibro(){

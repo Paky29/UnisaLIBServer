@@ -138,10 +138,9 @@ public class LibroPresenterTest {
             assertFalse(utente.getInteressi().contains(l));
             pw.flush();
             String linea = br.readLine();
-            Gson gson=new Gson();
-            JsonElement jelem = gson.fromJson(linea, JsonElement.class);
-            JsonObject jobj = jelem.getAsJsonObject();
-            assertEquals(utente,Utente.fromJson(jobj));
+            JSONObject json=new JSONObject();
+            json.put("Utente",Utente.toJson(utente));
+            assertEquals(json.toString(),linea);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Non avrebbe dovuto lanciare l'eccezione");
@@ -165,7 +164,29 @@ public class LibroPresenterTest {
             assertTrue(utente.getInteressi().contains(l));
             pw.flush();
             String linea = br.readLine();
-            assertEquals(utente,Utente.fromJson(linea));
+            JSONObject json=new JSONObject();
+            json.put("Utente",Utente.toJson(utente));
+            assertEquals(json.toString(),linea);
+        } catch (Exception e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void creaLibro(){
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
+        when(request.getPathInfo()).thenReturn("/crea-libro");
+        when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(posizioneDAO.doRetrieveByBibliotecaZona(l.getPosizione().getBiblioteca(),l.getPosizione().getZona())).thenReturn(p);
+            when(libroDAO.existCategoria(l.getCategoria())).thenReturn(true);
+            when(libroDAO.insert(l)).thenReturn(true);
+            assertDoesNotThrow(()->lp.doPost(request,response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Salvataggio avvenuto con successo",linea);
         } catch (Exception e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }

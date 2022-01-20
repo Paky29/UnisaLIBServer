@@ -17,6 +17,19 @@ import java.util.List;
 
 public class LibroDAO {
 
+    public boolean existCategoria(String categoria){
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as esiste FROM categoria c WHERE c.nome=?");
+            ps.setString(1,categoria);
+            ResultSet rs=ps.executeQuery();
+            if(rs.getInt("esiste")==1)
+                return true;
+            return false;
+        }catch (SQLException e){
+            return false;
+        }
+    }
+
     public boolean insert(Libro libro) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("INSERT into libro (isbn, titolo, autore, editore, n_copie, anno_pubblicazione, url_copertina, categoria_fk, posizione_fk) " +

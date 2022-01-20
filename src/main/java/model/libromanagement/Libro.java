@@ -173,4 +173,9 @@ public class Libro implements Serializable {
         Libro libro= gson.fromJson(json, Libro.class);
         return libro;
     }
+
+    public static String toJson(Libro l) {
+        Gson gson = new Gson();
+        return gson.toJson(l);
+    }
 }
