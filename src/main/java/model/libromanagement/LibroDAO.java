@@ -32,7 +32,7 @@ public class LibroDAO {
             ps.setInt(9, libro.getPosizione().getId());
 
             if (ps.executeUpdate() != 1)
-                throw new RuntimeException("INSERT error");
+                return false;
 
             return true;
         }
@@ -114,7 +114,7 @@ public class LibroDAO {
             ps.setString(2, isbn);
 
             if (ps.executeUpdate() != 1)
-                throw new RuntimeException("DELETE error");
+                return false;
 
             return true;
         }
@@ -128,7 +128,7 @@ public class LibroDAO {
             ps.setString(2, isbn);
 
             if (ps.executeUpdate() != 1)
-                throw new RuntimeException("DELETE error");
+                return false;
 
             return true;
         }

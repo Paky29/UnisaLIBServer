@@ -57,30 +57,46 @@ public class LibroPresenter extends presenter {
         switch (path) {
             case "/mostra-ricerca-libri": {
                 String ad = req.getParameter("is_admin");
-                boolean admin = Boolean.parseBoolean(ad);
-                mostraRicercaLibri(admin);
+                if(ad!=null){
+                    boolean admin = Boolean.parseBoolean(ad);
+                    mostraRicercaLibri(admin);
+                }
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/ricerca-libri": {
                 String ricerca = req.getParameter("ricerca");
-                ricercaLibri(ricerca);
+                if(ricerca!=null)
+                    ricercaLibri(ricerca);
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/ricerca-libri-categoria": {
                 String categoria = req.getParameter("categoria");
-                ricercaLibriCategoria(categoria);
+                if(categoria!=null)
+                    ricercaLibriCategoria(categoria);
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/rimuovi-interesse": {
                 String emailUtente = req.getParameter("email");
                 String isbnLibro = req.getParameter("isbn");
-                rimuoviLibroFromInteressi(isbnLibro, emailUtente);
+                if(emailUtente!=null && isbnLibro!=null)
+                    rimuoviLibroFromInteressi(isbnLibro, emailUtente);
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/aggiungi-interesse": {
                 String emailUtente=req.getParameter("email");
                 String isbnLibro=req.getParameter("isbn");
-                aggiungiLibroFromInteressi(isbnLibro, emailUtente);
+                if(emailUtente!=null && isbnLibro!=null)
+                    aggiungiLibroToInteressi(isbnLibro, emailUtente);
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/informazioni-aggiunta":{
@@ -93,8 +109,15 @@ public class LibroPresenter extends presenter {
             }
             case "/crea-libro": {
                 String l = req.getParameter("libro");
-                Libro libro = Libro.fromJsonToLibro(l);
-                creaLibro(libro);
+                if(l!=null) {
+                    Libro libro = Libro.fromJsonToLibro(l);
+                    if(libro!=null)
+                        creaLibro(libro);
+                    else
+                        pw.write("Libro inviato non corretto");
+                }
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
         }
@@ -144,45 +167,53 @@ public class LibroPresenter extends presenter {
         try {
             Libro l = libroDAO.doRetrieveByCodiceISBN(isbnLibro);
             Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
-            if (u.getInteressi().isEmpty()) {
-                pw.write("Nessun libro in interessi");
-            }
-            if (!u.getInteressi().contains(l))
-                pw.write("Libro non presente in interesse");
-
-            if (libroDAO.doDeleteInteresse(emailUtente, isbnLibro)) {
-                u.getInteressi().remove(l);
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    System.out.println("sono dentro");
-                    jsonObject.put("Utente", Utente.toJson(u));
-                } catch (JSONException ex) {
-                    pw.write("Errore del server");
+            if(u!=null && l!=null) {
+                if (u.getInteressi().isEmpty()) {
+                    pw.write("Nessun libro in interessi");
                 }
-                pw.write(jsonObject.toString());
-            } else
-                pw.write("Rimozione fallita, riprova.");
+                else
+                    if (!u.getInteressi().contains(l))
+                        pw.write("Libro non presente in interesse");
 
+                if (libroDAO.doDeleteInteresse(emailUtente, isbnLibro)) {
+                    u.getInteressi().remove(l);
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        System.out.println("sono dentro");
+                        jsonObject.put("Utente", Utente.toJson(u));
+                    } catch (JSONException ex) {
+                        pw.write("Errore del server");
+                    }
+                    pw.write(jsonObject.toString());
+                } else
+                    pw.write("Rimozione fallita, riprova.");
+            }
+            else
+                pw.write("Richiesta non corretta");
         } catch (Exception e) {
             pw.write("Errore del server");
         }
     }
 
-    private void aggiungiLibroFromInteressi(String isbnLibro, String emailUtente){
+    private void aggiungiLibroToInteressi(String isbnLibro, String emailUtente){
         try {
-            if(libroDAO.doAddInteresse(emailUtente, isbnLibro)) {
-                Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
-                JSONObject jsonObject=new JSONObject();
-                try {
-                    jsonObject.put("Utente", Utente.toJson(u));
-                } catch (JSONException ex) {
-                    pw.write("Errore del server");
-                }
-                pw.write(jsonObject.toString());
+            Libro l = libroDAO.doRetrieveByCodiceISBN(isbnLibro);
+            Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
+            if(u!=null && l!=null) {
+                if (libroDAO.doAddInteresse(emailUtente, isbnLibro)) {
+                    u.getInteressi().add(l);
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("Utente", Utente.toJson(u));
+                    } catch (JSONException ex) {
+                        pw.write("Errore del server");
+                    }
+                    pw.write(jsonObject.toString());
+                } else
+                    pw.write("Rimozione fallita, riprova.");
             }
             else
-                pw.write("Rimozione fallita, riprova.");
-
+                pw.write("Richiesta non corretta");
         } catch (Exception e) {
             pw.write("Errore del server");
         }
