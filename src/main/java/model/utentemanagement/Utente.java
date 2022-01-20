@@ -7,12 +7,15 @@ import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
 import model.postazionemanagement.Postazione;
 import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Utente {
     private String email, password, nome, cognome, matricola, genere;
@@ -206,6 +209,12 @@ public class Utente {
     public static Utente fromJson(String json) throws JsonSyntaxException {
         Gson gson = new Gson();
         Utente p = gson.fromJson(json,Utente.class);
+        return p;
+    }
+
+    public static Utente fromJson(JsonObject json) {
+        Gson gson = new Gson();
+        Utente p = gson.fromJson(""+json.get("Utente"),Utente.class);
         return p;
     }
 }
