@@ -28,6 +28,22 @@ import java.util.ArrayList;
 @WebServlet(name="libropresenter", value = "/LibroPresenter/*")
 public class LibroPresenter extends presenter {
     private PrintWriter pw;
+    private LibroDAO libroDAO;
+    private UtenteDAO utenteDAO;
+    private PosizioneDAO posizioneDAO;
+
+    public LibroPresenter() {
+        libroDAO=new LibroDAO();
+        utenteDAO=new UtenteDAO();
+        posizioneDAO=new PosizioneDAO();
+    }
+
+    public LibroPresenter(LibroDAO libroDAO, UtenteDAO utenteDAO, PosizioneDAO posizioneDAO) {
+        this.libroDAO = libroDAO;
+        this.utenteDAO = utenteDAO;
+        this.posizioneDAO = posizioneDAO;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -85,25 +101,23 @@ public class LibroPresenter extends presenter {
     }
 
     private void mostraRicercaLibri(boolean admin){
-        LibroDAO service = new LibroDAO();
         try {
-            ArrayList<String> categorie = service.doRetrieveAllCategorie();
+            ArrayList<String> categorie = libroDAO.doRetrieveAllCategorie();
             if (!categorie.isEmpty()) {
                 if (categorie.contains("Consigliati") && admin==true)
                     categorie.remove("Consigliati");
+                System.out.println(Libro.toJsonCategorie(categorie));
                 pw.write(Libro.toJsonCategorie(categorie));
             } else
                 pw.write("Categorie non trovate");
-
         } catch (Exception e) {
             pw.write("Errore del server");
         }
     }
 
     private void ricercaLibri(String ricerca){
-        LibroDAO service = new LibroDAO();
         try {
-            ArrayList<Libro> libri = service.doRetrieveByTitoloAutore(ricerca);
+            ArrayList<Libro> libri = libroDAO.doRetrieveByTitoloAutore(ricerca);
             if (!libri.isEmpty()) {
                 System.out.println(Libro.toJson(libri));
                 pw.write(Libro.toJson(libri));
@@ -115,9 +129,8 @@ public class LibroPresenter extends presenter {
     }
 
     private void ricercaLibriCategoria(String categoria){
-        LibroDAO service = new LibroDAO();
         try {
-            ArrayList<Libro> libri = service.doRetrieveByCategoria(categoria);
+            ArrayList<Libro> libri = libroDAO.doRetrieveByCategoria(categoria);
             System.out.println(categoria);
             if (!libri.isEmpty()) {
                 pw.write(Libro.toJson(libri));
@@ -129,8 +142,6 @@ public class LibroPresenter extends presenter {
     }
 
     private void rimuoviLibroFromInteressi(String isbnLibro, String emailUtente){
-        UtenteDAO utenteDAO = new UtenteDAO();
-        LibroDAO libroDAO = new LibroDAO();
         try {
             Libro l = libroDAO.doRetrieveByCodiceISBN(isbnLibro);
             Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
@@ -159,8 +170,6 @@ public class LibroPresenter extends presenter {
     }
 
     private void aggiungiLibroFromInteressi(String isbnLibro, String emailUtente){
-        UtenteDAO utenteDAO=new UtenteDAO();
-        LibroDAO libroDAO=new LibroDAO();
         try {
             if(libroDAO.doAddInteresse(emailUtente, isbnLibro)) {
                 Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
@@ -181,8 +190,6 @@ public class LibroPresenter extends presenter {
     }
 
     private void informazioniAggiuntaLibro(){
-        LibroDAO libroDAO=new LibroDAO();
-        PosizioneDAO posizioneDAO=new PosizioneDAO();
         try {
             ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
             if (categorie.contains("Consigliati"))
@@ -216,7 +223,6 @@ public class LibroPresenter extends presenter {
     }
 
     private void creaLibro(Libro libro){
-        LibroDAO libroDAO = new LibroDAO();
         try{
             if (libroDAO.insert(libro)){
                 pw.write("Salvataggio avvenuto con successo");
@@ -231,8 +237,6 @@ public class LibroPresenter extends presenter {
     }
 
     private void mostraDettagliLibro(){
-        LibroDAO libroDAO=new LibroDAO();
-        PosizioneDAO posizioneDAO=new PosizioneDAO();
         try {
             ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
             if (categorie.contains("Consigliati"))

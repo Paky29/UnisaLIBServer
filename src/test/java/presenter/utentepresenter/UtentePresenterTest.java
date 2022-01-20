@@ -40,7 +40,5 @@ public class UtentePresenterTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 }
