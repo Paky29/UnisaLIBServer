@@ -28,6 +28,20 @@ import java.util.GregorianCalendar;
 @WebServlet(name="postazionepresenter", value = "/PostazionePresenter/*")
 public class PostazionePresenter extends presenter {
     private PrintWriter pw;
+    PostazioneDAO postazioneDAO;
+    PeriodoDAO periodoDAO;
+
+    public PostazionePresenter(){
+        this.postazioneDAO = new PostazioneDAO();
+        this.periodoDAO =  new PeriodoDAO();
+    }
+
+
+    public PostazionePresenter(PostazioneDAO postazioneDAO, PeriodoDAO periodoDAO){
+        this.postazioneDAO = postazioneDAO;
+        this.periodoDAO = periodoDAO;
+    }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -44,8 +58,7 @@ public class PostazionePresenter extends presenter {
                 break;
             }
             case "/mostra-ricerca-postazioni": {
-                String admin = req.getParameter("is_admin");
-                mostraRicercaPostazioni(admin);
+                mostraRicercaPostazioni();
                 break;
             }
             case "/mostra-elenco-postazioni": {
@@ -83,7 +96,7 @@ public class PostazionePresenter extends presenter {
             case "/sblocca-postazione-periodo":{
                 String idPos = req.getParameter("idPos");
                 Periodo p=Periodo.fromJson(req.getParameter("periodo"));
-                sbloccaPostazione(idPos,p);
+                sbloccaPostazionePeriodo(idPos,p);
                 break;
             }
             case "/cerca-blocchi":{
@@ -94,7 +107,6 @@ public class PostazionePresenter extends presenter {
     }
 
     private void cercaBlocchi(String idPos) {
-        PostazioneDAO postazioneDAO=new PostazioneDAO();
         try {
             Postazione p=postazioneDAO.doRetrieveById(idPos);
             if(p!=null){
@@ -110,7 +122,7 @@ public class PostazionePresenter extends presenter {
         }
     }
 
-    private void mostraRicercaPostazioni(String admin){
+    private void mostraRicercaPostazioni(){
         PosizioneDAO posizioneDAO=new PosizioneDAO();
         try {
             ArrayList<Posizione> posizioni = posizioneDAO.doRetrieveAll();
@@ -124,7 +136,6 @@ public class PostazionePresenter extends presenter {
     }
 
     private void mostraElencoPostazioni(GregorianCalendar gc, Posizione p) {
-        PostazioneDAO postazioneDAO=new PostazioneDAO();
         PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
         try {
             ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveDisponibiliByPosizione(p.getBiblioteca(),p.getZona());
@@ -163,7 +174,6 @@ public class PostazionePresenter extends presenter {
     }
 
     private void mostraElencoPostazioniAdmin(Posizione pos) {
-        PostazioneDAO postazioneDAO = new PostazioneDAO();
         try {
             ArrayList<Postazione> postazioni = postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(), pos.getZona());
             if (!postazioni.isEmpty()) {
@@ -179,9 +189,8 @@ public class PostazionePresenter extends presenter {
 
     private void bloccoIndeterminato(String idPos) {
         JSONObject string = new JSONObject();
-        PostazioneDAO pdao = new PostazioneDAO();
         try {
-            if (pdao.isDisponibile(idPos) == 0) {
+            if (postazioneDAO.isDisponibile(idPos) == 0) {
                 try {
                     string.put("messaggio", "Postazione gia' bloccata");
                     pw.write(string.toString());
@@ -190,7 +199,7 @@ public class PostazionePresenter extends presenter {
                     pw.write("Errore del server");
                 }
             } else {
-                if (pdao.bloccaPostazione(idPos)) {
+                if (postazioneDAO.bloccaPostazione(idPos)) {
                     try {
                         string.put("messaggio", "blocco effettuato con successo");
                         pw.write(string.toString());
@@ -212,9 +221,8 @@ public class PostazionePresenter extends presenter {
 
     private void sbloccaPostazione(String idPos) {
         JSONObject string = new JSONObject();
-        PostazioneDAO pdao = new PostazioneDAO();
         try {
-            if(pdao.sbloccaPostazione(idPos)){
+            if(postazioneDAO.sbloccaPostazione(idPos)){
                 try{
                     string.put("messaggio", "sblocco effettuato con successo");
                     pw.write(string.toString());
@@ -231,14 +239,12 @@ public class PostazionePresenter extends presenter {
         }
     }
 
-    private void sbloccaPostazione(String idPos, Periodo p) {
+    private void sbloccaPostazionePeriodo(String idPos, Periodo p) {
         JSONObject string = new JSONObject();
-        PeriodoDAO periodoDAO=new PeriodoDAO();
-        PostazioneDAO pdao = new PostazioneDAO();
         try {
             Periodo periodo=periodoDAO.doRetrieveByInfo(p);
             System.out.println(idPos+" "+p.getId());
-            if(pdao.sbloccaPostazione(idPos,periodo)){
+            if(postazioneDAO.sbloccaPostazione(idPos,periodo)){
                 try{
                     string.put("messaggio", "sblocco effettuato con successo");
                     pw.write(string.toString());
@@ -258,7 +264,6 @@ public class PostazionePresenter extends presenter {
     private void bloccoDeterminato(String idPos, Periodo per, HttpServletResponse resp) {
         JSONObject rsp=new JSONObject();
         try{
-            PostazioneDAO postazioneDAO=new PostazioneDAO();
             Postazione pos=postazioneDAO.doRetrieveById(idPos);
             if(pos.isDisponibile()){
                 System.out.println("dentro");

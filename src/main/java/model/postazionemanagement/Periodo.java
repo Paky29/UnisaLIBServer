@@ -72,4 +72,9 @@ public class Periodo {
         Periodo p = gson.fromJson(json,Periodo.class);
         return p;
     }
+
+    public static String toJson(Periodo p) {
+        Gson gson = new Gson();
+        return gson.toJson(p);
+    }
 }
