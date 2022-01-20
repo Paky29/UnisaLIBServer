@@ -47,9 +47,9 @@ public class Prestito {
         if(!SwitchDate.equalsDate(dataFine, prestito.dataFine))
             return false;
         if(dataConsegna!=null && prestito.dataConsegna!=null)
-            return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro) && commento.equals(prestito.commento) && SwitchDate.equalsDate(dataConsegna, prestito.dataConsegna);
+            return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro) && SwitchDate.equalsDate(dataConsegna, prestito.dataConsegna);
         else if(dataConsegna==null && prestito.dataConsegna==null){
-            return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro) && commento.equals(prestito.commento);
+            return voto == prestito.voto && attivo == prestito.attivo  && utente.getEmail().equals(prestito.utente.getEmail()) && libro.equals(prestito.libro);
         }
         else{
             return false;
