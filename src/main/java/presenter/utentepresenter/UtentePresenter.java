@@ -22,9 +22,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 @WebServlet(name="utentepresenter", value = "/UtentePresenter/*")
 public class UtentePresenter extends presenter {
+    private UtenteDAO utenteDAO;
+    private PrintWriter pw;
+
+    public UtentePresenter(){
+        this.utenteDAO=new UtenteDAO();
+    }
+
+    public UtentePresenter(UtenteDAO utenteDAO){
+        this.utenteDAO=utenteDAO;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,37 +45,45 @@ public class UtentePresenter extends presenter {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
-        PrintWriter pw=resp.getWriter();
+        pw=resp.getWriter();
         switch(path){
             case "/": break;
             case "/login": {
                 String e=req.getParameter("email");
                 String p=req.getParameter("pass");
-                pw.write(login(e,p));
+                if(e==null || p==null)
+                    pw.write("Email o password non inserita");
+                else
+                    login(e,p);
                 break;
             }
         }
     }
 
-    public String login(String email, String password){
-        UtenteDAO utenteDAO=new UtenteDAO();
+    public void login(String email, String password){
         Utente u=null;
-        try {
-            u = utenteDAO.doRetrieveByEmailAndPasswordAll(email,password);
-            if(u!=null) {
-                JSONObject jsonObject=new JSONObject();
-                try {
-                    jsonObject.put("Utente", Utente.toJson(u));
-                    return jsonObject.toString();
-                } catch (JSONException ex) {
-                    return"Errore del server";
+        String email_regex="[A-z0-9\\.\\+_-]+@(studenti.)*(unisa\\.it)";
+        String pword_regex="(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
+        if(!Pattern.matches(email_regex, email) || !Pattern.matches(pword_regex, password)){
+            pw.write("Email o password non valida");
+        }
+        else {
+            try {
+                u = utenteDAO.doRetrieveByEmailAndPasswordAll(email, password);
+                if (u != null) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("Utente", Utente.toJson(u));
+                        pw.write(jsonObject.toString());
+                    } catch (JSONException ex) {
+                        pw.write("Errore del server");
+                    }
+                } else {
+                    pw.write("Utente non trovato");
                 }
+            } catch (Exception ex) {
+                pw.write("Errore del server");
             }
-            else{
-                return"Utente non trovato";
-            }
-        } catch (Exception ex) {
-            return"Errore del server";
         }
 
     }
