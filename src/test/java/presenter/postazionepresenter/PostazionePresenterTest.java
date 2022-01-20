@@ -48,41 +48,6 @@ public class PostazionePresenterTest {
     }
 
     @Test
-    public void mostraRicercaPostazioniTest(){
-        //
-    }
-
-    @Test
-    public void mostraElencoPostazioniTest(){
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
-        Postazione p1 = new Postazione("A1", true, posizione);
-        Postazione p2 = new Postazione("A1", true, posizione);
-        ArrayList<Postazione> postazioni = new ArrayList<>();
-        postazioni.add(p1);
-        postazioni.add(p2);
-        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni");
-        when(request.getParameter("giorno")).thenReturn("10");
-        when(request.getParameter("mese")).thenReturn("1");
-        when(request.getParameter("anno")).thenReturn("2022");
-        when(request.getParameter("posizione")).thenReturn(Posizione.toJson(posizione));
-        try {
-            when(response.getWriter()).thenReturn(pw);
-            when(postazioneDAO.doRetrieveDisponibiliByPosizione(posizione.getBiblioteca(), posizione.getZona())).thenReturn(postazioni);
-            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
-            pw.flush();
-            String linea = br.readLine();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void mostraElencoPostazioniAdminTest() {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
