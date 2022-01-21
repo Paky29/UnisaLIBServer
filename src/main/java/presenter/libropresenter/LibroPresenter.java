@@ -101,19 +101,16 @@ public class LibroPresenter extends presenter {
                     pw.write("Errore nella richiesta");
                 break;
             }
-            case "/informazioni-aggiunta":{
-                informazioniAggiuntaLibro();
-                break;
-            }
-            case "/dettagli-libro-admin":{
-                mostraDettagliLibro();
+            case "/informazioni-aggiunta":
+            case "/dettagli-libro-admin": {
+                informazioniLibro();
                 break;
             }
             case "/crea-libro": {
                 String l = req.getParameter("libro");
                 if(l!=null) {
                     Libro libro = Libro.fromJsonToLibro(l);
-                    if(libro!=null)
+                    if(libro.getIsbn()!=null)
                         creaLibro(libro);
                     else
                         pw.write("Libro inviato non corretto");
@@ -129,8 +126,10 @@ public class LibroPresenter extends presenter {
         try {
             ArrayList<String> categorie = libroDAO.doRetrieveAllCategorie();
             if (!categorie.isEmpty()) {
-                if (categorie.contains("Consigliati") && admin==true)
+                if ((categorie.contains("Consigliati") || categorie.contains("consigliati")) && admin==true){
                     categorie.remove("Consigliati");
+                    categorie.remove("consigliati");
+                }
                 pw.write(Libro.toJsonCategorie(categorie));
             } else
                 pw.write("Categorie non trovate");
@@ -173,22 +172,19 @@ public class LibroPresenter extends presenter {
                 if (u.getInteressi().isEmpty()) {
                     pw.write("Nessun libro in interessi");
                 }
-                else
+                else {
                     if (!u.getInteressi().contains(l))
-                        pw.write("Libro non presente in interesse");
-
-                if (libroDAO.doDeleteInteresse(emailUtente, isbnLibro)) {
-                    u.getInteressi().remove(l);
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        System.out.println("sono dentro");
-                        jsonObject.put("Utente", Utente.toJson(u));
-                    } catch (JSONException ex) {
-                        pw.write("Errore del server");
+                        pw.write("Libro non presente in interessi");
+                    else {
+                        if (libroDAO.doDeleteInteresse(emailUtente, isbnLibro)) {
+                            u.getInteressi().remove(l);
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("Utente", Utente.toJson(u));
+                            pw.write(jsonObject.toString());
+                        } else
+                            pw.write("Rimozione fallita, riprova.");
                     }
-                    pw.write(jsonObject.toString());
-                } else
-                    pw.write("Rimozione fallita, riprova.");
+                }
             }
             else
                 pw.write("Richiesta non corretta");
@@ -205,14 +201,10 @@ public class LibroPresenter extends presenter {
                 if (libroDAO.doAddInteresse(emailUtente, isbnLibro)) {
                     u.getInteressi().add(l);
                     JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("Utente", Utente.toJson(u));
-                    } catch (JSONException ex) {
-                        pw.write("Errore del server");
-                    }
+                    jsonObject.put("Utente", Utente.toJson(u));
                     pw.write(jsonObject.toString());
                 } else
-                    pw.write("Rimozione fallita, riprova.");
+                    pw.write("Aggiunta fallita, riprova.");
             }
             else
                 pw.write("Richiesta non corretta");
@@ -221,7 +213,7 @@ public class LibroPresenter extends presenter {
         }
     }
 
-    private void informazioniAggiuntaLibro(){
+    private void informazioniLibro(){
         try {
             ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
             if (categorie.contains("Consigliati"))
@@ -234,14 +226,12 @@ public class LibroPresenter extends presenter {
                     obj.put("categoria",Libro.toJsonCategoria(c));
                     cat.put(obj);
                 }
-
                 JSONArray pos= new JSONArray();
                 for(Posizione p:posizioni){
                     JSONObject obj=new JSONObject();
                     obj.put("posizione",Posizione.toJson(p));
                     pos.put(obj);
                 }
-
                 JSONObject response= new JSONObject();
                 response.put("categorie", cat);
                 response.put("posizioni", pos);
@@ -257,54 +247,25 @@ public class LibroPresenter extends presenter {
     private void creaLibro(Libro libro){
         if(LibroValidator.validate(libro)){
             try{
-                Posizione p=posizioneDAO.doRetrieveByBibliotecaZona(libro.getPosizione().getBiblioteca(),libro.getPosizione().getZona());
-                if(p!=null && libroDAO.existCategoria(libro.getCategoria())) {
-                    if (libroDAO.insert(libro)) {
-                        pw.write("Salvataggio avvenuto con successo");
-                    } else {
-                        System.out.println("Errore Salvataggio");
-                        pw.write("Salvataggio non andato a buon fine");
-                    }
+                Libro l=libroDAO.doRetrieveByCodiceISBN(libro.getIsbn());
+                if(l!=null)
+                    pw.write("ISBN libro gia' presente");
+                else {
+                    Posizione p=posizioneDAO.doRetrieveByBibliotecaZona(libro.getPosizione().getBiblioteca(),libro.getPosizione().getZona());
+                    if (p != null && libroDAO.existCategoria(libro.getCategoria())) {
+                        if (libroDAO.insert(libro)) {
+                            pw.write("Salvataggio avvenuto con successo");
+                        } else {
+                            pw.write("Salvataggio non andato a buon fine");
+                        }
+                    } else
+                        pw.write("Posizione o categoria inserite non corrette");
                 }
             } catch (SQLException e) {
                 pw.write("Errore nel server");
-                e.printStackTrace();
             }
         }
         else
             pw.write("Libro non valido");
-    }
-
-    private void mostraDettagliLibro(){
-        try {
-            ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
-            if (categorie.contains("Consigliati"))
-                categorie.remove("Consigliati");
-            ArrayList<Posizione> posizioni=posizioneDAO.doRetrieveAll();
-            if((!categorie.isEmpty()) && (!posizioni.isEmpty())) {
-                JSONArray cat = new JSONArray();
-                for (String c: categorie) {
-                    JSONObject obj=new JSONObject();
-                    obj.put("categoria",Libro.toJsonCategoria(c));
-                    cat.put(obj);
-                }
-
-                JSONArray pos= new JSONArray();
-                for(Posizione p:posizioni){
-                    JSONObject obj=new JSONObject();
-                    obj.put("posizione",Posizione.toJson(p));
-                    pos.put(obj);
-                }
-
-                JSONObject response= new JSONObject();
-                response.put("categorie", cat);
-                response.put("posizioni", pos);
-                pw.write(response.toString());
-            }
-            else
-                pw.write("Informazioni non trovate");
-        } catch (Exception e) {
-            pw.write("Errore del server");
-        }
     }
 }

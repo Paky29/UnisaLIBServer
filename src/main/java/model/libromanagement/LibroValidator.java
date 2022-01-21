@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class LibroValidator {
     public static boolean validate(Libro l){
-        if(l.getIsbn().length()!=10)
+        if(l.getIsbn()==null || l.getIsbn().length()!=10)
             return false;
         if(l.getAnnoPubbl()> Calendar.getInstance().get(Calendar.YEAR) || (!Pattern.matches("^[12][0-9]{3}$",Integer.toString(l.getAnnoPubbl()))))
             return false;
