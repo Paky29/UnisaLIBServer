@@ -52,7 +52,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void AllPrestitiTest() {
+    public void allPrestitiTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/all-prestiti");
         when(request.getParameter("utente")).thenReturn("test_email@studenti.unisa.it");
@@ -78,7 +78,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void AllPrestitiEmptyTest() {
+    public void allPrestitiEmptyTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/all-prestiti");
         when(request.getParameter("utente")).thenReturn("test_email@studenti.unisa.it");
@@ -99,7 +99,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CercaPrestitiAttiviPerLibroTest() {
+    public void cercaPrestitiAttiviPerLibroTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/lista-prestiti-libro");
         when(request.getParameter("libro")).thenReturn("isbn_test");
@@ -125,7 +125,30 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoUtenteNotExistTest() {
+    public void cercaPrestitiAttiviPerLibroEmptyTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/lista-prestiti-libro");
+        when(request.getParameter("libro")).thenReturn("isbn_test");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        ArrayList<Prestito> prestiti= new ArrayList<>();
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveValidByLibro(lib.getIsbn())).thenReturn(prestiti);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Non sono presenti prestiti", linea);
+
+        } catch (IOException | SQLException  ex) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+    }
+
+    @Test
+    public void creaPrestitoUtenteNotExistTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_emailnotexist@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -151,7 +174,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoLibroInPossessoTest() {
+    public void creaPrestitoLibroInPossessoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -177,7 +200,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoWithPrestitoAttivoTest() {
+    public void creaPrestitoWithPrestitoAttivoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -205,7 +228,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoInsertErrorTest() {
+    public void creaPrestitoInsertErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -234,7 +257,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoDataInizioErrorTest() {
+    public void creaPrestitoDataInizioErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -261,7 +284,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoLibroNonDisponibileTest() {
+    public void creaPrestitoLibroNonDisponibileTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -287,7 +310,7 @@ public class PrestitoPresenterTest {
     }
 
     @Test
-    public void CreaPrestitoTest() {
+    public void creaPrestitoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/crea-prestito");
         Posizione pos = new Posizione(1, "test", "test");
@@ -319,6 +342,299 @@ public class PrestitoPresenterTest {
         } catch (IOException | SQLException  | JSONException e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
+
+    }
+
+    @Test
+    public void valutaPrestitoWithoutCommentTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/valuta-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).dataConsegna(dataInizio).attivo(false).voto(5).build();
+        JSONObject jsonObject=new JSONObject();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        ArrayList<Prestito> prestiti = new ArrayList<>();
+        prestiti.add(p);
+        Utente utente_final=new Utente.UtenteBuilder().email(utente.getEmail()).password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).prestiti(prestiti).build();
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(p);
+            when(prestitoDAO.valutaPrestito(p)).thenReturn(true);
+            when(utenteDAO.doRetrieveByEmailAll(p.getUtente().getEmail())).thenReturn(utente_final);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            jsonObject.put("Utente", Utente.toJson(utente_final));
+            System.out.println(jsonObject.toString());
+            assertEquals(jsonObject.toString(), linea);
+
+        } catch (IOException | SQLException  | JSONException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void valutaPrestitoWithCommentTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/valuta-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).dataConsegna(dataInizio).attivo(false).voto(5).commento("ok").build();
+        JSONObject jsonObject=new JSONObject();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        ArrayList<Prestito> prestiti = new ArrayList<>();
+        prestiti.add(p);
+        Utente utente_final=new Utente.UtenteBuilder().email(utente.getEmail()).password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).prestiti(prestiti).build();
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(p);
+            when(prestitoDAO.valutaPrestito(p)).thenReturn(true);
+            when(utenteDAO.doRetrieveByEmailAll(p.getUtente().getEmail())).thenReturn(utente_final);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            jsonObject.put("Utente", Utente.toJson(utente_final));
+            System.out.println(jsonObject.toString());
+            assertEquals(jsonObject.toString(), linea);
+
+        } catch (IOException | SQLException  | JSONException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void valutaPrestitoVotoWrongFormatTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/valuta-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).dataConsegna(dataInizio).attivo(false).voto(0).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals("Voto o commento non rispettano il formato", linea);
+
+        } catch (IOException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void valutaPrestitoCommentoWrongFormatTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/valuta-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).dataConsegna(dataInizio).attivo(false).voto(0).commento("").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals("Voto o commento non rispettano il formato", linea);
+
+        } catch (IOException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void valutaPrestitoValutazioneFailedTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/valuta-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).dataConsegna(dataInizio).attivo(false).voto(5).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(p);
+            when(prestitoDAO.valutaPrestito(p)).thenReturn(false);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals("Errore del server", linea);
+
+        } catch (IOException | SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void attivaPrestitoTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/attiva-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 20);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+        Prestito pAttivo=new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).voto(5).commento("ok").build();
+
+        ArrayList<Prestito> prestiti = new ArrayList<>();
+        prestiti.add(pAttivo);
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(p);
+            when(prestitoDAO.attivaPrestito(p)).thenReturn(true);
+            when(prestitoDAO.doRetrieveValidByLibro(p.getLibro().getIsbn())).thenReturn(prestiti);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals(Prestito.toJson(prestiti), linea);
+
+        } catch (IOException | SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void attivaPrestitoAttivoErrorTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/attiva-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 20);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).attivo(true).voto(5).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(p);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals("Prestito attivo o non trovato", linea);
+
+        } catch (IOException | SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void attivaPrestitoAttivazioneErrorTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/attiva-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 20);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(p);
+            when(prestitoDAO.attivaPrestito(p)).thenReturn(false);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals("Errore del server", linea);
+
+        } catch (IOException | SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void concludiPrestitoTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/concludi-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        Libro lib2 = new Libro.LibroBuilder().isbn("isbn_test2").titolo("titolo_test2").autore("test_autore2").editore("test_editore2").annoPubbl(2021).nCopie(5).urlCopertina("test_url2").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 0, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
+        Prestito pExist = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).voto(5).commento("ok").build();
+        Prestito p2 = new Prestito.PrestitoBuilder().utente(utente).libro(lib2).dataInizio(dataInizio).attivo(true).voto(5).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+        ArrayList<Prestito> prestiti = new ArrayList<>();
+        prestiti.add(p2);
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prestitoDAO.doRetrieveByKey(p.getDataInizio(), p.getLibro().getIsbn(), p.getUtente().getEmail())).thenReturn(pExist);
+            when(prestitoDAO.concludiPrestito(p)).thenReturn(true);
+            when(prestitoDAO.doRetrieveValidByLibro(p.getLibro().getIsbn())).thenReturn(prestiti);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals(Prestito.toJson(prestiti), linea);
+
+        } catch (IOException | SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+
+    }
+
+    @Test
+    public void concludiPrestitoDataConsegnaNotValidTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/concludi-prestito");
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2021, 0, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
+        when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
+
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            System.out.println(linea);
+            assertEquals("Data consegna non valida", linea);
+
+        } catch (IOException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
 
     }
 

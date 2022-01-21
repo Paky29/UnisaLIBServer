@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
 
 @WebServlet(name="prestitopresenter", value = "/PrestitoPresenter/*")
 public class PrestitoPresenter extends presenter {
@@ -82,14 +84,25 @@ public class PrestitoPresenter extends presenter {
             case "/valuta-prestito": {
                 String p = req.getParameter("prestito");
                 Prestito prestito = Prestito.fromJsonToPrestito(p);
-                valutaPrestito(prestito);
+                int voto=prestito.getVoto();
+                String commento=prestito.getCommento();
+                if((voto<1 || voto>5) || (commento!=null && !Pattern.matches("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,100}$", commento)))
+                    pw.write("Voto o commento non rispettano il formato");
+                else
+                    valutaPrestito(prestito);
                 break;
             }
 
             case "/attiva-prestito": {
                 String p = req.getParameter("prestito");
                 Prestito prestito = Prestito.fromJsonToPrestito(p);
-                attivaPrestito(prestito);
+                GregorianCalendar dataInizio=prestito.getDataInizio();
+                GregorianCalendar dataFineAttivazione= (GregorianCalendar) dataInizio.clone();
+                dataFineAttivazione.roll(Calendar.DAY_OF_MONTH, 7);
+                if(dataFineAttivazione.compareTo(new GregorianCalendar())<0)
+                    pw.write("Prestito non attivabile. Settimana scaduta.");
+                else
+                    attivaPrestito(prestito);
                 break;
             }
 
@@ -97,7 +110,12 @@ public class PrestitoPresenter extends presenter {
                 String p = req.getParameter("prestito");
                 Prestito prestito = Prestito.fromJsonToPrestito(p);
                 System.out.println("DataC prestito: " + prestito.getDataConsegna());
-                concludiPrestito(prestito);
+                GregorianCalendar dataConsegna=prestito.getDataConsegna();
+                GregorianCalendar dataInizio=prestito.getDataInizio();
+                if(dataConsegna.compareTo(dataInizio)<0)
+                    pw.write("Data consegna non valida");
+                else
+                    concludiPrestito(prestito);
                 break;
             }
         }
@@ -183,25 +201,25 @@ public class PrestitoPresenter extends presenter {
     }
 
     public void valutaPrestito(Prestito prestito){
-        UtenteDAO utenteDAO = new UtenteDAO();
         try {
-            Utente utentePrestito = prestito.getUtente();
-            if(prestitoDAO.valutaPrestito(prestito)) {
-                Utente utente = utenteDAO.doRetrieveByEmailAll(prestito.getUtente().getEmail());
-
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("Utente", Utente.toJson(utente));
-                    System.out.println("Json successo");
-                } catch (JSONException ex) {
-                    System.out.println("Errore JSON");
+            if(prestitoDAO.doRetrieveByKey(prestito.getDataInizio(), prestito.getLibro().getIsbn(), prestito.getUtente().getEmail())==null)
+                pw.write("Prestito non trovato");
+            else {
+                if (prestitoDAO.valutaPrestito(prestito)) {
+                    Utente utente = utenteDAO.doRetrieveByEmailAll(prestito.getUtente().getEmail());
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("Utente", Utente.toJson(utente));
+                        System.out.println("Json successo");
+                    } catch (JSONException ex) {
+                        System.out.println("Errore JSON");
+                        pw.write("Errore del server");
+                    }
+                    pw.write(jsonObject.toString());
+                    System.out.println("Scritto in risposta oggetto");
+                } else {
                     pw.write("Errore del server");
                 }
-                pw.write(jsonObject.toString());
-                System.out.println("Scritto in risposta oggetto");
-            }
-            else{
-                pw.write("Errore del server");
             }
         } catch (Exception ex) {
             pw.write("Errore del server");
@@ -215,22 +233,26 @@ public class PrestitoPresenter extends presenter {
         try {
             Libro libro = prestito.getLibro();
             System.out.println("Ho preso il libro");
-            if(prestitoDAO.attivaPrestito(prestito)) {
-                ArrayList<Prestito> prestitiLibro = prestitoDAO.doRetrieveValidByLibro(libro.getIsbn());
-                System.out.println("Vuoto?" + prestitiLibro.isEmpty());
-                if (!prestitiLibro.isEmpty()) {
-                    System.out.println("ok");
-                    for(Prestito p: prestitiLibro)
-                        System.out.println("Prestito: Ut=" + p.getUtente().getEmail() + " Lib=" + p.getLibro().getIsbn());
-                    pw.write(Prestito.toJson(prestitiLibro));
+            Prestito prestitoExist=prestitoDAO.doRetrieveByKey(prestito.getDataInizio(), prestito.getLibro().getIsbn(), prestito.getUtente().getEmail());
+            if(prestitoExist==null || prestitoExist.isAttivo())
+                pw.write("Prestito attivo o non trovato");
+            else {
+                if (prestitoDAO.attivaPrestito(prestito)) {
+                    ArrayList<Prestito> prestitiLibro = prestitoDAO.doRetrieveValidByLibro(libro.getIsbn());
+                    System.out.println("Vuoto?" + prestitiLibro.isEmpty());
+                    if (!prestitiLibro.isEmpty()) {
+                        System.out.println("ok");
+                        for (Prestito p : prestitiLibro)
+                            System.out.println("Prestito: Ut=" + p.getUtente().getEmail() + " Lib=" + p.getLibro().getIsbn());
+                        pw.write(Prestito.toJson(prestitiLibro));
+                    } else {
+                        System.out.println("prestiti vuoto");
+                        pw.write("Non sono presenti prestiti");
+                    }
+                } else {
+                    System.out.println("errore in database ");
+                    pw.write("Errore del server");
                 }
-                else
-                    System.out.println("prestiti vuoto");
-                    pw.write("Non sono presenti prestiti");
-            }
-            else{
-                System.out.println("errore in database ");
-                pw.write("Errore del server");
             }
         } catch (Exception ex) {
             pw.write("Errore del server");
@@ -243,22 +265,25 @@ public class PrestitoPresenter extends presenter {
         System.out.println("Sono in concludi prestito");
         try {
         Libro libro = prestito.getLibro();
-        if(prestitoDAO.concludiPrestito(prestito)) {
-            ArrayList<Prestito> prestitiLibro = prestitoDAO.doRetrieveValidByLibro(libro.getIsbn());
-            System.out.println("Vuoto?" + prestitiLibro.isEmpty());
-            if (!prestitiLibro.isEmpty()) {
-                System.out.println("ok");
-                for(Prestito p: prestitiLibro)
-                    System.out.println("Prestito: Ut=" + p.getUtente().getEmail() + " Lib=" + p.getLibro().getIsbn());
-                pw.write(Prestito.toJson(prestitiLibro));
+        Prestito prestitoExist=prestitoDAO.doRetrieveByKey(prestito.getDataInizio(), prestito.getLibro().getIsbn(), prestito.getUtente().getEmail());
+        if(prestitoExist==null || prestitoExist.getDataConsegna()!=null)
+            pw.write("Prestito concluso o non trovato");
+        else {
+            if (prestitoDAO.concludiPrestito(prestito)) {
+                ArrayList<Prestito> prestitiLibro = prestitoDAO.doRetrieveValidByLibro(libro.getIsbn());
+                System.out.println("Vuoto?" + prestitiLibro.isEmpty());
+                if (!prestitiLibro.isEmpty()) {
+                    System.out.println("ok");
+                    for (Prestito p : prestitiLibro)
+                        System.out.println("Prestito: Ut=" + p.getUtente().getEmail() + " Lib=" + p.getLibro().getIsbn());
+                    pw.write(Prestito.toJson(prestitiLibro));
+                } else {
+                    pw.write(Prestito.toJson(new ArrayList<Prestito>()));
+                }
+            } else {
+                System.out.println("errore in database ");
+                pw.write("Errore del server");
             }
-            else {
-                pw.write(Prestito.toJson(new ArrayList<Prestito>()));
-            }
-        }
-        else{
-            System.out.println("errore in database ");
-            pw.write("Errore del server");
         }
     } catch (Exception ex) {
         pw.write("Errore del server");
