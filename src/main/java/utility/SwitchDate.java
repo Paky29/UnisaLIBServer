@@ -20,4 +20,8 @@ public class SwitchDate {
     public static boolean equalsDate(GregorianCalendar d1, GregorianCalendar d2){
         return (d1.get(Calendar.YEAR)==d2.get(Calendar.YEAR) && d1.get(Calendar.MONTH)==d2.get(Calendar.MONTH) && d1.get(Calendar.DATE)==d2.get(Calendar.DATE));
     }
+
+    public static int compareDate(GregorianCalendar d1, GregorianCalendar d2){
+        return (new GregorianCalendar(d1.get(Calendar.YEAR), d1.get(Calendar.MONTH), d1.get(Calendar.DATE)).compareTo(new GregorianCalendar(d2.get(Calendar.YEAR), d2.get(Calendar.MONTH), d2.get(Calendar.DATE))));
+    }
 }

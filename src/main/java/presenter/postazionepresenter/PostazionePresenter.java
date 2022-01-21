@@ -3,10 +3,7 @@ package presenter.postazionepresenter;
 import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneDAO;
-import model.postazionemanagement.Periodo;
-import model.postazionemanagement.PeriodoDAO;
-import model.postazionemanagement.Postazione;
-import model.postazionemanagement.PostazioneDAO;
+import model.postazionemanagement.*;
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
 import org.json.JSONArray;
@@ -68,43 +65,78 @@ public class PostazionePresenter extends presenter {
                 String giorno = req.getParameter("giorno");
                 String mese = req.getParameter("mese");
                 String anno = req.getParameter("anno");
-                GregorianCalendar gc = new GregorianCalendar(Integer.valueOf(anno), Integer.valueOf(mese), Integer.valueOf(giorno));
                 String posizione = req.getParameter("posizione");
-                Posizione p=Posizione.fromJson(posizione);
-                mostraElencoPostazioni(gc, p);
+                if(giorno!=null && mese!=null && anno!=null && posizione!=null) {
+                    Posizione p = Posizione.fromJson(posizione);
+                    if(p!=null) {
+                        GregorianCalendar gc = new GregorianCalendar(Integer.valueOf(anno), Integer.valueOf(mese), Integer.valueOf(giorno));
+                        mostraElencoPostazioni(gc, p);
+                    } else
+                        pw.write("Posizone inviata non corretta");
+                } else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/mostra-elenco-postazioni-admin": {
                 String p = req.getParameter("posizione");
-                Posizione pos = Posizione.fromJson(p);
-                mostraElencoPostazioniAdmin(pos);
+                if (p!=null) {
+                    Posizione pos = Posizione.fromJson(p);
+                    if(pos!=null)
+                        mostraElencoPostazioniAdmin(pos);
+                    else
+                        pw.write("Posizone inviata non corretta");
+                } else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/blocco-indeterminato": {
                 String idPos = req.getParameter("idPos");
-                bloccoIndeterminato(idPos);
+                if (idPos!=null)
+                    bloccoIndeterminato(idPos);
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/blocco-determinato": {
                 String idPos = req.getParameter("idPos");
-                Periodo per=Periodo.fromJson(req.getParameter("periodo"));
-                bloccoDeterminato(idPos, per, resp);
+                String periodo = req.getParameter("periodo");
+                if(idPos!=null && periodo!=null) {
+                    Periodo p = Periodo.fromJson(periodo);
+                    if(p!=null)
+                        bloccoDeterminato(idPos, p, resp);
+                    else
+                        pw.write("Periodo inviato non corretto");
+                } else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/sblocca-postazione": {
                 String idPos = req.getParameter("idPos");
-                sbloccaPostazione(idPos);
+                if (idPos!=null)
+                    sbloccaPostazione(idPos);
+                else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/sblocca-postazione-periodo":{
                 String idPos = req.getParameter("idPos");
-                Periodo p=Periodo.fromJson(req.getParameter("periodo"));
-                sbloccaPostazionePeriodo(idPos,p);
+                String periodo = req.getParameter("periodo");
+                if(idPos!=null && periodo!=null) {
+                    Periodo p = Periodo.fromJson(periodo);
+                    if(p!=null)
+                        sbloccaPostazionePeriodo(idPos,p);
+                    else
+                        pw.write("Periodo inviato non corretto");
+                } else
+                    pw.write("Errore nella richiesta");
                 break;
             }
             case "/cerca-blocchi":{
                 String idPos=req.getParameter("idPos");
-                cercaBlocchi(idPos);
+                if (idPos!=null)
+                    cercaBlocchi(idPos);
+                else
+                    pw.write("Errore nella richiesta");
             }
         }
     }
@@ -194,11 +226,8 @@ public class PostazionePresenter extends presenter {
                     }
                 } else {
                     pw.write("Blocco non effettuato");
-
                 }
-
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             pw.write("Errore del server");
@@ -248,22 +277,24 @@ public class PostazionePresenter extends presenter {
     }
 
     private void bloccoDeterminato(String idPos, Periodo per, HttpServletResponse resp) {
-        JSONObject rsp=new JSONObject();
-        try{
-            Postazione pos=postazioneDAO.doRetrieveById(idPos);
-            if(pos.isDisponibile()){
-                System.out.println("dentro");
-                String str=postazioneDAO.bloccoDeterminato(per,pos);
-                rsp.put("messaggio",str);
-                pw.write(rsp.toString());
+        if(PeriodoValidator.validate(per)){
+            JSONObject rsp = new JSONObject();
+            try {
+                Postazione pos = postazioneDAO.doRetrieveById(idPos);
+                if (pos.isDisponibile()) {
+                    System.out.println("dentro");
+                    String str = postazioneDAO.bloccoDeterminato(per, pos);
+                    rsp.put("messaggio", str);
+                    pw.write(rsp.toString());
+                } else
+                    pw.write("Postazione bloccata in modo indeterminato");
+            } catch (Exception e) {
+                resp.setStatus(505);
+                e.printStackTrace();
+                pw.write("Errore del server");
             }
-            else
-                pw.write("Postazione bloccata in modo indeterminato");
-        }catch (Exception e) {
-            resp.setStatus(505);
-            e.printStackTrace();
-            pw.write("Errore del server");
-        }
+        } else
+            pw.write("Periodo non valido");
     }
 
     private void cercaBlocchi(String idPos) {
