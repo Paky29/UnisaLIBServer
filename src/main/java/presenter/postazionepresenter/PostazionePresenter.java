@@ -30,16 +30,19 @@ public class PostazionePresenter extends presenter {
     private PrintWriter pw;
     PostazioneDAO postazioneDAO;
     PeriodoDAO periodoDAO;
+    PosizioneDAO posizioneDAO;
 
     public PostazionePresenter(){
         this.postazioneDAO = new PostazioneDAO();
         this.periodoDAO =  new PeriodoDAO();
+        this.posizioneDAO = new PosizioneDAO();
     }
 
 
-    public PostazionePresenter(PostazioneDAO postazioneDAO, PeriodoDAO periodoDAO){
+    public PostazionePresenter(PostazioneDAO postazioneDAO, PeriodoDAO periodoDAO, PosizioneDAO posizioneDAO){
         this.postazioneDAO = postazioneDAO;
         this.periodoDAO = periodoDAO;
+        this.posizioneDAO = posizioneDAO;
     }
 
 
@@ -106,24 +109,7 @@ public class PostazionePresenter extends presenter {
         }
     }
 
-    private void cercaBlocchi(String idPos) {
-        try {
-            Postazione p=postazioneDAO.doRetrieveById(idPos);
-            if(p!=null){
-            JSONObject string = new JSONObject();
-            string.put("postazione",Postazione.toJson(p));
-            pw.write(string.toString());
-            }
-            else
-                pw.write("Postazione non trovata");
-        } catch (Exception e) {
-            e.printStackTrace();
-            pw.write("Errore del server");
-        }
-    }
-
     private void mostraRicercaPostazioni(){
-        PosizioneDAO posizioneDAO=new PosizioneDAO();
         try {
             ArrayList<Posizione> posizioni = posizioneDAO.doRetrieveAll();
             if (!posizioni.isEmpty()) {
@@ -176,7 +162,7 @@ public class PostazionePresenter extends presenter {
     private void mostraElencoPostazioniAdmin(Posizione pos) {
         try {
             ArrayList<Postazione> postazioni = postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(), pos.getZona());
-            if (!postazioni.isEmpty()) {
+            if (!(postazioni==null || postazioni.isEmpty())) {
                 System.out.println("okokokookok");
                 pw.write(Postazione.toJson(postazioni));
             } else
@@ -279,4 +265,21 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
+
+    private void cercaBlocchi(String idPos) {
+        try {
+            Postazione p=postazioneDAO.doRetrieveById(idPos);
+            if(p!=null){
+                JSONObject string = new JSONObject();
+                string.put("postazione",Postazione.toJson(p));
+                pw.write(string.toString());
+            }
+            else
+                pw.write("Postazione non trovata");
+        } catch (Exception e) {
+            e.printStackTrace();
+            pw.write("Errore del server");
+        }
+    }
+
 }

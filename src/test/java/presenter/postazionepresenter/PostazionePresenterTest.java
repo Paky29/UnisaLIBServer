@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 public class PostazionePresenterTest {
     PostazioneDAO postazioneDAO;
     PeriodoDAO periodoDAO;
+    PosizioneDAO posizioneDAO;
     PostazionePresenter postazionePresenter;
     HttpServletRequest request;
     HttpServletResponse response;
@@ -36,7 +37,8 @@ public class PostazionePresenterTest {
     public void setUp(){
         postazioneDAO = Mockito.mock(PostazioneDAO.class);
         periodoDAO = Mockito.mock(PeriodoDAO.class);
-        postazionePresenter = new PostazionePresenter(postazioneDAO, periodoDAO);
+        posizioneDAO = Mockito.mock(PosizioneDAO.class);
+        postazionePresenter = new PostazionePresenter(postazioneDAO, periodoDAO, posizioneDAO);
         response= Mockito.mock(HttpServletResponse.class);
         request=Mockito.mock(HttpServletRequest.class);
         try {
@@ -48,9 +50,43 @@ public class PostazionePresenterTest {
     }
 
     @Test
+    public void mostraRicercaPostazioniTest(){
+        Posizione p1 = new Posizione(3, "scientifica", "Piano 1");
+        Posizione p2 = new Posizione(4, "scientifica", "Piano 2");
+        ArrayList<Posizione> posizioni = new ArrayList<>();
+        posizioni.add(p1);
+        posizioni.add(p2);
+        when(request.getPathInfo()).thenReturn("/mostra-ricerca-postazioni");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(posizioneDAO.doRetrieveAll()).thenReturn(posizioni);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals(Posizione.toJson(posizioni), linea);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraRicercaPostazioniIsEmptyTest(){
+        ArrayList<Posizione> posizioni = new ArrayList<>();
+        when(request.getPathInfo()).thenReturn("/mostra-ricerca-postazioni");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(posizioneDAO.doRetrieveAll()).thenReturn(posizioni);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Posizioni non trovate", linea);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void mostraElencoPostazioniAdminTest() {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
         Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A2", true, posizione);
@@ -72,6 +108,42 @@ public class PostazionePresenterTest {
     }
 
     @Test
+    public void mostraElencoPostazioniAdminIsEmptyTest() {
+        Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
+        ArrayList<Postazione> postazioni = new ArrayList<>();
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni-admin");
+        when(request.getParameter("posizione")).thenReturn(Posizione.toJson(posizione));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(postazioneDAO.doRetrieveByPosizione(posizione.getBiblioteca(), posizione.getZona())).thenReturn(postazioni);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Non ci sono postazioni", linea);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraElencoPostazioniAdminNullTest() {
+        Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
+        ArrayList<Postazione> postazioni = null;
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni-admin");
+        when(request.getParameter("posizione")).thenReturn(Posizione.toJson(posizione));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(postazioneDAO.doRetrieveByPosizione(posizione.getBiblioteca(), posizione.getZona())).thenReturn(postazioni);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Non ci sono postazioni", linea);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void bloccoIndeterminatoTest(){
         JSONObject jsonObject = new JSONObject();
         when(request.getParameter("idPos")).thenReturn("A1");
@@ -84,6 +156,24 @@ public class PostazionePresenterTest {
             pw.flush();
             String linea = br.readLine();
             jsonObject.put("messaggio", "blocco effettuato con successo");
+            assertEquals(jsonObject.toString(), linea);
+        } catch (IOException | SQLException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void bloccoIndeterminatoPostazioneBloccataTest(){
+        JSONObject jsonObject = new JSONObject();
+        when(request.getParameter("idPos")).thenReturn("A1");
+        when(request.getPathInfo()).thenReturn("/blocco-indeterminato");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(postazioneDAO.isDisponibile("A1")).thenReturn(0);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            jsonObject.put("messaggio", "Postazione gia' bloccata");
             assertEquals(jsonObject.toString(), linea);
         } catch (IOException | SQLException | JSONException e) {
             e.printStackTrace();
