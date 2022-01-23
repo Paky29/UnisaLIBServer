@@ -1,5 +1,7 @@
 package presenter.prenotazionepresenter;
 
+import model.libromanagement.LibroDAO;
+import model.posizionemanagement.PosizioneDAO;
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
 import model.utentemanagement.Utente;
@@ -20,6 +22,18 @@ import java.sql.SQLException;
 @WebServlet(name="prenotazionepresenter", value = "/PrenotazionePresenter/*")
 public class PrenotazionePresenter extends presenter {
     private PrintWriter pw;
+    private UtenteDAO utenteDAO;
+    private PrenotazioneDAO prenotazioneDAO;
+
+    public PrenotazionePresenter() {
+     utenteDAO = new UtenteDAO();
+     prenotazioneDAO = new PrenotazioneDAO();
+    }
+
+    public PrenotazionePresenter(PrenotazioneDAO prenotazioneDAO, UtenteDAO utenteDAO) {
+        this.utenteDAO = utenteDAO;
+        this.prenotazioneDAO = prenotazioneDAO;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,8 +57,6 @@ public class PrenotazionePresenter extends presenter {
     }
 
     private void creaPrenotazione(Prenotazione prenotazione){
-        PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
-        UtenteDAO utenteDAO = new UtenteDAO();
         try {
             if (prenotazioneDAO.insert(prenotazione)) {
                 Utente utenteAggiornato = utenteDAO.doRetrieveByEmail(prenotazione.getUtente().getEmail());
@@ -55,6 +67,7 @@ public class PrenotazionePresenter extends presenter {
                     pw.write(jsonObject.toString());
                     System.out.println("Scritto in risposta oggetto");
                 } catch (JSONException ex) {
+                    ex.printStackTrace();
                     System.out.println("Errore JSON");
                     pw.write("Errore del server");
                 }

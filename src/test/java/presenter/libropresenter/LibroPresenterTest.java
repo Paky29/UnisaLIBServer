@@ -45,7 +45,7 @@ public class LibroPresenterTest {
         response= Mockito.mock(HttpServletResponse.class);
         request=Mockito.mock(HttpServletRequest.class);
         try {
-            pw=new PrintWriter("src/test/java/testing.txt");
+            pw = new PrintWriter("src/test/java/testing.txt");
             br = new BufferedReader(new FileReader("src/test/java/testing.txt"));
         } catch (FileNotFoundException e) {
             fail("Il file dovrebbe essere presente");
