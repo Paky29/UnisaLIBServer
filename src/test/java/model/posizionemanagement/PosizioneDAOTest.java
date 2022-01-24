@@ -5,8 +5,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class PosizioneDAOTest {
@@ -26,10 +25,10 @@ public class PosizioneDAOTest {
         assertEquals(p.getZona(), p1.getZona());
     }
 
-    @Test(expected = SQLException.class)
-    public void insertAlreadyExistsPosizioneTest() throws SQLException {
+    @Test
+    public void insertAlreadyExistsPosizioneTest(){
         Posizione p = new Posizione("scientifica", "piano 1");
-        posizioneDAO.insert(p);
+        assertThrows(SQLException.class,()->posizioneDAO.insert(p));
     }
 
     @Test
