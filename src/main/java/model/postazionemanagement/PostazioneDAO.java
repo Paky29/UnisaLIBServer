@@ -37,7 +37,6 @@ public class PostazioneDAO {
             Postazione pst = null;
 
             while(rs.next()) {
-                System.out.println("While");
                 if(pst==null)
                     pst = PostazioneExtractor.extract(rs);
                 if(rs.getDate("pe.data_p")!=null)
@@ -155,9 +154,8 @@ public class PostazioneDAO {
             conn.setAutoCommit(true);
             return true;
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public String bloccoDeterminato(Periodo per, Postazione pos) throws SQLException {
@@ -176,9 +174,7 @@ public class PostazioneDAO {
                     periodoDAO.insertPeriodo (new Periodo(start,oraFinePeriodo,per.getData()));
                     periodo=periodoDAO.doRetrieveByInfo(per.getData(),start,oraFinePeriodo);
                 }
-                System.out.println("qui");
                 if(!pos.getBlocchi().contains(periodo)) {
-                    System.out.println("qui2");
                     ps = conn.prepareStatement("INSERT INTO blocco (postazione_fk, periodo_fk) VALUES (?, ?)");
                     ps.setString(1, pos.getId());
                     ps.setInt(2, periodo.getId());
@@ -229,8 +225,7 @@ public class PostazioneDAO {
             boolean isBlock = true;
             ResultSet rs;
             conn.setAutoCommit(false);
-            PreparedStatement ps;
-            ps =conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
+            PreparedStatement ps =conn.prepareStatement("SELECT postazione.is_disponibile as val FROM postazione WHERE postazione.postazione_id = ?");
             ps.setString(1,idPos);
             rs = ps.executeQuery();
             if(rs.next()){
@@ -247,13 +242,11 @@ public class PostazioneDAO {
             ps.setString(1, idPos);
             if (ps.executeUpdate() != 1) {
                 conn.setAutoCommit(true);
-                System.out.println("fallita la prima query");
                 return false;
             }
 
             conn.commit();
             conn.setAutoCommit(true);
-            System.out.println("torno true");
             return true;
         }
     }

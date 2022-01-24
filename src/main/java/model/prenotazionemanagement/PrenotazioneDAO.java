@@ -19,15 +19,10 @@ public class PrenotazioneDAO {
             PreparedStatement ps = conn.prepareStatement("INSERT into prenotazione (data_p, ora_inizio, postazione_fk, utente_fk, ora_fine) " +
                     "VALUES (?, ?, ?, ?, ?)");
             ps.setDate(1, SwitchDate.toDate(p.getData()));
-            System.out.println(SwitchDate.toDate(p.getData()));
             ps.setInt(2, p.getOraInizio());
-            System.out.println(p.getOraInizio());
             ps.setString(3, p.getPostazione().getId());
-            System.out.println(p.getPostazione().getId());
             ps.setString(4, p.getUtente().getEmail());
-            System.out.println(p.getUtente().getEmail());
             ps.setInt(5, p.getOraFine());
-            System.out.println(p.getOraFine());
 
             if (ps.executeUpdate() != 1)
                 throw new RuntimeException("INSERT error");
