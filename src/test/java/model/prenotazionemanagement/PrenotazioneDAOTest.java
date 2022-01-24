@@ -37,7 +37,7 @@ public class PrenotazioneDAOTest {
                 admin(false).
                 nuovo(false).
                 build();
-        Postazione postazione = new Postazione("B3", true, new Posizione( "scientifica" , "Piano 1"));
+        Postazione postazione = new Postazione("B3", true, new Posizione( "scientifica" , "piano 2"));
         Prenotazione p = new Prenotazione(new GregorianCalendar(2022, 1, 2), 16, 18, utente, postazione);
         prenotazioneDAO.insert(p);
         Prenotazione pTest = prenotazioneDAO.doRetrieveByInfo(p.getData(), p.getOraInizio(), p.getPostazione().getId(), p.getUtente().getEmail());
@@ -51,27 +51,24 @@ public class PrenotazioneDAOTest {
     @Test(expected = SQLException.class)
     public void insertAlreadyExistsPrenotazioneTest() throws SQLException {
         Utente utente = new Utente.UtenteBuilder().
-                email("s.celentano16@studenti.unisa.it").
+                email("sc").
                 password("s.cele").
-                nome("Sabato").
-                cognome("Celentano").
-                matricola("0512107757").
-                genere("M").
-                eta(23).
+                nome("sabato").
+                cognome("celentano").
                 admin(false).
-                nuovo(false).
+                nuovo(true).
                 build();
-        Postazione postazione = new Postazione("B3", true, new Posizione( "scientifica" , "Piano 1"));
-        Prenotazione p = new Prenotazione(new GregorianCalendar(2022, 1, 2), 16, 18, utente, postazione);
+        Postazione postazione = new Postazione("B1", true, new Posizione( "scientifica" , "piano 1"));
+        Prenotazione p = new Prenotazione(new GregorianCalendar(2022, 0, 31), 16, 18, utente, postazione);
         prenotazioneDAO.insert(p);
     }
 
     @Test
     public void doRetriveByInfoTest(){
-        GregorianCalendar data = new GregorianCalendar(2022, 1 ,2);
+        GregorianCalendar data = new GregorianCalendar(2022, 0 ,31);
         int oraInizio = 16;
-        String postazioneId = "B3";
-        String utenteEmail = "s.celentano16@studenti.unisa.it";
+        String postazioneId = "B1";
+        String utenteEmail = "sc";
         final Prenotazione[] pTest = new Prenotazione[1];
         assertDoesNotThrow(() -> pTest[0] = prenotazioneDAO.doRetrieveByInfo(data, oraInizio, postazioneId, utenteEmail));
         assertTrue(SwitchDate.equalsDate(data, pTest[0].getData()));
@@ -93,7 +90,7 @@ public class PrenotazioneDAOTest {
     @Test
     public void doRetrieveValidByPostazioneDateTest() throws SQLException {
         Postazione postazione = new Postazione("B3", true, new Posizione(1, "umanistica" , "piano 1"));
-        GregorianCalendar date = new GregorianCalendar(2022, 1, 2);
+        GregorianCalendar date = new GregorianCalendar(2022, 0, 31);
         ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByPostazioneDate(postazione, date);
         for (Prenotazione p : pTest){
             assertTrue(SwitchDate.equalsDate(date, p.getData()));
@@ -113,15 +110,12 @@ public class PrenotazioneDAOTest {
     @Test
     public void doRetrieveValidByUtenteTest() throws SQLException {
         Utente utente = new Utente.UtenteBuilder().
-                email("s.celentano16@studenti.unisa.it").
+                email("sc").
                 password("s.cele").
-                nome("Sabato").
-                cognome("Celentano").
-                matricola("0512107757").
-                genere("M").
-                eta(23).
+                nome("sabato").
+                cognome("celentano").
                 admin(false).
-                nuovo(false).
+                nuovo(true).
                 build();
         ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByUtente(utente);
         for (Prenotazione p : pTest){
@@ -131,17 +125,23 @@ public class PrenotazioneDAOTest {
     }
 
     @Test
+    public void doRetrieveValidByUtenteStringTest() throws SQLException {
+        ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByUtente("sc");
+        for (Prenotazione p : pTest){
+            assertTrue(p.getUtente().getEmail().equals("sc"));
+            assertTrue(p.getData().compareTo(new GregorianCalendar())>=0);
+        }
+    }
+
+    @Test
     public void doRetrieveValidByIncorrectUtenteTest() throws SQLException {
         Utente utente = new Utente.UtenteBuilder().
                 email("sc@studenti.unisa.it").
                 password("s.cele").
-                nome("Sabato").
-                cognome("Celentano").
-                matricola("0512107757").
-                genere("M").
-                eta(23).
+                nome("sabato").
+                cognome("celentano").
                 admin(false).
-                nuovo(false).
+                nuovo(true).
                 build();
         ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByUtente(utente);
         assertTrue(pTest.isEmpty());
