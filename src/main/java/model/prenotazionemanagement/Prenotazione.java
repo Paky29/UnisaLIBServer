@@ -12,6 +12,7 @@ import model.utentemanagement.Utente;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import presenter.prestitopresenter.PrestitoPresenter;
 import utility.SwitchDate;
 
 public class Prenotazione {

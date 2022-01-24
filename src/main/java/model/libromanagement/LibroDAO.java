@@ -22,10 +22,13 @@ public class LibroDAO {
             PreparedStatement ps = conn.prepareStatement("SELECT count(*) as esiste FROM categoria c WHERE c.nome=?");
             ps.setString(1,categoria);
             ResultSet rs=ps.executeQuery();
-            if(rs.getInt("esiste")==1)
-                return true;
+            if(rs.next()) {
+                if (rs.getInt("esiste") > 0)
+                    return true;
+            }
             return false;
         }catch (SQLException e){
+            e.printStackTrace();
             return false;
         }
     }
