@@ -71,8 +71,20 @@ public class PrestitoDAO {
                 return false;
             }
 
+            ps = conn.prepareStatement("SELECT l.n_copie FROM Libro l WHERE l.isbn=?");
+            ps.setString(1, p.getLibro().getIsbn());
+            ResultSet rs = ps.executeQuery();
+            int n_copie=0;
+            if (rs.next())
+                n_copie=rs.getInt("l.n_copie");
+            else{
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
+
             ps = conn.prepareStatement("UPDATE libro l SET l.n_copie=? WHERE l.isbn=?");
-            ps.setInt(1, (p.getLibro().getnCopie()+1));
+            ps.setInt(1, n_copie+1);
             ps.setString(2, p.getLibro().getIsbn());
             if (ps.executeUpdate() != 1) {
                 conn.rollback();

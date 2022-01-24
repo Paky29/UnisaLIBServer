@@ -32,7 +32,7 @@ public class PrestitoDAOTest {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 2, 12);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
 
         AtomicBoolean success = new AtomicBoolean(false);
@@ -60,7 +60,7 @@ public class PrestitoDAOTest {
     public void insertLibroExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("0000000001").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
 
@@ -80,8 +80,8 @@ public class PrestitoDAOTest {
     public void attivaPrestitoTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("0000000002").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 4, 12);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
         try{
             prestitoDAO.insert(p);
@@ -100,11 +100,11 @@ public class PrestitoDAOTest {
 
     @Test
     public void attivaPrestitoNotExistTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test_not_exist").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).attivo(false).build();
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
 
         assertThrows(RuntimeException.class, () -> prestitoDAO.attivaPrestito(p));
 
@@ -115,20 +115,25 @@ public class PrestitoDAOTest {
 
     @Test
     public void concludiPrestitoTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(4).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(false).build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 6, 12);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 6, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).build();
+        Prestito p_concluso = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).build();
 
         try{
+            prestitoDAO.insert(p);
+            System.out.println(p.getLibro().getnCopie());
             Prestito pre_conclusione=prestitoDAO.doRetrieveByKey(dataInizio, lib.getIsbn(), utente.getEmail());
+            System.out.println(pre_conclusione.getLibro().getnCopie());
             AtomicBoolean success = new AtomicBoolean(false);
-            assertDoesNotThrow(() -> success.set(prestitoDAO.concludiPrestito(p)));
+            assertDoesNotThrow(() -> success.set(prestitoDAO.concludiPrestito(p_concluso)));
             Prestito prestito_test=prestitoDAO.doRetrieveByKey(dataInizio, lib.getIsbn(), utente.getEmail());
+            System.out.println(prestito_test.getLibro().getnCopie());
             assertFalse(prestito_test.isAttivo());
-            assertTrue(SwitchDate.equalsDate(p.getDataConsegna(), prestito_test.getDataConsegna()));
+            assertTrue(SwitchDate.equalsDate(p_concluso.getDataConsegna(), prestito_test.getDataConsegna()));
             assertEquals(-1,pre_conclusione.getLibro().getnCopie()-prestito_test.getLibro().getnCopie());
 
         } catch (SQLException e) {
@@ -142,7 +147,7 @@ public class PrestitoDAOTest {
 
     @Test
     public void concludiPrestitoNotExistTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test_not_exist").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(4).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
@@ -156,16 +161,18 @@ public class PrestitoDAOTest {
 
     @Test
     public void valutaPrestitoTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 7, 12);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 7, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(false).build();
+        Prestito p_valutato = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
 
-        AtomicBoolean success = new AtomicBoolean(false);
-        assertDoesNotThrow(() -> success.set(prestitoDAO.valutaPrestito(p)));
         try{
+            prestitoDAO.insert(p);
+            AtomicBoolean success = new AtomicBoolean(false);
+            assertDoesNotThrow(() -> success.set(prestitoDAO.valutaPrestito(p)));
             Prestito prestito_test=prestitoDAO.doRetrieveByKey(dataInizio, lib.getIsbn(), utente.getEmail());
             assertEquals(p.getVoto(), prestito_test.getVoto());
             assertEquals(p.getCommento(), prestito_test.getCommento());
@@ -177,25 +184,26 @@ public class PrestitoDAOTest {
 
     @Test
     public void valutaPrestitoNotExistTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test_not_exist").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
         GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
 
         assertThrows(RuntimeException.class, () -> prestitoDAO.valutaPrestito(p));
     }
 
     @Test
     public void doRetrieveValidByLibroTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).attivo(false).voto(5).commento("test").build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 9, 12);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
 
         try{
+            prestitoDAO.insert(p);
             prestitoDAO.attivaPrestito(p);
             AtomicReference<ArrayList<Prestito>> prestiti = new AtomicReference<>();
             assertDoesNotThrow(() -> prestiti.set(prestitoDAO.doRetrieveValidByLibro(lib.getIsbn())));
@@ -212,11 +220,11 @@ public class PrestitoDAOTest {
 
     @Test
     public void doRetrieveValidByLibroNotExistTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test_not_exist").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).attivo(true).voto(5).commento("test").build();
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).build();
 
         AtomicReference<ArrayList<Prestito>> prestiti = new AtomicReference<>();
         assertDoesNotThrow(() -> prestiti.set(prestitoDAO.doRetrieveValidByLibro(lib.getIsbn())));
@@ -225,15 +233,17 @@ public class PrestitoDAOTest {
 
     @Test
     public void doRetrieveValidByLibroConsegnaNotNullTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(true).voto(5).commento("test").build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 10, 12);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 10, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("test").build();
+        Prestito p_concluso = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("test").build();
 
         try{
-            prestitoDAO.concludiPrestito(p);
+            prestitoDAO.insert(p);
+            prestitoDAO.concludiPrestito(p_concluso);
             prestitoDAO.attivaPrestito(p);
             AtomicReference<ArrayList<Prestito>> prestiti = new AtomicReference<>();
             assertDoesNotThrow(() -> prestiti.set(prestitoDAO.doRetrieveValidByLibro(lib.getIsbn())));
@@ -246,7 +256,7 @@ public class PrestitoDAOTest {
 
     @Test
     public void doRetrieveByUtenteTest(){
-        String email="test_email";
+        String email="test_email@studenti.unisa.it";
         AtomicReference<ArrayList<Prestito>> prestiti = new AtomicReference<>();
         assertDoesNotThrow(() -> prestiti.set(prestitoDAO.doRetrieveByUtente(email)));
         for(Prestito pr_test: prestiti.get()){
@@ -265,14 +275,14 @@ public class PrestitoDAOTest {
 
     @Test
     public void doRetrieveValidByUtenteTest(){
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(false).voto(5).commento("test").build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 11, 14);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("test").build();
 
         try{
+            prestitoDAO.insert(p);
             prestitoDAO.attivaPrestito(p);
             final Prestito[] prestito_test= new Prestito[1];
             assertDoesNotThrow(() -> prestito_test[0]=prestitoDAO.doRetrieveValidByUtente(utente.getEmail()));
@@ -288,14 +298,15 @@ public class PrestitoDAOTest {
     @Test
     public void doRetrieveValidByUtenteNotExistTest(){
         String email="test_email_not_exist";
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(1, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
-        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 21);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2022, 0, 31);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2022, 4, 12)).dataConsegna(dataConsegna).attivo(false).voto(5).commento("test").build();
 
         try{
+            prestitoDAO.insert(p);
             prestitoDAO.attivaPrestito(p);
             final Prestito[] prestito_test= new Prestito[1];
             assertDoesNotThrow(() -> prestito_test[0]=prestitoDAO.doRetrieveValidByUtente(email));
@@ -309,26 +320,47 @@ public class PrestitoDAOTest {
 
     @Test
     public void doRetrieveByKeyTest(){
-        String email="test_email";
-        String isbn="isbn_test";
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
+        String email="test_email@studenti.unisa.it";
+        String isbn="0000000000";
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 1, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("test").build();
 
-        final Prestito[] prestito_test= new Prestito[1];
-        assertDoesNotThrow(() -> prestito_test[0]=prestitoDAO.doRetrieveByKey(dataInizio, isbn, email));
-        assertEquals(email, prestito_test[0].getUtente().getEmail());
-        assertEquals(isbn, prestito_test[0].getLibro().getIsbn());
-        assertTrue(SwitchDate.equalsDate(dataInizio, prestito_test[0].getDataInizio()));
+
+        try {
+            prestitoDAO.insert(p);
+            final Prestito[] prestito_test= new Prestito[1];
+            assertDoesNotThrow(() -> prestito_test[0]=prestitoDAO.doRetrieveByKey(dataInizio, isbn, email));
+            assertEquals(email, prestito_test[0].getUtente().getEmail());
+            assertEquals(isbn, prestito_test[0].getLibro().getIsbn());
+            assertTrue(SwitchDate.equalsDate(dataInizio, prestito_test[0].getDataInizio()));
+        } catch (SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
     }
 
     @Test
     public void doRetrieveByKeyNotExistTest(){
-        String email="test_email";
-        String isbn="isbn_test";
-        GregorianCalendar dataInizio=new GregorianCalendar(2023, 3, 12);
+        String email="test_email_not_exist";
+        String isbn="0000000000";
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Posizione pos = new Posizione(1, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 21);
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("test").build();
 
-        final Prestito[] prestito_test= new Prestito[1];
-        assertDoesNotThrow(() -> prestito_test[0]=prestitoDAO.doRetrieveByKey(dataInizio, isbn, email));
-        assertNull(prestito_test[0]);
+
+        try {
+            prestitoDAO.insert(p);
+            final Prestito[] prestito_test= new Prestito[1];
+            assertDoesNotThrow(() -> prestito_test[0]=prestitoDAO.doRetrieveByKey(dataInizio, isbn, email));
+            assertNull(prestito_test[0]);
+        } catch (SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
     }
 
 }
