@@ -8,8 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import model.posizionemanagement.Posizione;
 import model.prestitomanagement.Prestito;
+import presenter.http.presenter;
 
-public class Libro implements Serializable {
+public class Libro extends presenter implements Serializable {
     private String isbn, titolo, autore, editore, urlCopertina, categoria;
     private int nCopie, annoPubbl;
     private float rating;

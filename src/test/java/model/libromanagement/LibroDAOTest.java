@@ -32,7 +32,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904454C")
+                .isbn("test")
                 .nCopie(5)
                 .build();
         assertDoesNotThrow(() -> libroDAO.insert(l));
@@ -51,9 +51,9 @@ public class LibroDAOTest {
         }
     }
 
-    @Test(expected = SQLException.class)
-    public void insertIncorrectPosizioneTest() throws SQLException{
-        Posizione p=new Posizione(1,"linguistica","piano 11");
+    @Test
+    public void insertIncorrectPosizioneTest(){
+        Posizione p=new Posizione(23,"linguistica","piano 11");
         Libro l= new Libro.LibroBuilder()
                 .annoPubbl(1980)
                 .autore("Alessandro Manzoni")
@@ -62,11 +62,15 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("97888919044541C")
+                .isbn("test_incorretto")
                 .nCopie(5)
                 .build();
-        assertFalse(libroDAO.insert(l));
-        assertNull(libroDAO.doRetrieveByCodiceISBN(l.getIsbn()));
+        assertThrows(SQLException.class, ()->libroDAO.insert(l));
+        try {
+            assertNull(libroDAO.doRetrieveByCodiceISBN(l.getIsbn()));
+        }catch(SQLException e){
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
     }
 
     @Test(expected = SQLException.class)
@@ -80,7 +84,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904454C")
+                .isbn("test_incorretto")
                 .nCopie(5)
                 .build();
         assertFalse(libroDAO.insert(l));
@@ -89,7 +93,7 @@ public class LibroDAOTest {
 
     @Test
     public void doRetrieveByCodiceISBNTest() {
-        String isbn="9788891904454C";
+        String isbn="test";
         final Libro[] libro_test = new Libro[1];
         assertDoesNotThrow(() -> libro_test[0] =libroDAO.doRetrieveByCodiceISBN(isbn));
         assertEquals(isbn, libro_test[0].getIsbn());
@@ -123,28 +127,6 @@ public class LibroDAOTest {
     }
 
     @Test
-    public void doRetrieveByInteresseTest(){
-        String email="ps";
-        Posizione p=new Posizione(1,"umanistica","piano 1");
-        ArrayList<Libro> interessi=new ArrayList<>();
-        Libro l= new Libro.LibroBuilder()
-                .annoPubbl(1980)
-                .autore("Alessandro Manzoni")
-                .categoria("lettere")
-                .editore("Mondadori")
-                .posizione(p)
-                .urlCopertina("ciao")
-                .titolo("Promessi Sposi")
-                .isbn("9788891904454C")
-                .nCopie(5)
-                .build();
-        interessi.add(l);
-        AtomicReference<ArrayList<Libro>> libri_test=new AtomicReference<>();
-        assertDoesNotThrow(()-> libri_test.set(libroDAO.doRetrieveInteresse(email)));
-        assertIterableEquals(interessi,libri_test.get());
-    }
-
-    @Test
     public void doAddInteresseTest(){
         String email="ps";
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -156,7 +138,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904454C")
+                .isbn("test")
                 .nCopie(5)
                 .build();
         assertDoesNotThrow(()->libroDAO.doAddInteresse(email,l.getIsbn()));
@@ -166,6 +148,28 @@ public class LibroDAOTest {
         } catch (SQLException e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
+    }
+
+    @Test
+    public void doRetrieveInteresseTest(){
+        String email="ps";
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        ArrayList<Libro> interessi=new ArrayList<>();
+        Libro l= new Libro.LibroBuilder()
+                .annoPubbl(1980)
+                .autore("Alessandro Manzoni")
+                .categoria("lettere")
+                .editore("Mondadori")
+                .posizione(p)
+                .urlCopertina("ciao")
+                .titolo("Promessi Sposi")
+                .isbn("test")
+                .nCopie(5)
+                .build();
+        interessi.add(l);
+        AtomicReference<ArrayList<Libro>> libri_test=new AtomicReference<>();
+        assertDoesNotThrow(()-> libri_test.set(libroDAO.doRetrieveInteresse(email)));
+        assertIterableEquals(interessi,libri_test.get());
     }
 
     @Test(expected = SQLException.class)
@@ -180,17 +184,18 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904454A")
+                .isbn("test_incorretto")
                 .nCopie(5)
                 .build();
         assertFalse(libroDAO.doAddInteresse(email,l.getIsbn()));
-        ArrayList<Libro> libri_test=libroDAO.doRetrieveInteresse(email);
-        assertFalse(libri_test.contains(l));
+        AtomicReference<ArrayList<Libro>> libri_test=new AtomicReference<>();
+        assertThrows(SQLException.class,()-> libri_test.set(libroDAO.doRetrieveInteresse(email)));
+        assertFalse(libri_test.get().contains(l));
     }
 
     @Test(expected = SQLException.class)
     public void doAddInteresseIncorretEmailTest() throws SQLException{
-        String email="pss";
+        String email="ps_incorretta";
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder()
                 .annoPubbl(1980)
@@ -218,7 +223,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904454C")
+                .isbn("test")
                 .nCopie(5)
                 .build();
         ArrayList<Libro> libri_test= null;
@@ -243,7 +248,7 @@ public class LibroDAOTest {
                 .posizione(p)
                 .urlCopertina("ciao")
                 .titolo("Promessi Sposi")
-                .isbn("9788891904454A")
+                .isbn("test_incorretto")
                 .nCopie(5)
                 .build();
         ArrayList<Libro> libri= null;
@@ -259,7 +264,7 @@ public class LibroDAOTest {
 
     @Test
     public void doDeleteInteresseIncorrectEmailTest(){
-        String email="pss";
+        String email="ps_incorretta";
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder()
                 .annoPubbl(1980)
@@ -277,5 +282,13 @@ public class LibroDAOTest {
         } catch (SQLException e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
+    }
+
+    @Test
+    public void existCategoriaTest(){
+        String categoria="lettere";
+        boolean risultato;
+        risultato=libroDAO.existCategoria(categoria);
+        assertTrue(risultato);
     }
 }
