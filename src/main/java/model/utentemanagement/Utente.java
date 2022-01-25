@@ -81,7 +81,6 @@ public class Utente {
         if(genere!=null)
             if(!genere.equals(utente.genere))
                 return false;
-        System.out.println("Ret" + (email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta));
         return email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta && nuovo == utente.nuovo;
     }
 
@@ -206,7 +205,7 @@ public class Utente {
         return gson.toJson(utenti);
     }
 
-    public static Utente fromJson(String json) throws JsonSyntaxException {
+    /*public static Utente fromJson(String json) throws JsonSyntaxException {
         Gson gson = new Gson();
         Utente p = gson.fromJson(json,Utente.class);
         return p;
@@ -216,5 +215,5 @@ public class Utente {
         Gson gson = new Gson();
         Utente p = gson.fromJson(""+json.get("Utente"),Utente.class);
         return p;
-    }
+    }*/
 }

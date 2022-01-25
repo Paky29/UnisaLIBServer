@@ -98,14 +98,14 @@ public class Prenotazione {
         return json;
     }
 
-    public static Prenotazione[] fromJson(JSONArray response) throws JSONException {
+    /*public static Prenotazione[] fromJson(JSONArray response) throws JSONException {
         ArrayList<Prenotazione> p=new ArrayList<>();
         for(int i=0;i<response.length();++i)
             p.add(Prenotazione.fromJson(response.getJSONObject(i)));
         Prenotazione[] array = new Prenotazione[p.size()];
         array = p.toArray(array);
         return array;
-    }
+    }*/
 
     public static Prenotazione fromJson(JSONObject json) throws JSONException {
         Gson gson = new Gson();
@@ -113,11 +113,11 @@ public class Prenotazione {
         return p;
     }
 
-    public static ArrayList<Prenotazione> fromJson(String json) {
+    /*public static ArrayList<Prenotazione> fromJson(String json) {
         Gson gson = new Gson();
         ArrayList<Prenotazione> prenotazioni= new ArrayList<>(Arrays.asList(gson.fromJson(json,Prenotazione[].class)));
         return prenotazioni;
-    }
+    }*/
 }
 
 

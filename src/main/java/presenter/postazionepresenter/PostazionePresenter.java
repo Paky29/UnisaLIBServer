@@ -72,7 +72,7 @@ public class PostazionePresenter extends presenter {
                         GregorianCalendar gc = new GregorianCalendar(Integer.valueOf(anno), Integer.valueOf(mese), Integer.valueOf(giorno));
                         mostraElencoPostazioni(gc, p);
                     } else
-                        pw.write("Posizone inviata non corretta");
+                        pw.write("Posizione inviata non corretta");
                 } else
                     pw.write("Errore nella richiesta");
                 break;
