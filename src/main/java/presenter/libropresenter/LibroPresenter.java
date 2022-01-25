@@ -2,18 +2,11 @@ package presenter.libropresenter;
 
 import model.libromanagement.Libro;
 import model.libromanagement.LibroDAO;
-import model.libromanagement.LibroValidator;
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneDAO;
-import model.postazionemanagement.Postazione;
-import model.prenotazionemanagement.Prenotazione;
-import model.prenotazionemanagement.PrenotazioneDAO;
-import model.prestitomanagement.Prestito;
-import model.prestitomanagement.PrestitoDAO;
 import model.utentemanagement.Utente;
 import model.utentemanagement.UtenteDAO;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
 
@@ -25,7 +18,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 @WebServlet(name="libropresenter", value = "/LibroPresenter/*")
 public class LibroPresenter extends presenter {

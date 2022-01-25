@@ -12,9 +12,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
+import utility.SwitchDate;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +109,31 @@ public class PostazioneDAOTest {
     }
 
     @Test
+    @Order(6)
+    public void doRetrieveByPosizioneConBloccoTest(){
+        Posizione pos=new Posizione("scientifica","piano 10");
+        AtomicReference<ArrayList<Postazione>> postazioni_test= new AtomicReference<>(new ArrayList<>());
+        ArrayList<Postazione> postazioni=new ArrayList<>();
+        try {
+            posizioneDAO.insert(pos);
+            Posizione finalP =posizioneDAO.doRetrieveByBibliotecaZona(pos.getBiblioteca(),pos.getZona());
+            postazioni.add(new Postazione("testZ1",true, finalP));
+            postazioni.add(new Postazione("testZ2",false, finalP));
+            postazioneDAO.insert(postazioni.get(0));
+            postazioneDAO.insert(postazioni.get(1));
+            Periodo p=(new Periodo(11,13,new GregorianCalendar()));
+            postazioneDAO.bloccoDeterminato(p, postazioni.get(0));
+            postazioni.get(0).getBlocchi().add(p);
+            assertDoesNotThrow(()-> postazioni_test.set(postazioneDAO.doRetrieveByPosizione(finalP.getBiblioteca(), finalP.getZona())));
+            posizioneDAO.delete(pos.getBiblioteca(),pos.getZona());
+            assertIterableEquals(postazioni,postazioni_test.get());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
     @Order(7)
     public void doRetrieveByPosizioneNonEsistenteTest(){
         Posizione p=new Posizione("linguistica","piano 10");
@@ -129,6 +158,31 @@ public class PostazioneDAOTest {
             assertDoesNotThrow(()-> postazioni_test.set(postazioneDAO.doRetrieveDisponibiliByPosizione(finalP.getBiblioteca(), finalP.getZona())));
             posizioneDAO.delete(p.getBiblioteca(),p.getZona());
             assertEquals(postazioni.get(0), postazioni_test.get().get(0));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    @Order(6)
+    public void doRetrieveDisponibiliByPosizioneConBloccoTest(){
+        Posizione pos=new Posizione("scientifica","piano 10");
+        AtomicReference<ArrayList<Postazione>> postazioni_test= new AtomicReference<>(new ArrayList<>());
+        ArrayList<Postazione> postazioni=new ArrayList<>();
+        try {
+            posizioneDAO.insert(pos);
+            Posizione finalP =posizioneDAO.doRetrieveByBibliotecaZona(pos.getBiblioteca(),pos.getZona());
+            postazioni.add(new Postazione("testZ1",true, finalP));
+            postazioni.add(new Postazione("testZ2",false, finalP));
+            postazioneDAO.insert(postazioni.get(0));
+            postazioneDAO.insert(postazioni.get(1));
+            Periodo p=(new Periodo(11,13,new GregorianCalendar()));
+            postazioneDAO.bloccoDeterminato(p, postazioni.get(0));
+            postazioni.get(0).getBlocchi().add(p);
+            assertDoesNotThrow(()-> postazioni_test.set(postazioneDAO.doRetrieveDisponibiliByPosizione(finalP.getBiblioteca(), finalP.getZona())));
+            posizioneDAO.delete(pos.getBiblioteca(),pos.getZona());
+            assertEquals(postazioni.get(0),postazioni_test.get().get(0));
         } catch (SQLException e) {
             e.printStackTrace();
             fail("Non avrebbe dovuto lanciare l'eccezione");
@@ -196,6 +250,26 @@ public class PostazioneDAOTest {
         Periodo periodo=new Periodo(9,13,new GregorianCalendar());
         try {
             Postazione pos=postazioneDAO.doRetrieveById("test3");
+            assertEquals("Blocchi inseriti correttamente",postazioneDAO.bloccoDeterminato(periodo,pos));
+            Postazione pos_test=postazioneDAO.doRetrieveById(pos.getId());
+            for(int start=periodo.getOraInizio();start<periodo.getOraFine();start+=2){
+                if(start==13)
+                    ++start;
+                Periodo periodo_test=new Periodo(start,start+2,new GregorianCalendar());
+                assertTrue(pos_test.getBlocchi().contains(periodo_test));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    @Order(13)
+    public void bloccoDeterminatoIntervalloTest(){
+        Periodo periodo=new Periodo(11,16,new GregorianCalendar());
+        try {
+            Postazione pos=postazioneDAO.doRetrieveById("test10");
             assertEquals("Blocchi inseriti correttamente",postazioneDAO.bloccoDeterminato(periodo,pos));
             Postazione pos_test=postazioneDAO.doRetrieveById(pos.getId());
             for(int start=periodo.getOraInizio();start<periodo.getOraFine();start+=2){
@@ -298,9 +372,7 @@ public class PostazioneDAOTest {
     @Order(20)
     public void sbloccoDeterminatoPostazioneNonPresenteTest(){
         try {
-            Periodo periodo=new Periodo(14,16,new GregorianCalendar());
-            Postazione pos=postazioneDAO.doRetrieveById("test8");
-            periodoDAO.insertPeriodo(periodo);
+            Periodo periodo=new Periodo(9,11,new GregorianCalendar(2022, Calendar.JANUARY,29));
             assertFalse(postazioneDAO.sbloccaPostazione("123", periodoDAO.doRetrieveByInfo(periodo)));
         } catch (SQLException e) {
             e.printStackTrace();

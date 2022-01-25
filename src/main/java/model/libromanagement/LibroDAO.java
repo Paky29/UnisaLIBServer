@@ -1,34 +1,22 @@
 package model.libromanagement;
-
-import com.google.gson.Gson;
-import model.libromanagement.Libro;
-import model.libromanagement.LibroExtractor;
-import model.prestitomanagement.Prestito;
-import model.prestitomanagement.PrestitoExtractor;
-import model.utentemanagement.Utente;
 import utility.ConPool;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class LibroDAO {
 
-    public boolean existCategoria(String categoria){
+    public boolean existCategoria(String categoria)throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT count(*) as esiste FROM categoria c WHERE c.nome=?");
-            ps.setString(1,categoria);
-            ResultSet rs=ps.executeQuery();
-            if(rs.next()) {
-                if (rs.getInt("esiste") > 0)
-                    return true;
+            ps.setString(1, categoria);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("esiste") > 0;
             }
-            return false;
-        }catch (SQLException e){
-            e.printStackTrace();
             return false;
         }
     }
@@ -47,10 +35,7 @@ public class LibroDAO {
             ps.setString(8, libro.getCategoria());
             ps.setInt(9, libro.getPosizione().getId());
 
-            if (ps.executeUpdate() != 1)
-                return false;
-
-            return true;
+            return ps.executeUpdate() == 1;
         }
     }
 
@@ -129,10 +114,7 @@ public class LibroDAO {
             ps.setString(1, email);
             ps.setString(2, isbn);
 
-            if (ps.executeUpdate() != 1)
-                return false;
-
-            return true;
+            return ps.executeUpdate() == 1;
         }
     }
 
@@ -143,10 +125,7 @@ public class LibroDAO {
             ps.setString(1, email);
             ps.setString(2, isbn);
 
-            if (ps.executeUpdate() != 1)
-                return false;
-
-            return true;
+            return ps.executeUpdate() == 1;
         }
     }
 

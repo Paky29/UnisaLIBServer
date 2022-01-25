@@ -1,6 +1,5 @@
 package presenter.postazionepresenter;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneDAO;
 import model.postazionemanagement.*;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;

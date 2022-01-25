@@ -1,5 +1,6 @@
-package model.postazionemanagement;
+package presenter.postazionepresenter;
 
+import model.postazionemanagement.Periodo;
 import utility.SwitchDate;
 
 import java.util.GregorianCalendar;

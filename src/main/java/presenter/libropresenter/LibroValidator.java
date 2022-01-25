@@ -1,4 +1,6 @@
-package model.libromanagement;
+package presenter.libropresenter;
+
+import model.libromanagement.Libro;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
@@ -296,8 +297,43 @@ public class LibroDAOTest {
     @Test
     public void existCategoriaTest(){
         String categoria="lettere";
-        boolean risultato;
-        risultato=libroDAO.existCategoria(categoria);
-        assertTrue(risultato);
+        try {
+            boolean risultato=libroDAO.existCategoria(categoria);
+            assertTrue(risultato);
+        } catch (SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void existCategoriaInsesistenteTest(){
+        String categoria="astronomia";
+        try {
+            boolean risultato=libroDAO.existCategoria(categoria);
+            assertFalse(risultato);
+        } catch (SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void doRetrieveAllCategorieTest(){
+        ArrayList<String> categorie=new ArrayList<>();
+        categorie.add("informatica");
+        categorie.add("lettere");
+        categorie.add("filosofia");
+        categorie.add("biologia");
+        categorie.add("fisica");
+        categorie.add("politica");
+        categorie.add("arte");
+        categorie.add("test");
+        categorie.add("consigliati");
+        categorie.add(("matematica"));
+        try {
+            ArrayList<String> categorie_test=libroDAO.doRetrieveAllCategorie();
+            assertIterableEquals(new TreeSet<>(categorie),new TreeSet<>(categorie_test));
+        } catch (SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
     }
 }

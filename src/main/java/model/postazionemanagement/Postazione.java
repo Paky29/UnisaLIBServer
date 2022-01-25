@@ -37,13 +37,12 @@ public class Postazione {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Postazione pos = (Postazione) o;
-        boolean bl=true;
         if(blocchi.size()!=pos.blocchi.size())
             return false;
         for(Periodo blocco: blocchi)
             if(!pos.blocchi.contains(blocco))
                 return false;
-        return disponibile == pos.disponibile && id.equals(pos.id) && posizione.equals(pos.posizione) && bl;
+        return disponibile == pos.disponibile && id.equals(pos.id) && posizione.equals(pos.posizione);
     }
 
     public String getId() {

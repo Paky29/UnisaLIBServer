@@ -17,10 +17,7 @@ public class PostazioneDAO {
             ps.setBoolean(2, p.isDisponibile());
             ps.setInt(3,p.getPosizione().getId());
 
-            if (ps.executeUpdate() != 1)
-                return false;
-
-            return true;
+            return ps.executeUpdate() == 1;
         }
     }
 
@@ -100,7 +97,7 @@ public class PostazioneDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 isBlock = rs.getBoolean("val");
-                return isBlock==true?1:0;
+                return isBlock ?1:0;
             }
             return -1;
         }
@@ -122,16 +119,14 @@ public class PostazioneDAO {
                     return false;
                 }
             }
-            else
-                return false;
 
-                ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = false WHERE pos.postazione_id = ?");
-                ps.setString(1, idPos);
-                if (ps.executeUpdate() != 1) {
-                    conn.setAutoCommit(true);
-                    System.out.println("fallita la prima query");
-                    return false;
-                }
+            ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = false WHERE pos.postazione_id = ?");
+            ps.setString(1, idPos);
+            if (ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
+                System.out.println("fallita la prima query");
+                return false;
+            }
             ps = conn.prepareStatement("SELECT COUNT(*) as pren FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");
             ps.setDate(1, dataCorrente);
             ps.setInt(2,Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
@@ -154,6 +149,7 @@ public class PostazioneDAO {
             conn.setAutoCommit(true);
             return true;
         } catch (SQLException throwables) {
+            throwables.printStackTrace();
             return false;
         }
     }
@@ -235,8 +231,6 @@ public class PostazioneDAO {
                     return false;
                 }
             }
-            else
-                return false;
 
             ps = conn.prepareStatement("UPDATE postazione pos  SET pos.is_disponibile = true WHERE pos.postazione_id = ?");
             ps.setString(1, idPos);
@@ -256,10 +250,7 @@ public class PostazioneDAO {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM blocco b WHERE b.postazione_fk=? AND periodo_fk=?");
             ps.setString(1,idPos);
             ps.setInt(2,p.getId());
-            if (ps.executeUpdate() != 1) {
-                return false;
-            }
-            return true;
+            return ps.executeUpdate() == 1;
         }
     }
 }
