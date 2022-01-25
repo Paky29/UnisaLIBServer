@@ -23,38 +23,32 @@ public class UtenteDAOTest {
     }
 
 
+    //fare prestiti, interessi e prenotazioni ad hoc per utente
     @Test
     public void doRetrieveByEmailAndPasswordAllTest() {
-        Utente utente=new Utente.UtenteBuilder().email("dd").password("donia").nome("daniele").cognome("donia").admin(false).matricola("0512108772").nuovo(true).genere("M").eta(21).build();
-        Posizione pos = new Posizione(1, "umanistica", "piano 1");
-        Libro lib = new Libro.LibroBuilder().isbn("0195153448").titolo("Classical Mythology").autore("Mark P. O. Morford").editore("Oxford University Press").annoPubbl(2002).nCopie(3).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").categoria("lettere").posizione(pos).build();
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(new GregorianCalendar(2022, 0, 17)).dataFine(new GregorianCalendar(2022, 1, 17)).dataConsegna(new GregorianCalendar(2022, 0, 19)).voto(5).commento("ok").attivo(false).build();
-        Postazione post = new Postazione("1", true, pos);
+        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Posizione pos = new Posizione(9, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(new GregorianCalendar(2022, 0, 17)).dataConsegna(new GregorianCalendar(2022, 0, 19)).voto(5).commento("ok").attivo(false).build();
+        Postazione post = new Postazione("A1", true, pos);
         Prenotazione pr = new Prenotazione(new GregorianCalendar(2022, 0, 18), 9, 11, utente, post);
         utente.getPrestiti().add(p);
         utente.getPrenotazioni().add(pr);
         utente.getInteressi().add(lib);
 
         final Utente[] utente_test = new Utente[1];
-        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAndPasswordAll("dd", "donia"));
+        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAndPasswordAll("test_email@studenti.unisa.it", "Testpword1?"));
         assertEquals(utente, utente_test[0]);
 
     }
 
+    //fare prestiti, interessi e prenotazioni ad hoc per utente
     @Test
     public void doRetrieveByEmailAllTest() {
-        Utente utente=new Utente.UtenteBuilder().email("dd").password("donia").nome("daniele").cognome("donia").admin(false).matricola("0512108772").nuovo(true).genere("M").eta(21).build();
-        Posizione pos = new Posizione(1, "umanistica", "piano 1");
-        Libro lib = new Libro.LibroBuilder().isbn("0195153448").titolo("Classical Mythology").autore("Mark P. O. Morford").editore("Oxford University Press").annoPubbl(2002).nCopie(3).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").categoria("lettere").posizione(pos).build();
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(new GregorianCalendar(2022, 0, 17)).dataFine(new GregorianCalendar(2022, 1, 17)).dataConsegna(new GregorianCalendar(2022, 0, 19)).voto(5).commento("ok").attivo(false).build();
-        Postazione post = new Postazione("1", true, pos);
-        Prenotazione pr = new Prenotazione(new GregorianCalendar(2022, 0, 18), 9, 11, utente, post);
-        utente.getPrestiti().add(p);
-        utente.getPrenotazioni().add(pr);
-        utente.getInteressi().add(lib);
+        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
 
         final Utente[] utente_test = new Utente[1];
-        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAll("dd"));
+        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAll("test_email@studenti.unisa.it"));
         assertEquals(utente, utente_test[0]);
 
     }
@@ -80,8 +74,8 @@ public class UtenteDAOTest {
 
     @Test
     public void doUpdateTest(){
-        String email="dd";
-        Utente utente=new Utente.UtenteBuilder().email(email).password("donia").nome("daniele").cognome("donia").admin(false).matricola("0512108772").nuovo(true).genere("M").eta(21).build();
+        String email="test_email@studenti.unisa.it";
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
 
         AtomicBoolean success = new AtomicBoolean(false);
         assertDoesNotThrow(()-> success.set(utenteDAO.doUpdate(utente)));
