@@ -99,6 +99,7 @@ public class LibroDAOTest {
         assertEquals(isbn, libro_test[0].getIsbn());
     }
 
+
     @Test
     public void doRetrieveByAutoreTest(){
         String autore="autore_test";
