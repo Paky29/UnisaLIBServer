@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -23,6 +24,7 @@ public class PosizioneDAOTest {
         Posizione p1 = posizioneDAO.doRetrieveByBibliotecaZona(p.getBiblioteca(), p.getZona());
         assertEquals(p.getBiblioteca(), p1.getBiblioteca());
         assertEquals(p.getZona(), p1.getZona());
+        posizioneDAO.delete(p.getBiblioteca(), p.getZona());
     }
 
     @Test
@@ -63,5 +65,24 @@ public class PosizioneDAOTest {
         String zona = "piano 5";
         posizioneDAO.delete(biblioteca, zona);
         assertNull(posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona));
+        posizioneDAO.insert(new Posizione(biblioteca, zona));
+    }
+
+    @Test
+    public void doRetrieveAllTest() throws SQLException {
+        ArrayList<Posizione> posizioni = new ArrayList<>();
+        boolean flag=true;
+        posizioni.add(new Posizione("scientifica", "piano 1"));
+        posizioni.add(new Posizione("scientifica", "piano 2"));
+        posizioni.add(new Posizione("scientifica", "piano 3"));
+        posizioni.add(new Posizione("umanistica", "piano 1"));
+        posizioni.add(new Posizione("umanistica", "piano 2"));
+        posizioni.add(new Posizione("umanistica", "piano 3"));
+        ArrayList<Posizione> retrieve = posizioneDAO.doRetrieveAll();
+        for(Posizione p:posizioni){
+            if(!retrieve.contains(p))
+                flag=false;
+        }
+        assertTrue(flag);
     }
 }

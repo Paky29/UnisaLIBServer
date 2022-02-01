@@ -13,7 +13,7 @@ public class SwitchDate {
 
     public static GregorianCalendar toGregorianCalendar(Date d){
         GregorianCalendar gc = new GregorianCalendar();
-        gc.set(d.getYear()+1900, d.getMonth(), d.getDate());
+        gc.set(d.getYear()+1900, d.getMonth(), d.getDate(), 0 ,0 ,0);
         return gc;
     }
 

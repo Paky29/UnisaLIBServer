@@ -6,6 +6,9 @@ import model.postazionemanagement.Periodo;
 import model.postazionemanagement.PeriodoDAO;
 import model.postazionemanagement.Postazione;
 import model.postazionemanagement.PostazioneDAO;
+import model.prenotazionemanagement.Prenotazione;
+import model.prenotazionemanagement.PrenotazioneDAO;
+import model.utentemanagement.Utente;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +31,7 @@ public class PostazionePresenterTest {
     PostazioneDAO postazioneDAO;
     PeriodoDAO periodoDAO;
     PosizioneDAO posizioneDAO;
+    PrenotazioneDAO prenotazioneDAO;
     PostazionePresenter postazionePresenter;
     HttpServletRequest request;
     HttpServletResponse response;
@@ -38,7 +43,8 @@ public class PostazionePresenterTest {
         postazioneDAO = Mockito.mock(PostazioneDAO.class);
         periodoDAO = Mockito.mock(PeriodoDAO.class);
         posizioneDAO = Mockito.mock(PosizioneDAO.class);
-        postazionePresenter = new PostazionePresenter(postazioneDAO, periodoDAO, posizioneDAO);
+        prenotazioneDAO = Mockito.mock(PrenotazioneDAO.class);
+        postazionePresenter = new PostazionePresenter(postazioneDAO, periodoDAO, posizioneDAO, prenotazioneDAO);
         response= Mockito.mock(HttpServletResponse.class);
         request=Mockito.mock(HttpServletRequest.class);
         try {
@@ -81,6 +87,58 @@ public class PostazionePresenterTest {
             String linea = br.readLine();
             assertEquals("Posizioni non trovate", linea);
         } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraElencoPostazioniTest(){
+        JSONArray jsonArray1 = new JSONArray();
+        JSONArray jsonArray2 = new JSONArray();
+        JSONObject jsonObject1 = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        JSONObject respJson = new JSONObject();
+        Posizione posizione = new Posizione(5, "scientifica", "piano 1");
+        Postazione p = new Postazione("B1", true, posizione);
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.set(2022, 1, 2, 0, 0,0);
+        Utente utente = new Utente.UtenteBuilder().
+                email("s.celentano16@studenti.unisa.it").
+                password("s.cele").
+                nome("Sabato").
+                cognome("Celentano").
+                matricola("0512107757").
+                genere("M").
+                eta(23).
+                admin(false).
+                nuovo(false).
+                build();
+        Prenotazione prenotazione = new Prenotazione(gc, 16, 18, utente, p);
+        ArrayList<Postazione> postazioni = new ArrayList<>();
+        postazioni.add(p);
+        ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
+        prenotazioni.add(prenotazione);
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni");
+        when(request.getParameter("giorno")).thenReturn(String.valueOf(gc.get(Calendar.DAY_OF_MONTH)));
+        when(request.getParameter("mese")).thenReturn(String.valueOf(gc.get(Calendar.MONTH)));
+        when(request.getParameter("anno")).thenReturn(String.valueOf(gc.get(Calendar.YEAR)));
+        when(request.getParameter("posizione")).thenReturn(Posizione.toJson(posizione));
+        try {
+            jsonObject1.put("postazione",Postazione.toJson(p));
+            jsonArray1.put(jsonObject1);
+            jsonObject2.put("prenotazione",Prenotazione.toJson(prenotazione));
+            jsonArray2.put(jsonObject2);
+            respJson.put("postazioni", jsonArray1);
+            respJson.put("prenotazioni", jsonArray2);
+            when(response.getWriter()).thenReturn(pw);
+            when(postazioneDAO.doRetrieveDisponibiliByPosizione(posizione.getBiblioteca(), posizione.getZona())).thenReturn(postazioni);
+            when(prenotazioneDAO.doRetrieveValidByPostazioneDate(p, gc)).thenReturn(prenotazioni);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals(respJson.toString(), linea);
+
+        } catch (IOException | JSONException | SQLException e) {
             e.printStackTrace();
         }
     }

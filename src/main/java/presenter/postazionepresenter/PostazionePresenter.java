@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 @WebServlet(name="postazionepresenter", value = "/PostazionePresenter/*")
@@ -26,18 +27,21 @@ public class PostazionePresenter extends presenter {
     PostazioneDAO postazioneDAO;
     PeriodoDAO periodoDAO;
     PosizioneDAO posizioneDAO;
+    PrenotazioneDAO prenotazioneDAO;
 
     public PostazionePresenter(){
         this.postazioneDAO = new PostazioneDAO();
         this.periodoDAO =  new PeriodoDAO();
         this.posizioneDAO = new PosizioneDAO();
+        this.prenotazioneDAO =  new PrenotazioneDAO();
     }
 
 
-    public PostazionePresenter(PostazioneDAO postazioneDAO, PeriodoDAO periodoDAO, PosizioneDAO posizioneDAO){
+    public PostazionePresenter(PostazioneDAO postazioneDAO, PeriodoDAO periodoDAO, PosizioneDAO posizioneDAO, PrenotazioneDAO prenotazioneDAO){
         this.postazioneDAO = postazioneDAO;
         this.periodoDAO = periodoDAO;
         this.posizioneDAO = posizioneDAO;
+        this.prenotazioneDAO = prenotazioneDAO;
     }
 
 
@@ -67,7 +71,8 @@ public class PostazionePresenter extends presenter {
                 if(giorno!=null && mese!=null && anno!=null && posizione!=null) {
                     Posizione p = Posizione.fromJson(posizione);
                     if(p!=null) {
-                        GregorianCalendar gc = new GregorianCalendar(Integer.valueOf(anno), Integer.valueOf(mese), Integer.valueOf(giorno));
+                        GregorianCalendar gc = new GregorianCalendar();
+                        gc.set(Integer.parseInt(anno), Integer.parseInt(mese), Integer.parseInt(giorno), 0, 0,0);
                         mostraElencoPostazioni(gc, p);
                     } else
                         pw.write("Posizione inviata non corretta");
@@ -164,7 +169,6 @@ public class PostazionePresenter extends presenter {
                     obj.put("postazione",Postazione.toJson(pt));
                     pos.put(obj);
                 }
-                System.out.println(pos.getJSONObject(0));
 
                 JSONArray pren= new JSONArray();
                 for(Prenotazione pr: prenotazioni){
@@ -176,7 +180,6 @@ public class PostazionePresenter extends presenter {
                 JSONObject response= new JSONObject();
                 response.put("postazioni", pos);
                 response.put("prenotazioni", pren);
-                System.out.println(response.toString());
                 pw.write(response.toString());
                 if(prenotazioni.isEmpty())
                     System.out.println("non ci sono prenotazioni");
