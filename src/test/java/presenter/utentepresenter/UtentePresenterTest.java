@@ -20,8 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UtentePresenterTest {
     UtenteDAO utenteDAO;
@@ -70,7 +69,7 @@ public class UtentePresenterTest {
 
     @Test
     public void loginWrongEmailFormatTest() {
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email").password("TestPword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/login");
         when(request.getParameter("email")).thenReturn("test_email");
         when(request.getParameter("pass")).thenReturn("test_pword");
@@ -87,6 +86,38 @@ public class UtentePresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
 
+    }
+
+    @Test
+    public void loginWrongPasswordFormatTest() {
+        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        when(request.getPathInfo()).thenReturn("/login");
+        when(request.getParameter("email")).thenReturn("test_email");
+        when(request.getParameter("pass")).thenReturn("test_pword");
+
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(utenteDAO.doRetrieveByEmailAndPasswordAll("test_email@studenti.unisa.it", "test_pword")).thenReturn(utente);
+            assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Email o password non valida", linea);
+
+        } catch (IOException | SQLException ex ) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+
+    }
+
+    @Test
+    public void loginWrongPathTest() {
+        when(request.getPathInfo()).thenReturn("/");
+        assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
+        try {
+            verify(response, only()).getWriter();
+        } catch (IOException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
     }
 
     @Test

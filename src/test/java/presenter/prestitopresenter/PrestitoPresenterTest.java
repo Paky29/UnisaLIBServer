@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -518,13 +519,16 @@ public class PrestitoPresenterTest {
 
     }
 
+    //cambiare data con una precedente di una settimana alla data corrente
     @Test
     public void attivaPrestitoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/attiva-prestito");
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 20);
+        GregorianCalendar currentDate= new GregorianCalendar();
+        currentDate.add(Calendar.DATE, -4);
+        GregorianCalendar dataInizio=new GregorianCalendar(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH));
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("ok").build();
         when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
         Prestito pAttivo=new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).voto(5).commento("ok").build();
@@ -550,14 +554,17 @@ public class PrestitoPresenterTest {
 
     }
 
+    //cambiare data con una precedente di una settimana alla data corrente
     @Test
     public void attivaPrestitoAttivoErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/attiva-prestito");
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 20);
-        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataFine(new GregorianCalendar(2023, 4, 12)).attivo(true).voto(5).commento("ok").build();
+        GregorianCalendar currentDate= new GregorianCalendar();
+        currentDate.add(Calendar.DATE, -4);
+        GregorianCalendar dataInizio=new GregorianCalendar(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH));
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).voto(5).commento("ok").build();
         when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
 
         try {
@@ -576,13 +583,16 @@ public class PrestitoPresenterTest {
 
     }
 
+    //cambiare data con una precedente di una settimana alla data corrente
     @Test
     public void attivaPrestitoAttivazioneErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/attiva-prestito");
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
-        GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 20);
+        GregorianCalendar currentDate= new GregorianCalendar();
+        currentDate.add(Calendar.DATE, -4);
+        GregorianCalendar dataInizio=new GregorianCalendar(currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH));
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("ok").build();
         when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
 

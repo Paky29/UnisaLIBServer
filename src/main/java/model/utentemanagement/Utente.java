@@ -75,12 +75,6 @@ public class Utente {
         if (o == null || getClass() != o.getClass()) return false;
         Utente utente = (Utente) o;
 
-        if(matricola!=null)
-            if(!matricola.equals(utente.matricola))
-                return false;
-        if(genere!=null)
-            if(!genere.equals(utente.genere))
-                return false;
         return email.equals(utente.email) && nome.equals(utente.nome) && cognome.equals(utente.cognome) && eta == utente.eta && nuovo == utente.nuovo;
     }
 

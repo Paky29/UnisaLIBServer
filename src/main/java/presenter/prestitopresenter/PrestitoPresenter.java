@@ -98,7 +98,8 @@ public class PrestitoPresenter extends presenter {
                 Prestito prestito = Prestito.fromJsonToPrestito(p);
                 GregorianCalendar dataInizio=prestito.getDataInizio();
                 GregorianCalendar dataFineAttivazione= (GregorianCalendar) dataInizio.clone();
-                dataFineAttivazione.roll(Calendar.DAY_OF_MONTH, 7);
+                dataFineAttivazione.add(GregorianCalendar.DATE, +7);
+                System.out.println("DataFinAtt: " + dataFineAttivazione.toString());
                 if(dataFineAttivazione.compareTo(new GregorianCalendar())<0)
                     pw.write("Prestito non attivabile. Settimana scaduta.");
                 else

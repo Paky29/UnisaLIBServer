@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,30 +27,52 @@ public class UtenteDAOTest {
     //fare prestiti, interessi e prenotazioni ad hoc per utente
     @Test
     public void doRetrieveByEmailAndPasswordAllTest() {
-        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
         Posizione pos = new Posizione(9, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("url_test").categoria("test").posizione(pos).build();
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(new GregorianCalendar(2022, 0, 17)).dataConsegna(new GregorianCalendar(2022, 0, 19)).voto(5).commento("ok").attivo(false).build();
-        Postazione post = new Postazione("A1", true, pos);
-        Prenotazione pr = new Prenotazione(new GregorianCalendar(2022, 0, 18), 9, 11, utente, post);
-        utente.getPrestiti().add(p);
-        utente.getPrenotazioni().add(pr);
-        utente.getInteressi().add(lib);
+        Postazione post = new Postazione("test10", true, pos);
+        Prenotazione pr = new Prenotazione(new GregorianCalendar(2022, 0, 31), 14, 16, utente, post);
+
+        ArrayList<Prestito> prestitiUtente=new ArrayList<>();
+        prestitiUtente.add(p);
+        ArrayList<Prenotazione> prenotazioniUtente=new ArrayList<>();
+        prenotazioniUtente.add(pr);
+        ArrayList<Libro> interessiUtente=new ArrayList<>();
+        interessiUtente.add(lib);
+
+        Utente utenteFinal=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).prestiti(prestitiUtente).prenotazioni(prenotazioniUtente).interessi(interessiUtente).build();
+
 
         final Utente[] utente_test = new Utente[1];
-        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAndPasswordAll("test_email@studenti.unisa.it", "Testpword1?"));
-        assertEquals(utente, utente_test[0]);
+        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAndPasswordAll("test_email_utente_dao@studenti.unisa.it", "Testpword1?"));
+        assertEquals(utenteFinal, utente_test[0]);
 
     }
 
     //fare prestiti, interessi e prenotazioni ad hoc per utente
     @Test
     public void doRetrieveByEmailAllTest() {
-        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
+        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
+        Posizione pos = new Posizione(9, "test", "test");
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("url_test").categoria("test").posizione(pos).build();
+        Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(new GregorianCalendar(2022, 0, 17)).dataConsegna(new GregorianCalendar(2022, 0, 19)).voto(5).commento("ok").attivo(false).build();
+        Postazione post = new Postazione("test10", true, pos);
+        Prenotazione pr = new Prenotazione(new GregorianCalendar(2022, 0, 31), 14, 16, utente, post);
+
+        ArrayList<Prestito> prestitiUtente=new ArrayList<>();
+        prestitiUtente.add(p);
+        ArrayList<Prenotazione> prenotazioniUtente=new ArrayList<>();
+        prenotazioniUtente.add(pr);
+        ArrayList<Libro> interessiUtente=new ArrayList<>();
+        interessiUtente.add(lib);
+
+        Utente utenteFinal=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).prestiti(prestitiUtente).prenotazioni(prenotazioniUtente).interessi(interessiUtente).build();
+
 
         final Utente[] utente_test = new Utente[1];
-        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAll("test_email@studenti.unisa.it"));
-        assertEquals(utente, utente_test[0]);
+        assertDoesNotThrow(() -> utente_test[0] =utenteDAO.doRetrieveByEmailAll("test_email_utente_dao@studenti.unisa.it"));
+        assertEquals(utenteFinal, utente_test[0]);
 
     }
 
@@ -74,8 +97,8 @@ public class UtenteDAOTest {
 
     @Test
     public void doUpdateTest(){
-        String email="test_email@studenti.unisa.it";
-        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        String email="test_email_utente_dao@studenti.unisa.it";
+        Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
 
         AtomicBoolean success = new AtomicBoolean(false);
         assertDoesNotThrow(()-> success.set(utenteDAO.doUpdate(utente)));
@@ -97,6 +120,12 @@ public class UtenteDAOTest {
         }
 
 
+    }
+
+    @Test
+    public void doUpdateUtenteNotExistTest(){
+        Utente utente=new Utente.UtenteBuilder().email("test_email_not_exist").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
+        assertThrows(RuntimeException.class, ()-> utenteDAO.doUpdate(utente));
     }
 
 
