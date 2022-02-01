@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -68,19 +69,63 @@ public class PrenotazionePresenterTest {
                 build();
         Postazione postazione = new Postazione("B3", true, new Posizione( "scientifica" , "Piano 1"));
         Prenotazione p = new Prenotazione(new GregorianCalendar(2022, 1, 2), 16, 18, utente, postazione);
+        ArrayList<Prenotazione> array = new ArrayList<>();
+        array.add(p);
         JSONObject jsonObject = new JSONObject();
         when(request.getPathInfo()).thenReturn("/crea-prenotazione");
         when(request.getParameter("prenotazione")).thenReturn(Prenotazione.toJson(p));
         try {
             when(response.getWriter()).thenReturn(pw);
             when(prenotazioneDAO.insert(p)).thenReturn(true);
-            utente.getPrenotazioni().add(p);
+            Utente utente2 = new Utente.UtenteBuilder().
+                    email("s.celentano16@studenti.unisa.it").
+                    password("s.cele").
+                    nome("Sabato").
+                    cognome("Celentano").
+                    matricola("0512107757").
+                    genere("M").
+                    eta(23).
+                    admin(false).
+                    nuovo(false).
+                    prenotazioni(array).
+                    build();
+            when(utenteDAO.doRetrieveByEmail(utente.getEmail())).thenReturn(utente2);
+            assertDoesNotThrow(()->prenP.doPost(request,response));
+            pw.flush();
+            String linea = br.readLine();
+            jsonObject.put("utente", Utente.toJson(utente2));
+            assertEquals(jsonObject.toString(), linea);
+        } catch (Exception e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+    @Test
+    public void creaPrenotazioneInserimentiFallito(){
+        Utente utente = new Utente.UtenteBuilder().
+                email("s.celentano16@studenti.unisa.it").
+                password("s.cele").
+                nome("Sabato").
+                cognome("Celentano").
+                matricola("0512107757").
+                genere("M").
+                eta(23).
+                admin(false).
+                nuovo(false).
+                build();
+        Postazione postazione = new Postazione("B3", true, new Posizione( "scientifica" , "Piano 1"));
+        Prenotazione p = new Prenotazione(new GregorianCalendar(2022, 1, 2), 16, 18, utente, postazione);
+        ArrayList<Prenotazione> array = new ArrayList<>();
+        array.add(p);
+        when(request.getPathInfo()).thenReturn("/crea-prenotazione");
+        when(request.getParameter("prenotazione")).thenReturn(Prenotazione.toJson(p));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(prenotazioneDAO.insert(p)).thenReturn(false);
             when(utenteDAO.doRetrieveByEmail(utente.getEmail())).thenReturn(utente);
             assertDoesNotThrow(()->prenP.doPost(request,response));
             pw.flush();
             String linea = br.readLine();
-            jsonObject.put("utente", Utente.toJson(utente));
-            assertEquals(jsonObject.toString(), linea);
+            assertEquals("Salvataggio non andato a buon fine", linea);
         } catch (Exception e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }

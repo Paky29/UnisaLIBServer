@@ -96,7 +96,7 @@ public class PeriodoDAO {
     }
 
     public boolean insertPeriodo(Periodo p) throws SQLException {
-        try(Connection conn= ConPool.getConnection()){
+        try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps = conn.prepareStatement("INSERT INTO periodo(data_p,ora_inizio,ora_fine) VALUES(?,?,?)");
             ps.setDate(1,SwitchDate.toDate(p.getData()));
             ps.setInt(2,p.getOraInizio());

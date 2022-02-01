@@ -61,21 +61,17 @@ public class PrenotazionePresenter extends presenter {
             if (prenotazioneDAO.insert(prenotazione)) {
                 Utente utenteAggiornato = utenteDAO.doRetrieveByEmail(prenotazione.getUtente().getEmail());
                 JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("utente", Utente.toJson(utenteAggiornato));
-                    System.out.println("Json successo");
-                    pw.write(jsonObject.toString());
-                    System.out.println("Scritto in risposta oggetto");
-                } catch (JSONException ex) {
-                    ex.printStackTrace();
-                    System.out.println("Errore JSON");
-                    pw.write("Errore del server");
-                }
+
+                jsonObject.put("utente", Utente.toJson(utenteAggiornato));
+                System.out.println("Json successo");
+                pw.write(jsonObject.toString());
+                System.out.println("Scritto in risposta oggetto");
+
             } else {
                 System.out.println("Errore Salvataggio");
                 pw.write("Salvataggio non andato a buon fine");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             pw.write("Errore nel server");
             e.printStackTrace();
         }

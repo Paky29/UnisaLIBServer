@@ -57,10 +57,10 @@ public class PrestitoDAOTest {
     }
 
     @Test
-    public void insertLibroExistTest(){
+    public void insertPrestitoExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
         Posizione pos = new Posizione(9, "test", "test");
-        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).urlCopertina("test_url").categoria("test").posizione(pos).build();
+        Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 3, 12);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
 
@@ -69,6 +69,7 @@ public class PrestitoDAOTest {
             AtomicBoolean success = new AtomicBoolean(false);
             assertThrows(SQLException.class, () -> success.set(prestitoDAO.insert(p)));
         } catch (SQLException e) {
+            e.printStackTrace();
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
 
