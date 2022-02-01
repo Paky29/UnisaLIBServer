@@ -70,7 +70,7 @@ public class PostazionePresenter extends presenter {
                 String posizione = req.getParameter("posizione");
                 if(giorno!=null && mese!=null && anno!=null && posizione!=null) {
                     Posizione p = Posizione.fromJson(posizione);
-                    if(p!=null) {
+                    if(p.getBiblioteca()!=null && p.getZona()!=null) {
                         GregorianCalendar gc = new GregorianCalendar();
                         gc.set(Integer.parseInt(anno), Integer.parseInt(mese), Integer.parseInt(giorno), 0, 0,0);
                         mostraElencoPostazioni(gc, p);
@@ -157,14 +157,14 @@ public class PostazionePresenter extends presenter {
     }
 
     private void mostraElencoPostazioni(GregorianCalendar gc, Posizione p) {
-        PrenotazioneDAO prenotazioneDAO=new PrenotazioneDAO();
         try {
             ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveDisponibiliByPosizione(p.getBiblioteca(),p.getZona());
             if(!postazioni.isEmpty()) {
                 ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
                 JSONArray pos = new JSONArray();
                 for (Postazione pt : postazioni) {
-                    prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt, gc));
+                    System.out.println(pt.getId()+gc.toString());
+                    prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt, gc.get(Calendar.DATE), gc.get(Calendar.MONTH), gc.get(Calendar.YEAR)));
                     JSONObject obj=new JSONObject();
                     obj.put("postazione",Postazione.toJson(pt));
                     pos.put(obj);

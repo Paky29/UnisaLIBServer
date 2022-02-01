@@ -132,13 +132,53 @@ public class PostazionePresenterTest {
             respJson.put("prenotazioni", jsonArray2);
             when(response.getWriter()).thenReturn(pw);
             when(postazioneDAO.doRetrieveDisponibiliByPosizione(posizione.getBiblioteca(), posizione.getZona())).thenReturn(postazioni);
-            when(prenotazioneDAO.doRetrieveValidByPostazioneDate(p, gc)).thenReturn(prenotazioni);
+            when(prenotazioneDAO.doRetrieveValidByPostazioneDate(p, gc.get(Calendar.DATE), gc.get(Calendar.MONTH), gc.get(Calendar.YEAR))).thenReturn(prenotazioni);
             assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
             assertEquals(respJson.toString(), linea);
 
         } catch (IOException | JSONException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraElencoPostazioniPosizioneNullTest(){
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.set(2022, 1, 2, 0, 0,0);
+        Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni");
+        when(request.getParameter("giorno")).thenReturn(String.valueOf(gc.get(Calendar.DAY_OF_MONTH)));
+        when(request.getParameter("mese")).thenReturn(String.valueOf(gc.get(Calendar.MONTH)));
+        when(request.getParameter("anno")).thenReturn(String.valueOf(gc.get(Calendar.YEAR)));
+        when(request.getParameter("posizione")).thenReturn(Periodo.toJson(periodo));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Posizione inviata non corretta", linea);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraElencoPostazioniDataNullTest(){
+        Posizione posizione = new Posizione(5, "scientifica", "piano 1");
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni");
+        when(request.getParameter("giorno")).thenReturn(null);
+        when(request.getParameter("mese")).thenReturn(null);
+        when(request.getParameter("anno")).thenReturn(null);
+        when(request.getParameter("posizione")).thenReturn(Posizione.toJson(posizione));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -161,6 +201,21 @@ public class PostazionePresenterTest {
             String linea = br.readLine();
             assertEquals(Postazione.toJson(postazioni), linea);
         } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraElencoPostazioniAdminPosizioneNullTest() {
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni-admin");
+        when(request.getParameter("posizione")).thenReturn(null);
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -257,6 +312,21 @@ public class PostazionePresenterTest {
     }
 
     @Test
+    public void sbloccaPostazionePosIdNullTest(){
+        when(request.getParameter("idPos")).thenReturn(null);
+        when(request.getPathInfo()).thenReturn("/sblocca-postazione");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void sbloccaPostazionePeriodoTest(){
         JSONObject jsonObject = new JSONObject();
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -298,7 +368,23 @@ public class PostazionePresenterTest {
         } catch (IOException | SQLException | JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void bloccoDeterminatoPosIdNullTest(){
+        Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
+        when(request.getParameter("idPos")).thenReturn(null);
+        when(request.getParameter("periodo")).thenReturn(Periodo.toJson(periodo));
+        when(request.getPathInfo()).thenReturn("/blocco-determinato");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

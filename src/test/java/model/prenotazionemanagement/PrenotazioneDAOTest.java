@@ -81,7 +81,7 @@ public class PrenotazioneDAOTest {
     public void doRetriveByIncorrectInfoTest() throws SQLException {
         GregorianCalendar data = new GregorianCalendar(2022, 1 ,2);
         int oraInizio = 17;
-        String postazioneId = "1";
+        String postazioneId = "Not Exists";
         String utenteEmail = "sc@studenti.unisa.it";
         Prenotazione p = prenotazioneDAO.doRetrieveByInfo(data,oraInizio,postazioneId,utenteEmail);
         assertNull(p);
@@ -91,7 +91,7 @@ public class PrenotazioneDAOTest {
     public void doRetrieveValidByPostazioneDateTest() throws SQLException {
         Postazione postazione = new Postazione("B3", true, new Posizione(1, "umanistica" , "piano 1"));
         GregorianCalendar date = new GregorianCalendar(2022, 0, 31);
-        ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByPostazioneDate(postazione, date);
+        ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByPostazioneDate(postazione, date.get(Calendar.DATE), date.get(Calendar.MONTH), date.get(Calendar.YEAR));
         for (Prenotazione p : pTest){
             assertTrue(SwitchDate.equalsDate(date, p.getData()));
             assertTrue(postazione.getId().equals(p.getPostazione().getId()));
@@ -101,9 +101,9 @@ public class PrenotazioneDAOTest {
 
     @Test
     public void doRetrieveValidByIncorrectPostazioneDateTest() throws SQLException {
-        Postazione postazione = new Postazione("1", true, new Posizione(1, "umanistica" , "piano 1"));
+        Postazione postazione = new Postazione("Not Exists", true, new Posizione(1, "umanistica" , "piano 1"));
         GregorianCalendar date = new GregorianCalendar(2022, 1, 2);
-        ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByPostazioneDate(postazione, date);
+        ArrayList<Prenotazione> pTest = prenotazioneDAO.doRetrieveValidByPostazioneDate(postazione, date.get(Calendar.DATE), date.get(Calendar.MONTH), date.get(Calendar.YEAR));
         assertTrue(pTest.isEmpty());
     }
 
