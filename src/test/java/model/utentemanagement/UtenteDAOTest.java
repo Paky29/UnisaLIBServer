@@ -24,7 +24,7 @@ public class UtenteDAOTest {
     }
 
 
-    //fare prestiti, interessi e prenotazioni ad hoc per utente
+    //fare prestiti , interessi e prenotazioni ad hoc per utente
     @Test
     public void doRetrieveByEmailAndPasswordAllTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
