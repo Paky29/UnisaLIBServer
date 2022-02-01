@@ -144,7 +144,7 @@ public class PostazionePresenterTest {
     }
 
     @Test
-    public void mostraElencoPostazioniPosizioneNullTest(){
+    public void mostraElencoPostazioniPosizioneIncorrettaTest(){
         GregorianCalendar gc = new GregorianCalendar();
         gc.set(2022, 1, 2, 0, 0,0);
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -201,6 +201,22 @@ public class PostazionePresenterTest {
             String linea = br.readLine();
             assertEquals(Postazione.toJson(postazioni), linea);
         } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mostraElencoPostazioniAdminPosizioneIncorrettaTest() {
+        Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
+        when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni-admin");
+        when(request.getParameter("posizione")).thenReturn(Periodo.toJson(periodo));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Posizone inviata non corretta", linea);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -271,6 +287,21 @@ public class PostazionePresenterTest {
             jsonObject.put("messaggio", "blocco effettuato con successo");
             assertEquals(jsonObject.toString(), linea);
         } catch (IOException | SQLException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void bloccoIndeterminatoIdPosTest(){
+        when(request.getParameter("idPos")).thenReturn(null);
+        when(request.getPathInfo()).thenReturn("/blocco-indeterminato");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -348,6 +379,23 @@ public class PostazionePresenterTest {
     }
 
     @Test
+    public void sbloccaPostazionePeriodoIdPosNullTest(){
+        Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
+        when(request.getParameter("idPos")).thenReturn(null);
+        when(request.getParameter("periodo")).thenReturn(Periodo.toJson(periodo));
+        when(request.getPathInfo()).thenReturn("/sblocca-postazione-periodo");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void bloccoDeterminatoTest(){
         JSONObject jsonObject = new JSONObject();
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -370,6 +418,7 @@ public class PostazionePresenterTest {
         }
     }
 
+
     @Test
     public void bloccoDeterminatoPosIdNullTest(){
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -388,7 +437,7 @@ public class PostazionePresenterTest {
     }
 
     @Test
-    public void cercaBlocchi(){
+    public void cercaBlocchiTest(){
         JSONObject jsonObject = new JSONObject();
         Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
         Postazione postazione = new Postazione("A1", true, posizione);
@@ -415,6 +464,21 @@ public class PostazionePresenterTest {
             verify(response, only()).getWriter();
         } catch (IOException e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void cercaBlocchiIdPosNullTest(){
+        when(request.getParameter("idPos")).thenReturn(null);
+        when(request.getPathInfo()).thenReturn("/cerca-blocchi");
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Errore nella richiesta", linea);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
