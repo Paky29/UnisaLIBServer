@@ -111,7 +111,7 @@ public class UtentePresenterTest {
 
     @Test
     public void loginWrongPathTest() {
-        when(request.getPathInfo()).thenReturn("/");
+        when(request.getPathInfo()).thenReturn(null);
         assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
         try {
             verify(response, only()).getWriter();
