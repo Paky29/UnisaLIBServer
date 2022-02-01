@@ -18,16 +18,13 @@ import presenter.libropresenter.LibroPresenter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PrenotazionePresenterTest {
 
@@ -127,6 +124,17 @@ public class PrenotazionePresenterTest {
             String linea = br.readLine();
             assertEquals("Salvataggio non andato a buon fine", linea);
         } catch (Exception e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void prenotazioneWrongPathTest() {
+        when(request.getPathInfo()).thenReturn(null);
+        assertDoesNotThrow(() -> prenP.doPost(request, response));
+        try {
+            verify(response, only()).getWriter();
+        } catch (IOException e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
