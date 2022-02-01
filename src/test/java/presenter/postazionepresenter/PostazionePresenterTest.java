@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PostazionePresenterTest {
     PostazioneDAO postazioneDAO;
@@ -404,6 +404,17 @@ public class PostazionePresenterTest {
             assertEquals(jsonObject.toString(), linea);
         } catch (SQLException | IOException | JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void prenotazioneWrongPathTest() {
+        when(request.getPathInfo()).thenReturn(null);
+        assertDoesNotThrow(() -> postazionePresenter.doPost(request, response));
+        try {
+            verify(response, only()).getWriter();
+        } catch (IOException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
 }
