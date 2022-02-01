@@ -69,7 +69,7 @@ public class UtentePresenterTest {
 
     @Test
     public void loginWrongEmailFormatTest() {
-        Utente utente=new Utente.UtenteBuilder().email("test_email").password("TestPword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
+        Utente utente =new Utente.UtenteBuilder().email("test_email").password("TestPword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getPathInfo()).thenReturn("/login");
         when(request.getParameter("email")).thenReturn("test_email");
         when(request.getParameter("pass")).thenReturn("test_pword");
