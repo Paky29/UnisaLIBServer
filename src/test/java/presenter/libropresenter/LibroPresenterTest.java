@@ -545,10 +545,32 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibroAttributiNonCorrettiTest(){
+    public void creaLibroISBNShorterLengthTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         //isbn troppo corto
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("9790445Z").nCopie(5).build();
+        when(request.getPathInfo()).thenReturn("/crea-libro");
+        when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(libroDAO.doRetrieveByCodiceISBN(l.getIsbn())).thenReturn(null);
+            when(posizioneDAO.doRetrieveByBibliotecaZona(l.getPosizione().getBiblioteca(),l.getPosizione().getZona())).thenReturn(p);
+            when(libroDAO.existCategoria(l.getCategoria())).thenReturn(true);
+            when(libroDAO.insert(l)).thenReturn(true);
+            assertDoesNotThrow(()->lp.doPost(request,response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Libro non valido",linea);
+        } catch (Exception e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void creaLibroLongerLengthTest(){
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        //isbn troppo lungo
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("97904456665Z").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
         when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
         try {
