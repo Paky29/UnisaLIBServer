@@ -84,7 +84,7 @@ public class PostazionePresenter extends presenter {
                 String p = req.getParameter("posizione");
                 if (p!=null) {
                     Posizione pos = Posizione.fromJson(p);
-                    if(pos!=null)
+                    if(pos.getBiblioteca()!=null && pos.getZona()!=null)
                         mostraElencoPostazioniAdmin(pos);
                     else
                         pw.write("Posizone inviata non corretta");
@@ -105,10 +105,7 @@ public class PostazionePresenter extends presenter {
                 String periodo = req.getParameter("periodo");
                 if(idPos!=null && periodo!=null) {
                     Periodo p = Periodo.fromJson(periodo);
-                    if(p!=null)
-                        bloccoDeterminato(idPos, p, resp);
-                    else
-                        pw.write("Periodo inviato non corretto");
+                    bloccoDeterminato(idPos, p, resp);
                 } else
                     pw.write("Errore nella richiesta");
                 break;
@@ -126,10 +123,7 @@ public class PostazionePresenter extends presenter {
                 String periodo = req.getParameter("periodo");
                 if(idPos!=null && periodo!=null) {
                     Periodo p = Periodo.fromJson(periodo);
-                    if(p!=null)
-                        sbloccaPostazionePeriodo(idPos,p);
-                    else
-                        pw.write("Periodo inviato non corretto");
+                    sbloccaPostazionePeriodo(idPos,p);
                 } else
                     pw.write("Errore nella richiesta");
                 break;
@@ -140,6 +134,7 @@ public class PostazionePresenter extends presenter {
                     cercaBlocchi(idPos);
                 else
                     pw.write("Errore nella richiesta");
+                break;
             }
         }
     }
@@ -169,14 +164,12 @@ public class PostazionePresenter extends presenter {
                     obj.put("postazione",Postazione.toJson(pt));
                     pos.put(obj);
                 }
-
                 JSONArray pren= new JSONArray();
                 for(Prenotazione pr: prenotazioni){
                     JSONObject obj=new JSONObject();
                     obj.put("prenotazione",Prenotazione.toJson(pr));
                     pren.put(obj);
                 }
-
                 JSONObject response= new JSONObject();
                 response.put("postazioni", pos);
                 response.put("prenotazioni", pren);
@@ -313,5 +306,4 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
 }

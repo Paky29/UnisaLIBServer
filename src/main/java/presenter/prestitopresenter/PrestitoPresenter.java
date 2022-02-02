@@ -267,7 +267,7 @@ public class PrestitoPresenter extends presenter {
         try {
         Libro libro = prestito.getLibro();
         Prestito prestitoExist=prestitoDAO.doRetrieveByKey(prestito.getDataInizio(), prestito.getLibro().getIsbn(), prestito.getUtente().getEmail());
-        if(prestitoExist==null || prestitoExist.getDataConsegna()!=null)
+        if(prestitoExist==null || prestitoExist.getDataConsegna()!=null || !prestitoExist.isAttivo())
             pw.write("Prestito concluso o non trovato");
         else {
             if (prestitoDAO.concludiPrestito(prestito)) {
