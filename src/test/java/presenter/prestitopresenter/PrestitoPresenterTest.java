@@ -656,7 +656,7 @@ public class PrestitoPresenterTest {
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
-        GregorianCalendar dataConsegna=new GregorianCalendar(2021, 0, 21);
+        GregorianCalendar dataConsegna=new GregorianCalendar(2023, 0, 21);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
         when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
 

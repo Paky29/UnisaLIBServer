@@ -106,8 +106,8 @@ public class PrestitoPresenter extends presenter {
                 Prestito prestito = Prestito.fromJsonToPrestito(p);
                 System.out.println("DataC prestito: " + prestito.getDataConsegna());
                 GregorianCalendar dataConsegna=prestito.getDataConsegna();
-                GregorianCalendar dataInizio=prestito.getDataInizio();
-                if(dataConsegna.compareTo(dataInizio)<0)
+                GregorianCalendar dataCorrente=new GregorianCalendar();
+                if(dataConsegna.compareTo(dataCorrente)>0)
                     pw.write("Data consegna non valida");
                 else
                     concludiPrestito(prestito);
