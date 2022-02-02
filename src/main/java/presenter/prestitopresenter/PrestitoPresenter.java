@@ -1,11 +1,7 @@
 package presenter.prestitopresenter;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import model.libromanagement.Libro;
 import model.libromanagement.LibroDAO;
-import model.prenotazionemanagement.Prenotazione;
-import model.prenotazionemanagement.PrenotazioneDAO;
 import model.prestitomanagement.Prestito;
 import model.prestitomanagement.PrestitoDAO;
 import model.utentemanagement.Utente;
@@ -16,14 +12,12 @@ import presenter.http.presenter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 
@@ -67,7 +61,7 @@ public class PrestitoPresenter extends presenter {
             }
             case "/lista-prestiti-libro": {
                 String isbn = req.getParameter("libro");
-                cercaPrestitiAttiviPerLibro(isbn);
+                cercaPrestitiValidiPerLibro(isbn);
                 break;
             }
             case "/crea-prestito": {
@@ -135,7 +129,7 @@ public class PrestitoPresenter extends presenter {
         }
     }
 
-    private void cercaPrestitiAttiviPerLibro(String codiceISBN){
+    private void cercaPrestitiValidiPerLibro(String codiceISBN){
         System.out.println("Sono in metodo cercaPAttivi");
         try {
             ArrayList<Prestito> prestiti = prestitoDAO.doRetrieveValidByLibro(codiceISBN);

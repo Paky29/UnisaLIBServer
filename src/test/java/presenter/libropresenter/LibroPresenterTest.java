@@ -187,9 +187,9 @@ public class LibroPresenterTest {
         String categoria="lettere";
         when(request.getParameter("categoria")).thenReturn(categoria);
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l1= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
-        Libro l2= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454A").nCopie(5).build();
-        Libro l3= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454B").nCopie(5).build();
+        Libro l1= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
+        Libro l2= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889191X").nCopie(5).build();
+        Libro l3= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889192X").nCopie(5).build();
         ArrayList<Libro> libri=new ArrayList<>();
         libri.add(l1);
         libri.add(l2);
@@ -211,9 +211,9 @@ public class LibroPresenterTest {
         when(request.getPathInfo()).thenReturn("/ricerca-libri-categoria");
         String categoria="lettere";
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l1= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
-        Libro l2= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454A").nCopie(5).build();
-        Libro l3= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454B").nCopie(5).build();
+        Libro l1= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
+        Libro l2= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889191X").nCopie(5).build();
+        Libro l3= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889192X").nCopie(5).build();
         ArrayList<Libro> libri=new ArrayList<>();
         libri.add(l1);
         libri.add(l2);
@@ -252,7 +252,7 @@ public class LibroPresenterTest {
     public void rimuoviInteresseTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         utente.getInteressi().add(l);
         when(request.getParameter("email")).thenReturn(utente.getEmail());
@@ -278,7 +278,7 @@ public class LibroPresenterTest {
     public void rimuoviInteresseParametriNullTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         utente.getInteressi().add(l);
         when(request.getParameter("email")).thenReturn(utente.getEmail());
@@ -302,7 +302,7 @@ public class LibroPresenterTest {
     public void rimuoviInteresseFallitaTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         utente.getInteressi().add(l);
         when(request.getParameter("email")).thenReturn(utente.getEmail());
@@ -326,7 +326,7 @@ public class LibroPresenterTest {
     public void rimuoviInteresseSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         utente.getInteressi().add(l);
         try {
@@ -347,7 +347,7 @@ public class LibroPresenterTest {
     public void rimuoviInteresseUtenteSenzaInteressiTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getParameter("email")).thenReturn(utente.getEmail());
         when(request.getParameter("isbn")).thenReturn(l.getIsbn());
@@ -369,8 +369,8 @@ public class LibroPresenterTest {
     public void rimuoviInteresseLibroNonDiInteresseTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l1= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
-        Libro l2= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904453A").nCopie(5).build();
+        Libro l1= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
+        Libro l2= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889191X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         utente.getInteressi().add(l2);
         when(request.getParameter("email")).thenReturn(utente.getEmail());
@@ -393,7 +393,7 @@ public class LibroPresenterTest {
     public void aggiungiInteresseTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getParameter("email")).thenReturn(utente.getEmail());
         when(request.getParameter("isbn")).thenReturn(l.getIsbn());
@@ -418,7 +418,7 @@ public class LibroPresenterTest {
     public void aggiungiInteresseSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         try {
             when(response.getWriter()).thenReturn(pw);
@@ -439,7 +439,7 @@ public class LibroPresenterTest {
     public void aggiungiInteresseParametriNullTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getParameter("email")).thenReturn(utente.getEmail());
         when(request.getParameter("isbn")).thenReturn(l.getIsbn());
@@ -462,7 +462,7 @@ public class LibroPresenterTest {
     public void aggiungiInteresseFallitaTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("9788891904454C").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("Alessandro Manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("ciao").titolo("Promessi Sposi").isbn("978889190X").nCopie(5).build();
         Utente utente=new Utente.UtenteBuilder().email("pasquale@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         when(request.getParameter("email")).thenReturn(utente.getEmail());
         when(request.getParameter("isbn")).thenReturn(l.getIsbn());
@@ -484,7 +484,7 @@ public class LibroPresenterTest {
     @Test
     public void creaLibroTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445X").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
         when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
         try {
@@ -505,7 +505,7 @@ public class LibroPresenterTest {
     @Test
     public void creaLibroSenzaParametriTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445X").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
         try {
             when(response.getWriter()).thenReturn(pw);
@@ -525,7 +525,7 @@ public class LibroPresenterTest {
     @Test
     public void creaLibroParametroNonCorrettoTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445X").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
         //passo qualcosa che non è un libro
         when(request.getParameter("libro")).thenReturn(Posizione.toJson(p));
@@ -548,7 +548,7 @@ public class LibroPresenterTest {
     public void creaLibroISBNShorterLengthTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         //isbn troppo corto
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("9790445Z").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("9790445X").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
         when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
         try {
@@ -567,10 +567,32 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibroLongerLengthTest(){
+    public void creaLibroISBNLongerLengthTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         //isbn troppo lungo
-        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("97904456665Z").nCopie(5).build();
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("97904456665X").nCopie(5).build();
+        when(request.getPathInfo()).thenReturn("/crea-libro");
+        when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
+        try {
+            when(response.getWriter()).thenReturn(pw);
+            when(libroDAO.doRetrieveByCodiceISBN(l.getIsbn())).thenReturn(null);
+            when(posizioneDAO.doRetrieveByBibliotecaZona(l.getPosizione().getBiblioteca(),l.getPosizione().getZona())).thenReturn(p);
+            when(libroDAO.existCategoria(l.getCategoria())).thenReturn(true);
+            when(libroDAO.insert(l)).thenReturn(true);
+            assertDoesNotThrow(()->lp.doPost(request,response));
+            pw.flush();
+            String linea = br.readLine();
+            assertEquals("Libro non valido",linea);
+        } catch (Exception e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
+    }
+
+    @Test
+    public void creaLibroISBNWrongFormatTest(){
+        Posizione p=new Posizione(1,"umanistica","piano 1");
+        //isbn troppo lungo
+        Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("979044566B").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
         when(request.getParameter("libro")).thenReturn(Libro.toJson(l));
         try {

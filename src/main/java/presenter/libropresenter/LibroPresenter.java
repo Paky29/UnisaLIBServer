@@ -156,10 +156,10 @@ public class LibroPresenter extends presenter {
         }
     }
 
-    private void rimuoviLibroFromInteressi(String isbnLibro, String emailUtente){
+    private void rimuoviLibroFromInteressi(String isbn, String email){
         try {
-            Libro l = libroDAO.doRetrieveByCodiceISBN(isbnLibro);
-            Utente u = utenteDAO.doRetrieveByEmailAll(emailUtente);
+            Libro l = libroDAO.doRetrieveByCodiceISBN(isbn);
+            Utente u = utenteDAO.doRetrieveByEmailAll(email);
             if(u!=null && l!=null) {
                 if (u.getInteressi().isEmpty()) {
                     pw.write("Nessun libro in interessi");
@@ -168,7 +168,7 @@ public class LibroPresenter extends presenter {
                     if (!u.getInteressi().contains(l))
                         pw.write("Libro non presente in interessi");
                     else {
-                        if (libroDAO.doDeleteInteresse(emailUtente, isbnLibro)) {
+                        if (libroDAO.doDeleteInteresse(email, isbn)) {
                             u.getInteressi().remove(l);
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("Utente", Utente.toJson(u));
