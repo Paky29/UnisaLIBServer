@@ -89,27 +89,6 @@ public class UtentePresenterTest {
     }
 
     @Test
-    public void loginWrongPasswordFormatTest() {
-        Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("test_pword").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
-        when(request.getPathInfo()).thenReturn("/login");
-        when(request.getParameter("email")).thenReturn("test_email");
-        when(request.getParameter("pass")).thenReturn("test_pword");
-
-        try {
-            when(response.getWriter()).thenReturn(pw);
-            when(utenteDAO.doRetrieveByEmailAndPasswordAll("test_email@studenti.unisa.it", "test_pword")).thenReturn(utente);
-            assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
-            pw.flush();
-            String linea = br.readLine();
-            assertEquals("Email o password non valida", linea);
-
-        } catch (IOException | SQLException ex ) {
-            fail("Non avrebbe dovuto lanciare l'eccezione");
-        }
-
-    }
-
-    @Test
     public void loginWrongPathTest() {
         when(request.getPathInfo()).thenReturn(null);
         assertDoesNotThrow(() -> utentePresenter.doPost(request, response));

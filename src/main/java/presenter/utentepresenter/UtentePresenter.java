@@ -63,8 +63,7 @@ public class UtentePresenter extends presenter {
     public void login(String email, String password){
         Utente u=null;
         String email_regex="[A-z0-9\\.\\+_-]+@(studenti.)*(unisa\\.it)";
-        String pword_regex="(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
-        if(!Pattern.matches(email_regex, email) || !Pattern.matches(pword_regex, password)){
+        if(!Pattern.matches(email_regex, email)){
             pw.write("Email o password non valida");
         }
         else {
