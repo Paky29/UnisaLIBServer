@@ -712,7 +712,7 @@ public class PrestitoPresenterTest {
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 0, 12);
         GregorianCalendar dataConsegna=new GregorianCalendar(2022, 0, 21);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).build();
-        Prestito pExist = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).build();
+        Prestito pExist = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(true).build();
         when(request.getParameter("prestito")).thenReturn(Prestito.toJson(p));
 
         try {
