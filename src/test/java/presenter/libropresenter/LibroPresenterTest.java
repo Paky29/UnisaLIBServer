@@ -482,7 +482,7 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibro(){
+    public void creaLibroTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
@@ -503,7 +503,7 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibroSenzaParametri(){
+    public void creaLibroSenzaParametriTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
@@ -523,7 +523,7 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibroParametroNonCorretto(){
+    public void creaLibroParametroNonCorrettoTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("978190445Z").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");
@@ -545,7 +545,7 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibroAttributiNonCorretti(){
+    public void creaLibroAttributiNonCorrettiTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         //isbn troppo corto
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("9790445Z").nCopie(5).build();
@@ -567,7 +567,7 @@ public class LibroPresenterTest {
     }
 
     @Test
-    public void creaLibroFallita(){
+    public void creaLibroFallitaTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("781904451Z").nCopie(5).build();
         when(request.getPathInfo()).thenReturn("/crea-libro");

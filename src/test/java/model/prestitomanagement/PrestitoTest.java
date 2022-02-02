@@ -25,7 +25,7 @@ public class PrestitoTest {
     }
 
     @Test
-    public void equalsTestWithDataConsegnaNotNull(){
+    public void equalsTestWithDataConsegnaNotNullTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
@@ -70,7 +70,7 @@ public class PrestitoTest {
     }
 
     @Test
-    public void equalsErrorWithBothDataConsegnaNotNull(){
+    public void equalsErrorWithBothDataConsegnaNotNullTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
@@ -83,7 +83,7 @@ public class PrestitoTest {
     }
 
     @Test
-    public void equalsErrorWithOneDataConsegnaNotNull(){
+    public void equalsErrorWithOneDataConsegnaNotNullTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
         Posizione pos = new Posizione(1, "test", "test");
         Libro lib = new Libro.LibroBuilder().isbn("isbn_test").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();

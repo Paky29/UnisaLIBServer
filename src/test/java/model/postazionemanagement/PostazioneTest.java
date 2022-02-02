@@ -17,13 +17,13 @@ public class PostazioneTest {
         posizione = new Posizione(3, "scientifica", "Piano 1");
     }
     @Test
-    public void stessoOggetto(){
+    public void stessoOggettoTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         assertTrue(p1.equals(p1));
     }
 
     @Test
-    public void oggettoNull(){
+    public void oggettoNullTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         assertFalse(p1.equals(null));
     }
@@ -35,7 +35,7 @@ public class PostazioneTest {
     }
 
     @Test
-    public void sizeBlocchiDiverse(){
+    public void sizeBlocchiDiverseTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A1", true, posizione);
         p1.getBlocchi().add(new Periodo(11,13,new GregorianCalendar()));
@@ -43,7 +43,7 @@ public class PostazioneTest {
     }
 
     @Test
-    public void blocchiDiverse(){
+    public void blocchiDiverseTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A1", true, posizione);
         p1.getBlocchi().add(new Periodo(11,13,new GregorianCalendar()));
@@ -52,7 +52,7 @@ public class PostazioneTest {
     }
 
     @Test
-    public void diversaDisponibilita(){
+    public void diversaDisponibilitaTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A1", false, posizione);
         p1.getBlocchi().add(new Periodo(11,13,new GregorianCalendar()));
@@ -61,7 +61,7 @@ public class PostazioneTest {
     }
 
     @Test
-    public void diversoId(){
+    public void diversoIdTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A2", true, posizione);
         p1.getBlocchi().add(new Periodo(11,13,new GregorianCalendar()));
@@ -70,7 +70,7 @@ public class PostazioneTest {
     }
 
     @Test
-    public void diversaPosizione(){
+    public void diversaPosizioneTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A1", true, posizione);
         p1.getBlocchi().add(new Periodo(11,13,new GregorianCalendar()));
@@ -80,7 +80,7 @@ public class PostazioneTest {
     }
 
     @Test
-    public void postazioniUguali(){
+    public void postazioniUgualiTest(){
         Postazione p1 = new Postazione("A1", true, posizione);
         Postazione p2 = new Postazione("A1", true, posizione);
         p1.getBlocchi().add(new Periodo(11,13,new GregorianCalendar()));
