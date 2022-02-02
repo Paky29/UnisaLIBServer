@@ -72,7 +72,7 @@ public class PrenotazionePresenter extends presenter {
                 pw.write("Salvataggio non andato a buon fine");
             }
         } catch (Exception e) {
-            pw.write("Errore nel server");
+            pw.write("Prenotazione gia presente");
             e.printStackTrace();
         }
     }

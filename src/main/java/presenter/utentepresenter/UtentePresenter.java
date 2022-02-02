@@ -64,7 +64,7 @@ public class UtentePresenter extends presenter {
         Utente u=null;
         String email_regex="[A-z0-9\\.\\+_-]+@(studenti.)*(unisa\\.it)";
         if(!Pattern.matches(email_regex, email)){
-            pw.write("Email o password non valida");
+            pw.write("Email non valida");
         }
         else {
             try {

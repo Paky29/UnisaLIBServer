@@ -25,7 +25,7 @@ public class PrenotazioneDAO {
             ps.setInt(5, p.getOraFine());
 
             if (ps.executeUpdate() != 1)
-                throw new RuntimeException("INSERT error");
+                return false;
 
             return true;
         }

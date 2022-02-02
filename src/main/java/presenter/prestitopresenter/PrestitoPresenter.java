@@ -120,6 +120,7 @@ public class PrestitoPresenter extends presenter {
         try {
             ArrayList<Prestito> prestiti = prestitoDAO.doRetrieveByUtente(email);
             if (!prestiti.isEmpty()) {
+                System.out.println("jo"+Prestito.toJson(prestiti).toString());
                 System.out.println("okkkk");
                 pw.write(Prestito.toJson(prestiti));
             } else
@@ -134,7 +135,6 @@ public class PrestitoPresenter extends presenter {
         try {
             ArrayList<Prestito> prestiti = prestitoDAO.doRetrieveValidByLibro(codiceISBN);
             if (!prestiti.isEmpty()) {
-                System.out.println("okkkk");
                 pw.write(Prestito.toJson(prestiti));
             } else
                 pw.write("Non sono presenti prestiti");

@@ -109,7 +109,7 @@ public class PrestitoDAO {
             ps.setString(5, p.getUtente().getEmail());
 
             if(ps.executeUpdate() != 1)
-                throw new RuntimeException("Valutazione prestito error");
+                return false;
 
             return true;
         }

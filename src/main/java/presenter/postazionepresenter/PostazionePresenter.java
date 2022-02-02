@@ -296,6 +296,7 @@ public class PostazionePresenter extends presenter {
             Postazione p=postazioneDAO.doRetrieveById(idPos);
             if(p!=null){
                 JSONObject string = new JSONObject();
+                System.out.println(Postazione.toJson(p));
                 string.put("postazione",Postazione.toJson(p));
                 pw.write(string.toString());
             }
