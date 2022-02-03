@@ -101,6 +101,7 @@ public class PrestitoDAO {
 
     public boolean valutaPrestito(Prestito p) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
+            conn.setAutoCommit(false);
             PreparedStatement ps=conn.prepareStatement("UPDATE prestito p SET p.commento=?, p.voto=? WHERE p.data_inizio=? AND p.libro_fk=? AND p.utente_fk=?");
             ps.setString(1,p.getCommento());
             ps.setFloat(2,p.getVoto());
@@ -108,8 +109,24 @@ public class PrestitoDAO {
             ps.setString(4, p.getLibro().getIsbn());
             ps.setString(5, p.getUtente().getEmail());
 
-            if(ps.executeUpdate() != 1)
+            if(ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
                 return false;
+            }
+
+            ps=conn.prepareStatement("UPDATE libro l SET l.rating=(SELECT AVG(p.voto) FROM Prestito p WHERE p.libro_fk=? AND p.voto!=0) WHERE l.isbn=?");
+            String isbn=p.getLibro().getIsbn();
+            ps.setString(1,isbn);
+            ps.setString(2,isbn);
+
+            if (ps.executeUpdate() != 1) {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
+
+            conn.commit();
+            conn.setAutoCommit(true);
 
             return true;
         }
