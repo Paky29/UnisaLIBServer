@@ -7,6 +7,7 @@ import model.posizionemanagement.PosizioneDAO;
 import model.utentemanagement.Utente;
 import model.utentemanagement.UtenteDAO;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
 
@@ -246,7 +247,9 @@ public class LibroPresenter extends presenter {
                     Posizione p=posizioneDAO.doRetrieveByBibliotecaZona(libro.getPosizione().getBiblioteca(),libro.getPosizione().getZona());
                     if (p != null && libroDAO.existCategoria(libro.getCategoria())) {
                         if (libroDAO.insert(libro)) {
-                            pw.write("Salvataggio avvenuto con successo");
+                            JSONObject json=new JSONObject();
+                            json.put("messaggio","Salvataggio avvenuto con successo");
+                            pw.write(json.toString());
                         } else {
                             pw.write("Salvataggio non andato a buon fine");
                         }
@@ -255,6 +258,8 @@ public class LibroPresenter extends presenter {
                 }
             } catch (SQLException e) {
                 pw.write("Errore nel server");
+            } catch (JSONException e){
+                pw.write("Errore del server, ma il salvataggio avvenuto con successo");
             }
         }
         else

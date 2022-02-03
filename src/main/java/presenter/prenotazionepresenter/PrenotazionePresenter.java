@@ -59,10 +59,10 @@ public class PrenotazionePresenter extends presenter {
     private void creaPrenotazione(Prenotazione prenotazione){
         try {
             if (prenotazioneDAO.insert(prenotazione)) {
-                Utente utenteAggiornato = utenteDAO.doRetrieveByEmail(prenotazione.getUtente().getEmail());
+                Utente utenteAggiornato = utenteDAO.doRetrieveByEmailAll(prenotazione.getUtente().getEmail());
                 JSONObject jsonObject = new JSONObject();
 
-                jsonObject.put("utente", Utente.toJson(utenteAggiornato));
+                jsonObject.put("Utente", Utente.toJson(utenteAggiornato));
                 System.out.println("Json successo");
                 pw.write(jsonObject.toString());
                 System.out.println("Scritto in risposta oggetto");
