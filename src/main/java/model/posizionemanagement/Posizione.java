@@ -11,25 +11,42 @@ public class Posizione {
     private int id;
     private String biblioteca, zona;
     private ArrayList<Postazione> postazioni;
-
+    /**
+     * Crea una nuova Posizione
+     */
     public Posizione() {
         this.postazioni=new ArrayList<>();
     }
-
+    /**
+     * Crea una nuova Posizione settando gli opportuni parametri
+     * @param id l'identificativo della posizione
+     * @param biblioteca il nome della biblioteca della posizione
+     * @param zona la zona della posizione
+     * @param postazioni postazioni di quella posizione
+     */
     public Posizione(int id, String biblioteca, String zona, ArrayList<Postazione> postazioni) {
         this.id = id;
         this.biblioteca = biblioteca;
         this.zona = zona;
         this.postazioni = postazioni;
     }
-
+    /**
+     * Crea una nuova Posizione settando gli opportuni parametri
+     * @param id l'identificativo della posizione
+     * @param biblioteca il nome della biblioteca della posizione
+     * @param zona la zona della posizione
+     */
     public Posizione(int id, String biblioteca, String zona) {
         this.id = id;
         this.biblioteca = biblioteca;
         this.zona = zona;
         this.postazioni=new ArrayList<>();
     }
-
+    /**
+     * Crea una nuova Posizione settando gli opportuni parametri
+     * @param biblioteca il nome della biblioteca della posizione
+     * @param zona la zona della posizione
+     */
     public Posizione(String biblioteca, String zona) {
         this.biblioteca = biblioteca;
         this.zona = zona;

@@ -8,7 +8,11 @@ import java.util.ArrayList;
 
 
 public class LibroDAO {
-
+    /**
+     * Controlla se una categoria esiste nella base dei dati
+     * @param categoria il nome della categoria
+     * @return boolean rappresentante l'esito
+     */
     public boolean existCategoria(String categoria)throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT count(*) as esiste FROM categoria c WHERE c.nome=?");
@@ -20,7 +24,10 @@ public class LibroDAO {
             return false;
         }
     }
-
+    /**
+     * Inserisce un libro all'interno della base di dati
+     * @param libro il libro da inserire
+     */
     public boolean insert(Libro libro) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("INSERT into libro (isbn, titolo, autore, editore, n_copie, anno_pubblicazione, url_copertina, categoria_fk, posizione_fk) " +
@@ -38,7 +45,11 @@ public class LibroDAO {
             return ps.executeUpdate() == 1;
         }
     }
-
+    /**
+     * Recupera tutti i libri dalla base di dati dato un identificativo
+     * @param isbn identificativo su cui filtrare la base dati
+     * @return libro
+     */
     public Libro doRetrieveByCodiceISBN(String isbn) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona FROM libro l, posizione p WHERE p.posizione_id = l.posizione_fk AND l.isbn=?");
@@ -51,7 +62,11 @@ public class LibroDAO {
             return l;
         }
     }
-
+    /**
+     * Recupera tutti i libri dalla base di dati ricercando per titolo e autore
+     * @param ricerca stringa estratta contenente titolo e/o autore
+     * @return la lista di Libri
+     */
     public ArrayList<Libro> doRetrieveByTitoloAutore(String ricerca) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
@@ -67,7 +82,11 @@ public class LibroDAO {
         }
     }
 
-
+    /**
+     * Recupera tutti i libri dalla base di dati ricercando per categoria
+     * @param categoria categoria dei libri ricercati
+     * @return la lista di Libri
+     */
     public ArrayList<Libro> doRetrieveByCategoria(String categoria) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
@@ -81,7 +100,11 @@ public class LibroDAO {
             return libri;
         }
     }
-
+    /**
+     * Recupera tutti i libri dalla base di dati aggiungi alla lista degli interessi
+     * @param email email dell'utente che richiede di visualizzare i suoi interessi
+     * @return la lista di Libri
+     */
     public ArrayList<Libro> doRetrieveInteresse(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT l.isbn, l.titolo, l.autore, l.editore, l.n_copie, l.anno_pubblicazione, l.url_copertina, l.rating, l.categoria_fk, p.posizione_id, p.biblioteca, p.zona " +
@@ -95,7 +118,10 @@ public class LibroDAO {
             return libri;
         }
     }
-
+    /**
+     * Recupera tutte le categorie dalla base di dati
+     * @return lista di categorie
+     */
     public ArrayList<String> doRetrieveAllCategorie() throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT c.nome FROM Categoria c");
@@ -107,7 +133,12 @@ public class LibroDAO {
             return categorie;
         }
     }
-
+    /**
+     * Elimina il libro dalla lista di interessi dell'utente
+     * @param isbn identificativo del libro da voler eliminare
+     * @param email email dell'utente che vuole eliminare un libro
+     * @return boolean rappresentante l'esito
+     */
     public boolean doDeleteInteresse(String email, String isbn) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("DELETE FROM Interesse i WHERE i.utente_fk=? AND i.libro_fk=?");
@@ -118,7 +149,12 @@ public class LibroDAO {
         }
     }
 
-
+    /**
+     * Aggiuge il libro dalla lista di interessi dell'utente
+     * @param isbn identificativo del libro da voler aggiungere
+     * @param email email dell'utente che vuole aggiungere un libro
+     * @return boolean rappresentante l'esito
+     */
     public boolean doAddInteresse(String email, String isbn) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Interesse VALUES(?,?)");

@@ -6,7 +6,12 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class PosizioneDAO {
-
+    /**
+     * Recupera tutte le posizione dalla base di dati dato Biblioteca e zona
+     * @param biblioteca biblioteca della posizione
+     * @param zona zona della posizione
+     * @return posizione
+     */
     public Posizione doRetrieveByBibliotecaZona(String biblioteca, String zona) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT p.posizione_id, p.biblioteca, p.zona FROM posizione p WHERE p.biblioteca=? AND p.zona=?");
@@ -21,7 +26,11 @@ public class PosizioneDAO {
             return p;
         }
     }
-
+    /**
+     * Inserisce una posizione all'interno della base di dati
+     * @param p la posizione da inserire
+     * @return boolean rappresentante l'esito
+     */
     public boolean insert(Posizione p) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("INSERT into posizione (biblioteca, zona) VALUES (?, ?)");
@@ -34,7 +43,12 @@ public class PosizioneDAO {
             return true;
         }
     }
-
+    /**
+     * ELimina una posizione dalla base di dati dato biblioteca e zona
+     * @param biblioteca biblioteca della posizione
+     * @param zona zona della posizione
+     * @return boolean rappresentante l'esito
+     */
     public boolean delete(String biblioteca, String zona) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM Posizione p WHERE p.biblioteca=? AND p.zona=?");
@@ -47,6 +61,11 @@ public class PosizioneDAO {
             return true;
         }
     }
+
+    /**
+     * Recupera tutte le posizione dalla base di dati
+     * @return lista di posizioni
+     */
 
     public ArrayList<Posizione> doRetrieveAll() throws SQLException {
         try(Connection conn= ConPool.getConnection()) {

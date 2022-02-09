@@ -27,6 +27,13 @@ public class PeriodoDAO {
         }
     }
 */
+    /**
+     * Recupera il periodo indicando data, ora di inizio e ora di fine
+     * @param date data del periodo ricercato
+     * @param oraFine orario di termine del periodo ricercato
+     * @param oraInizio orario di inizio del periodo ricercato
+     * @return periodo
+     */
     public  Periodo doRetrieveByInfo(GregorianCalendar date, int oraInizio, int oraFine) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
@@ -77,6 +84,7 @@ public class PeriodoDAO {
         }
     }
 */
+
     public Periodo doRetrieveByInfo(Periodo periodo) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
@@ -94,7 +102,11 @@ public class PeriodoDAO {
             return p;
         }
     }
-
+    /**
+     * Inserisce un periodo nella base di dati
+     * @param p il periodo da inserire
+     * @return boolean rappresentante l'esito
+     */
     public boolean insertPeriodo(Periodo p) throws SQLException {
         try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps = conn.prepareStatement("INSERT INTO periodo(data_p,ora_inizio,ora_fine) VALUES(?,?,?)");

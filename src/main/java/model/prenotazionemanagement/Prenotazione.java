@@ -20,7 +20,14 @@ public class Prenotazione {
     private int oraInizio, oraFine;
     private Utente utente;
     private Postazione postazione;
-
+    /**
+     * Crea una nuova Prenotazione settando gli opportuni parametri
+     * @param data data della prenotazione
+     * @param oraInizio orario di inizio della prenotazione
+     * @param oraFine orario di termine della prenotazione
+     * @param utente Utente che effettua la prenotazione
+     * @param postazione postazione coinvolta nella prenotazione
+     */
     public Prenotazione(GregorianCalendar data, int oraInizio, int oraFine, Utente utente, Postazione postazione) {
         this.data = data;
         this.oraInizio = oraInizio;

@@ -68,63 +68,110 @@ public class Libro extends presenter implements Serializable {
         private Posizione posizione;
         private ArrayList<Prestito> prestiti;
 
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param isbn l'identificativo dell'oggetto Libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder isbn(String isbn){
             this.isbn=isbn;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param titolo il titolo dell'oggetto Libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder titolo(String titolo){
             this.titolo=titolo;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param autore l'autore dell'oggetto libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder autore(String autore){
             this.autore=autore;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param editore l'editore dell'oggetto libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder editore(String editore){
             this.editore=editore;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param urlCopertina l'url a cui è situata la copertina
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder urlCopertina(String urlCopertina){
             this.urlCopertina=urlCopertina;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param categoria la categoria dell'oggetto Libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder categoria(String categoria){
             this.categoria=categoria;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param nCopie il numero delle copie dell'oggetto libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder nCopie(int nCopie){
             this.nCopie=nCopie;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param annoPubbl l'anno di pubblicazione dell'oggetto libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder annoPubbl(int annoPubbl){
             this.annoPubbl=annoPubbl;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param rating il rating dell'oggetto libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder rating(float rating){
             this.rating=rating;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param posizione il rating dell'oggetto libro
+         * @return oggetto di tipo LibroBuilder con isbn settato
+         */
         public LibroBuilder posizione(Posizione posizione){
             this.posizione=posizione;
             return this;
         }
-
+        /**
+         * Setta il parametro nell'oggetto LibroBuilder
+         * @param prestiti la lista di prestiti riguardante l'oggetto libro
+         * @return oggetto di tipo LibroBuilder con lista prestiti settato
+         */
         public LibroBuilder prestiti(ArrayList<Prestito> prestiti){
             this.prestiti=prestiti;
             return this;
         }
 
-
+        /**
+         * Genera un oggetto di tipo Libro invocando il costruttore passando come argomento LibroBuilder
+         * @return oggetto di tipo LibroBuilder con lista prestiti settato
+         */
         public Libro build(){
             return new Libro(this);
         }
@@ -139,7 +186,10 @@ public class Libro extends presenter implements Serializable {
         Libro libro = (Libro) o;
         return  getIsbn().equals(libro.getIsbn());
     }
-
+    /**
+     * Crea un nuovo Libro settando gli opportuni parametri ottenuti dal LibroBuilder passato come argomento
+     * @param lb LibroBuilder da cui si estraggono i valori precedentemente settati
+     */
     private Libro(LibroBuilder lb){
         this.isbn = lb.isbn;
         this.titolo = lb.titolo;

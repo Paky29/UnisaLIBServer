@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LibroExtractor {
+
     public static Libro extract(ResultSet rs) throws SQLException {
 
        Posizione p = PosizioneExtractor.extract(rs);
