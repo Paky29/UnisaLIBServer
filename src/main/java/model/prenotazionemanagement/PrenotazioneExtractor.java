@@ -6,7 +6,10 @@ import utility.SwitchDate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ * Questa classe si occupa di estrarre si occupa di estrarre dal ResultSet i valori riguardanti Prenotazione
+ * e di creare e restituire un oggetto di tipo Prenotazione
+ */
 public class PrenotazioneExtractor {
     public static Prenotazione extract(ResultSet rs) throws SQLException {
         Prenotazione p=new Prenotazione();

@@ -4,7 +4,10 @@ import utility.ConPool;
 
 import java.sql.*;
 import java.util.ArrayList;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Posizione e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class PosizioneDAO {
     /**
      * Recupera tutte le posizione dalla base di dati dato Biblioteca e zona
@@ -29,7 +32,7 @@ public class PosizioneDAO {
     /**
      * Inserisce una posizione all'interno della base di dati
      * @param p la posizione da inserire
-     * @return boolean rappresentante l'esito
+     * @return l'esito della transazione
      */
     public boolean insert(Posizione p) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
@@ -47,7 +50,7 @@ public class PosizioneDAO {
      * ELimina una posizione dalla base di dati dato biblioteca e zona
      * @param biblioteca biblioteca della posizione
      * @param zona zona della posizione
-     * @return boolean rappresentante l'esito
+     * @return l'esito della transazione
      */
     public boolean delete(String biblioteca, String zona) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {

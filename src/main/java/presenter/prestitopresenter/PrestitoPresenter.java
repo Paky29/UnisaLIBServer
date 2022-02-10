@@ -20,7 +20,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione del prestito
+ */
 @WebServlet(name="prestitopresenter", value = "/PrestitoPresenter/*")
 public class PrestitoPresenter extends presenter {
     private PrintWriter pw;

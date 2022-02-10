@@ -6,7 +6,9 @@ import com.google.gson.JsonSyntaxException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Objects;
-
+/**
+ * Questa classe definisce un Periodo. Un Periodo ha un identificativo, un'ora di inizio, un'ora di fine e una data
+ */
 public class Periodo {
     private int id, oraInizio, oraFine;
     private GregorianCalendar data;

@@ -20,7 +20,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione delle postazioni
+ */
 @WebServlet(name="postazionepresenter", value = "/PostazionePresenter/*")
 public class PostazionePresenter extends presenter {
     private PrintWriter pw;

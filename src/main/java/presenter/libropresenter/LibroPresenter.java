@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione dei libri
+ */
 @WebServlet(name="libropresenter", value = "/LibroPresenter/*")
 public class LibroPresenter extends presenter {
     private PrintWriter pw;

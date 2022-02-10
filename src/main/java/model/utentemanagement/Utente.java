@@ -16,7 +16,12 @@ import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/**
+ * Questa classe definisce un Utente. Un utente è identificato da un email, ha una password,
+ * un nome, un cognome, una matricola, genere ed età.
+ * Inoltre ci sono due valori che specificano se l'utente è un amministratore o è un nuovo utente,
+ * ha una lista di interessi, una lista di prestiti e una lista di prenotazioni
+ */
 public class Utente {
     private String email, password, nome, cognome, matricola, genere;
     private int eta;

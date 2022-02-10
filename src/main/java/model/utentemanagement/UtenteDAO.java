@@ -15,7 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Utente e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class UtenteDAO {
     /**
      * Recupera un utente dalla base di dati specificando email e password

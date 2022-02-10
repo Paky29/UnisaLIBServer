@@ -23,7 +23,10 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione degli utenti e delle attività di autenticazione
+ */
 @WebServlet(name="utentepresenter", value = "/UtentePresenter/*")
 public class UtentePresenter extends presenter {
     private UtenteDAO utenteDAO;

@@ -6,6 +6,10 @@ import utility.SwitchDate;
 import java.util.GregorianCalendar;
 
 public class PeriodoValidator {
+    /**
+     * Valida un periodo verificando la correttezza dei seguenti parametri:
+     * data, ora di inizio, ora di fine
+     */
     public static boolean validate(Periodo p){
         if (SwitchDate.compareDate(p.getData(), new GregorianCalendar())<0)
             return false;

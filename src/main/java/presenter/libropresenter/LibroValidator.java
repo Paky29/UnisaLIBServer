@@ -4,12 +4,15 @@ import model.libromanagement.Libro;
 
 import java.util.Calendar;
 import java.util.regex.Pattern;
-
+/**
+ * Valida un libro verificando la correttezza dei seguenti parametri:
+ * isbn, anno pubblicazione, titolo, editore, autore, numero copie, url copertina
+ */
 public class LibroValidator {
     public static boolean validate(Libro l){
         if((l.getIsbn()==null || l.getIsbn().length()!=10) ||(!Pattern.matches("[0-9]{9}[0-9|X]{1}",l.getIsbn())))
             return false;
-        if(l.getAnnoPubbl()> Calendar.getInstance().get(Calendar.YEAR) || (!Pattern.matches("^[12][0-9]{3}$",Integer.toString(l.getAnnoPubbl()))))
+        if(l.getAnnoPubbl()>=Calendar.getInstance().get(Calendar.YEAR) || (!Pattern.matches("^[12][0-9]{3}$",Integer.toString(l.getAnnoPubbl()))))
             return false;
         if(l.getTitolo()==null || (l.getTitolo().length()==0 || l.getTitolo().length()>50))
             return false;

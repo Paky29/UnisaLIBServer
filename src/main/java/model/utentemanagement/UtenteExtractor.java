@@ -7,7 +7,10 @@ import model.prestitomanagement.Prestito;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+/**
+ * Questa classe si occupa di estrarre si occupa di estrarre dal ResultSet i valori riguardanti Utente
+ * e di creare e restituire un oggetto di tipo Utente
+ */
 public class UtenteExtractor {
     public static Utente extract(ResultSet rs) throws SQLException {
         Utente u= new Utente.UtenteBuilder().

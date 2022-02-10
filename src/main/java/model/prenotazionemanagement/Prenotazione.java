@@ -14,7 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.prestitopresenter.PrestitoPresenter;
 import utility.SwitchDate;
-
+/**
+ * Questa classe definisce una Prenotazione. Una prenotazione ha una data, un'ora d'inizio, un'ora di fine, un utente che la prenota
+ * e una postazione coinvolta nella prenotazione.
+ */
 public class Prenotazione {
     private GregorianCalendar data;
     private int oraInizio, oraFine;

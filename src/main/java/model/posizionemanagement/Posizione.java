@@ -6,7 +6,10 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import model.postazionemanagement.Postazione;
-
+/**
+ * Questa classe definisce una Posizione. Una Posizione ha un identificativo, una stringa contenente il nome della biblioteca,
+ * la zona e una lista di postazioni che coinvolgono la posizione.
+ */
 public class Posizione {
     private int id;
     private String biblioteca, zona;

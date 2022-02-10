@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Libro e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class LibroDAO {
     /**
      * Controlla se una categoria esiste nella base dei dati
      * @param categoria il nome della categoria
-     * @return boolean rappresentante l'esito
+     * @return l'esito della richiesta
      */
     public boolean existCategoria(String categoria)throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
@@ -27,6 +30,7 @@ public class LibroDAO {
     /**
      * Inserisce un libro all'interno della base di dati
      * @param libro il libro da inserire
+     * @return l'esito della transazione
      */
     public boolean insert(Libro libro) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
@@ -46,8 +50,8 @@ public class LibroDAO {
         }
     }
     /**
-     * Recupera tutti i libri dalla base di dati dato un identificativo
-     * @param isbn identificativo su cui filtrare la base dati
+     * Recupera tutti i libri dalla base di dati dato un isbn
+     * @param isbn l'identificativo del libro in base al quale filtrare la base dati
      * @return libro
      */
     public Libro doRetrieveByCodiceISBN(String isbn) throws SQLException {
@@ -63,8 +67,8 @@ public class LibroDAO {
         }
     }
     /**
-     * Recupera tutti i libri dalla base di dati ricercando per titolo e autore
-     * @param ricerca stringa estratta contenente titolo e/o autore
+     * Recupera tutti i libri dalla base di dati ricercando per titolo o autore
+     * @param ricerca stringa estratta contenente titolo o autore
      * @return la lista di Libri
      */
     public ArrayList<Libro> doRetrieveByTitoloAutore(String ricerca) throws SQLException {
@@ -84,7 +88,7 @@ public class LibroDAO {
 
     /**
      * Recupera tutti i libri dalla base di dati ricercando per categoria
-     * @param categoria categoria dei libri ricercati
+     * @param categoria stringa contenente la categoria dei libri ricercati
      * @return la lista di Libri
      */
     public ArrayList<Libro> doRetrieveByCategoria(String categoria) throws SQLException {
@@ -101,8 +105,8 @@ public class LibroDAO {
         }
     }
     /**
-     * Recupera tutti i libri dalla base di dati aggiungi alla lista degli interessi
-     * @param email email dell'utente che richiede di visualizzare i suoi interessi
+     * Recupera tutti i libri dalla base di dati aggiungi alla lista degli interessi di un utente
+     * @param email identificativo dell'utente di cui si vuole visualizzare gli interessi
      * @return la lista di Libri
      */
     public ArrayList<Libro> doRetrieveInteresse(String email) throws SQLException {
@@ -136,8 +140,8 @@ public class LibroDAO {
     /**
      * Elimina il libro dalla lista di interessi dell'utente
      * @param isbn identificativo del libro da voler eliminare
-     * @param email email dell'utente che vuole eliminare un libro
-     * @return boolean rappresentante l'esito
+     * @param email identificativo dell'utente che vuole eliminare un libro
+     * @return l'esito della transazione
      */
     public boolean doDeleteInteresse(String email, String isbn) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
@@ -153,7 +157,7 @@ public class LibroDAO {
      * Aggiuge il libro dalla lista di interessi dell'utente
      * @param isbn identificativo del libro da voler aggiungere
      * @param email email dell'utente che vuole aggiungere un libro
-     * @return boolean rappresentante l'esito
+     * @return l'esito della transazione
      */
     public boolean doAddInteresse(String email, String isbn) throws SQLException {
         try(Connection conn=ConPool.getConnection()){

@@ -11,12 +11,15 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Prenotazione e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class PrenotazioneDAO {
     /**
      * Inserisce una prenotazione all'interno della base di dati
      * @param p la prenotazione da inserire
-     * @return boolean rappresentante l'esito
+     * @return l'esito della transazione
      */
     public boolean insert(Prenotazione p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {

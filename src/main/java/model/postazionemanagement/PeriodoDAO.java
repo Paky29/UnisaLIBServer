@@ -9,7 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Periodo e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class PeriodoDAO {
 
  /*   public Periodo doRetrieveById(int id) throws SQLException {
@@ -105,7 +108,7 @@ public class PeriodoDAO {
     /**
      * Inserisce un periodo nella base di dati
      * @param p il periodo da inserire
-     * @return boolean rappresentante l'esito
+     * @return l'esito della transazione
      */
     public boolean insertPeriodo(Periodo p) throws SQLException {
         try(Connection conn = ConPool.getConnection()){

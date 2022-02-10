@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione delle prenotazioni
+ */
 @WebServlet(name="prenotazionepresenter", value = "/PrenotazionePresenter/*")
 public class PrenotazionePresenter extends presenter {
     private PrintWriter pw;

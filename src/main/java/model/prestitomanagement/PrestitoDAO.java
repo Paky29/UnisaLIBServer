@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Prestito e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class PrestitoDAO {
     /**
      * Inserisce un prestito nella base di dati
