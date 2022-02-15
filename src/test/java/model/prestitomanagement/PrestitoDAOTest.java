@@ -16,7 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Testa i metodi di PostazioneDAO
+ * */
 public class PrestitoDAOTest {
     PrestitoDAO prestitoDAO;
     LibroDAO libroDAO;
@@ -26,7 +28,9 @@ public class PrestitoDAOTest {
         prestitoDAO=new PrestitoDAO();
         libroDAO=new LibroDAO();
     }
-
+    /**
+     * Testa il corretto inserimento
+     * */
     @Test
     public void insertTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -55,7 +59,9 @@ public class PrestitoDAOTest {
 
 
     }
-
+    /**
+     * Testa l'inserimento di un Prestito già esistente
+     * */
     @Test
     public void insertPrestitoExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -76,7 +82,9 @@ public class PrestitoDAOTest {
     }
 
 
-
+    /**
+     * Testa l'attivazione di un Prestito
+     * */
     @Test
     public void attivaPrestitoTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -98,7 +106,9 @@ public class PrestitoDAOTest {
 
 
     }
-
+    /**
+     * Testa l'attivazione di un Prestito non esistente
+     * */
     @Test
     public void attivaPrestitoNotExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -113,7 +123,9 @@ public class PrestitoDAOTest {
 
 
 
-
+    /**
+     * Testa la conclusione di un prestito
+     * */
     @Test
     public void concludiPrestitoTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -145,7 +157,9 @@ public class PrestitoDAOTest {
 
     }
 
-
+    /**
+     * Testa la conclusione di un prestito non esistente
+     * */
     @Test
     public void concludiPrestitoNotExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -159,7 +173,9 @@ public class PrestitoDAOTest {
         assertDoesNotThrow(() -> success.set(prestitoDAO.concludiPrestito(p)));
         assertFalse(Boolean.parseBoolean(success.toString()));
     }
-
+    /**
+     * Testa la valutazione di un prestito
+     * */
     @Test
     public void valutaPrestitoTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -182,7 +198,9 @@ public class PrestitoDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa la valutazione di un prestito non esistente
+     * */
     @Test
     public void valutaPrestitoNotExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -194,7 +212,9 @@ public class PrestitoDAOTest {
 
         assertThrows(RuntimeException.class, () -> prestitoDAO.valutaPrestito(p));
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti validi dato un libro
+     * */
     @Test
     public void doRetrieveValidByLibroTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email2@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -217,7 +237,9 @@ public class PrestitoDAOTest {
 
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti validi dato un libro non esistente
+     * */
     @Test
     public void doRetrieveValidByLibroNotExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email3@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -230,7 +252,9 @@ public class PrestitoDAOTest {
         assertDoesNotThrow(() -> prestiti.set(prestitoDAO.doRetrieveValidByLibro(lib.getIsbn())));
         assertTrue(prestiti.get().isEmpty());
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti validi dato un libro consegnato
+     * */
     @Test
     public void doRetrieveValidByLibroConsegnaNotNullTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email4@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -253,7 +277,9 @@ public class PrestitoDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti dato un Utente
+     * */
     @Test
     public void doRetrieveByUtenteTest(){
         String email="test_email@studenti.unisa.it";
@@ -264,7 +290,9 @@ public class PrestitoDAOTest {
         }
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti dato un Utente non esistente
+     * */
     @Test
     public void doRetrieveByUtenteNotExistTest(){
         String email="test_email_not_exist";
@@ -272,7 +300,9 @@ public class PrestitoDAOTest {
         assertDoesNotThrow(() -> prestiti.set(prestitoDAO.doRetrieveByUtente(email)));
         assertTrue(prestiti.get().isEmpty());
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti attivi dato un Utente
+     * */
     @Test
     public void doRetrieveValidByUtenteTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email5@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(true).genere("test").eta(21).build();
@@ -293,7 +323,9 @@ public class PrestitoDAOTest {
 
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti attivi dato un Utente non esistente
+     * */
     @Test
     public void doRetrieveValidByUtenteNotExistTest(){
         String email="test_email_not_exist";
@@ -316,7 +348,9 @@ public class PrestitoDAOTest {
 
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti attivi dato: isbn ed email
+     * */
     @Test
     public void doRetrieveByKeyTest(){
         String email="test_email@studenti.unisa.it";
@@ -340,7 +374,9 @@ public class PrestitoDAOTest {
         }
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo i prestiti attivi dato: isbn ed email non esistenti
+     * */
     @Test
     public void doRetrieveByKeyNotExistTest(){
         String email="test_email_not_exist";

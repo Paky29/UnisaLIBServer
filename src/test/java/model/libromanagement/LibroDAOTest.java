@@ -13,7 +13,9 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-
+/**
+ * Testa i metodi di LibroDAO
+ * */
 public class LibroDAOTest {
     private LibroDAO libroDAO;
 
@@ -21,7 +23,9 @@ public class LibroDAOTest {
     public void setUp(){
         libroDAO=new LibroDAO();
     }
-
+/**
+ * Testa il corretto inserimento
+ * */
     @Test
     public void insertTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -51,7 +55,9 @@ public class LibroDAOTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa  inserimento non corretto
+     * */
     @Test
     public void insertIncorrectPosizioneTest(){
         Posizione p=new Posizione(23,"linguistica","piano 11");
@@ -91,7 +97,9 @@ public class LibroDAOTest {
         assertFalse(libroDAO.insert(l));
         assertNull(libroDAO.doRetrieveByCodiceISBN(l.getIsbn()));
     }
-
+    /**
+     * Testa l'interrogazione del DAO sull'ISBN
+     * */
     @Test
     public void doRetrieveByCodiceISBNTest() {
         String isbn="0000000000";
@@ -100,7 +108,9 @@ public class LibroDAOTest {
         assertEquals(isbn, libro_test[0].getIsbn());
     }
 
-
+    /**
+     * Testa l'interrogazione del DAO sull'autore
+     * */
     @Test
     public void doRetrieveByAutoreTest(){
         String autore="autore_test";
@@ -109,7 +119,9 @@ public class LibroDAOTest {
         for(Libro l: libri_test.get())
             assertEquals(autore,l.getAutore());
     }
-
+    /**
+     * Testa l'interrogazione del DAO sul titolo
+     * */
     @Test
     public void doRetrieveByTitoloTest(){
         String titolo="titolo_test";
@@ -118,7 +130,9 @@ public class LibroDAOTest {
         for(Libro l:libri_test.get())
             assertEquals(titolo,l.getTitolo());
     }
-
+    /**
+     * Testa l'interrogazione del DAO sulla categoria
+     * */
     @Test
     public void doRetrieveByCategoriaTest(){
         String categoria="test";
@@ -127,7 +141,9 @@ public class LibroDAOTest {
         for(Libro l:libri_test.get())
             assertEquals(categoria,l.getCategoria());
     }
-
+    /**
+     * Testa l'aggiunta alla lista degli interessi
+     * */
     @Test
     public void doAddInteresseTest(){
         String email="ps";
@@ -151,7 +167,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO sugli interessi
+     * */
     @Test
     public void doRetrieveInteresseTest(){
         String email="ps";
@@ -179,7 +197,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'aggiunta alla lista degli interessi con ISBN errato
+     * */
     @Test
     public void doAddInteresseIncorretISBNTest(){
         String email="ps";
@@ -202,7 +222,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'aggiunta alla lista degli interessi con email errata
+     * */
     @Test
     public void doAddInteresseIncorretEmailTest() throws SQLException{
         String email="ps_incorretta";
@@ -220,7 +242,9 @@ public class LibroDAOTest {
                 .build();
         assertThrows(SQLException.class,()->libroDAO.doAddInteresse(email,l.getIsbn()));
     }
-
+    /**
+     * Testa l'eliminazione dalla lista degli interessi
+     * */
     @Test
     public void doDeleteInteresseTest(){
         String email="ps";
@@ -245,7 +269,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa la rimozione dalla lista degli interessi con ISBN errato
+     * */
     @Test
     public void doDeleteInteresseIncorrectISBNTest() {
         String email="ps";
@@ -271,7 +297,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa la rimozione dalla lista degli interessi con email errata
+     * */
     @Test
     public void doDeleteInteresseIncorrectEmailTest(){
         String email="ps_incorretta";
@@ -293,7 +321,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'esistenza di una categoria esistente
+     * */
     @Test
     public void existCategoriaTest(){
         String categoria="lettere";
@@ -304,7 +334,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'esistenza di una categoria non esistente
+     * */
     @Test
     public void existCategoriaInsesistenteTest(){
         String categoria="astronomia";
@@ -315,7 +347,9 @@ public class LibroDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO sul tutte le categorie
+     * */
     @Test
     public void doRetrieveAllCategorieTest(){
         ArrayList<String> categorie=new ArrayList<>();

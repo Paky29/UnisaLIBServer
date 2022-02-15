@@ -21,7 +21,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+/**
+ * Questa classe si occupa di testare PostazionePresenter
+ */
 public class UtentePresenterTest {
     UtenteDAO utenteDAO;
     UtentePresenter utentePresenter;
@@ -43,7 +45,9 @@ public class UtentePresenterTest {
             fail("File testing.txt non trovato");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet login
+     */
     @Test
     public void loginTest() {
         JSONObject jsonObject= new JSONObject();
@@ -66,7 +70,9 @@ public class UtentePresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet login in caso di formato email errato
+     */
     @Test
     public void loginWrongEmailFormatTest() {
         Utente utente =new Utente.UtenteBuilder().email("test_email").password("TestPword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -98,7 +104,9 @@ public class UtentePresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet login in caso di formato email inesistente
+     */
     @Test
     public void loginEmailNotExistTest() {
         when(request.getPathInfo()).thenReturn("/login");
@@ -119,7 +127,9 @@ public class UtentePresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet login in caso di password inesistente
+     */
     @Test
     public void loginPasswordNotExistTest() {
         when(request.getPathInfo()).thenReturn("/login");
@@ -140,7 +150,9 @@ public class UtentePresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet login in caso di email e password null
+     */
     @Test
     public void loginUtenteEmailAndPWordNullTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();

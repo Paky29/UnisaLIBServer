@@ -26,7 +26,9 @@ import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+/**
+ * Questa classe si occupa di testare PostazionePresenter
+ */
 public class PostazionePresenterTest {
     PostazioneDAO postazioneDAO;
     PeriodoDAO periodoDAO;
@@ -54,7 +56,9 @@ public class PostazionePresenterTest {
             fail("File testing.txt non trovato");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-ricerca-postazioni
+     */
     @Test
     public void mostraRicercaPostazioniTest(){
         Posizione p1 = new Posizione(3, "scientifica", "Piano 1");
@@ -74,7 +78,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-ricerca-postazioni in caso di assenza di postazioni
+     */
     @Test
     public void mostraRicercaPostazioniIsEmptyTest(){
         ArrayList<Posizione> posizioni = new ArrayList<>();
@@ -90,7 +96,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni
+     */
     @Test
     public void mostraElencoPostazioniTest(){
         JSONArray jsonArray1 = new JSONArray();
@@ -142,7 +150,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni con una posizione incorretta
+     */
     @Test
     public void mostraElencoPostazioniPosizioneIncorrettaTest(){
         GregorianCalendar gc = new GregorianCalendar();
@@ -163,7 +173,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni con data null
+     */
     @Test
     public void mostraElencoPostazioniDataNullTest(){
         Posizione posizione = new Posizione(5, "scientifica", "piano 1");
@@ -182,7 +194,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni-admin
+     */
     @Test
     public void mostraElencoPostazioniAdminTest() {
         Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
@@ -204,7 +218,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni-admin con posizione incorretta
+     */
     @Test
     public void mostraElencoPostazioniAdminPosizioneIncorrettaTest() {
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -220,7 +236,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni-admin con posizione null
+     */
     @Test
     public void mostraElencoPostazioniAdminPosizioneNullTest() {
         when(request.getPathInfo()).thenReturn("/mostra-elenco-postazioni-admin");
@@ -235,7 +253,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni-admin in caso di assenza di postazioni
+     */
     @Test
     public void mostraElencoPostazioniAdminIsEmptyTest() {
         Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
@@ -253,7 +273,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-elenco-postazioni-admin con postazioni null
+     */
     @Test
     public void mostraElencoPostazioniAdminNullTest() {
         Posizione posizione = new Posizione(3, "scientifica", "Piano 1");
@@ -271,7 +293,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di blocco-indeterminato
+     */
     @Test
     public void bloccoIndeterminatoTest(){
         JSONObject jsonObject = new JSONObject();
@@ -290,7 +314,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di blocco-indeterminato per id postazione
+     */
     @Test
     public void bloccoIndeterminatoIdPosTest(){
         when(request.getParameter("idPos")).thenReturn(null);
@@ -305,7 +331,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di blocco-indeterminato su una postazione già bloccata
+     */
     @Test
     public void bloccoIndeterminatoPostazioneBloccataTest(){
         JSONObject jsonObject = new JSONObject();
@@ -323,7 +351,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di sblocca-postazione
+     */
     @Test
     public void sbloccaPostazioneTest(){
         JSONObject jsonObject = new JSONObject();
@@ -341,7 +371,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di sblocca-postazione con id postazione null
+     */
     @Test
     public void sbloccaPostazionePosIdNullTest(){
         when(request.getParameter("idPos")).thenReturn(null);
@@ -356,7 +388,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di sblocca-postazione dato un periodo
+     */
     @Test
     public void sbloccaPostazionePeriodoTest(){
         JSONObject jsonObject = new JSONObject();
@@ -377,7 +411,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di sblocca-postazione dato un periodo, con id postazione null
+     */
     @Test
     public void sbloccaPostazionePeriodoIdPosNullTest(){
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -394,7 +430,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di blocco-determinato
+     */
     @Test
     public void bloccoDeterminatoTest(){
         JSONObject jsonObject = new JSONObject();
@@ -418,7 +456,9 @@ public class PostazionePresenterTest {
         }
     }
 
-
+    /**
+     * Testa il corretto funzionamento di blocco-determinato con id postazione null
+     */
     @Test
     public void bloccoDeterminatoPosIdNullTest(){
         Periodo periodo = new Periodo(1, 9, 11, new GregorianCalendar());
@@ -435,7 +475,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di cerca-blocchi
+     */
     @Test
     public void cercaBlocchiTest(){
         JSONObject jsonObject = new JSONObject();
@@ -455,7 +497,9 @@ public class PostazionePresenterTest {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di una chiamata a servlet con path sbagliata
+     */
     @Test
     public void prenotazioneWrongPathTest() {
         when(request.getPathInfo()).thenReturn(null);
@@ -466,7 +510,9 @@ public class PostazionePresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di cerca-blocchi con id postazione null
+     */
     @Test
     public void cercaBlocchiIdPosNullTest(){
         when(request.getParameter("idPos")).thenReturn(null);

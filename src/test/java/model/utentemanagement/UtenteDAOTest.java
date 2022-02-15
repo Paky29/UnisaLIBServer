@@ -14,7 +14,9 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Testa i metodi di UtenteDAO
+ * */
 public class UtenteDAOTest {
     UtenteDAO utenteDAO;
 
@@ -24,7 +26,9 @@ public class UtenteDAOTest {
     }
 
 
-    //fare prestiti , interessi e prenotazioni ad hoc per utente
+    /**
+     * Testa l'interrogazione del DAO chiedendo un Utente dato email e password
+     * */
     @Test
     public void doRetrieveByEmailAndPasswordAllTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
@@ -50,8 +54,9 @@ public class UtenteDAOTest {
 
     }
 
-    //fare prestiti, interessi e prenotazioni ad hoc per utente
-    @Test
+    /**
+     * Testa l'interrogazione del DAO chiedendo un Utente data email
+     * */    @Test
     public void doRetrieveByEmailAllTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email_utente_dao@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
         Posizione pos = new Posizione(9, "test", "test");
@@ -75,7 +80,9 @@ public class UtenteDAOTest {
         assertEquals(utenteFinal, utente_test[0]);
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo un Utente data email errata
+     * */
     @Test
     public void doRetrieveByWrongEmailAllTest() {
         String email="dr";
@@ -84,7 +91,9 @@ public class UtenteDAOTest {
         assertNull(utente_test[0]);
 
     }
-
+    /**
+     * Testa l'interrogazione del DAO chiedendo un Utente data email e password errata
+     * */
     @Test
     public void doRetrieveByWrongEmailandPasswordAllTest() {
         String email="dr";
@@ -94,7 +103,9 @@ public class UtenteDAOTest {
         assertNull(utente_test[0]);
 
     }
-
+    /**
+     * Testa l'update di un utente
+     * */
     @Test
     public void doUpdateTest(){
         String email="test_email_utente_dao@studenti.unisa.it";
@@ -121,7 +132,9 @@ public class UtenteDAOTest {
 
 
     }
-
+    /**
+     * Testa l'update di un utente non esistente
+     * */
     @Test
     public void doUpdateUtenteNotExistTest(){
         Utente utente=new Utente.UtenteBuilder().email("test_email_not_exist").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).matricola("test_matricola").nuovo(false).genere("T").eta(21).build();
