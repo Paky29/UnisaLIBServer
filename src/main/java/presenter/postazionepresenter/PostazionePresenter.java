@@ -20,7 +20,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione delle postazioni
+ */
 @WebServlet(name="postazionepresenter", value = "/PostazionePresenter/*")
 public class PostazionePresenter extends presenter {
     private PrintWriter pw;
@@ -36,7 +39,13 @@ public class PostazionePresenter extends presenter {
         this.prenotazioneDAO =  new PrenotazioneDAO();
     }
 
-
+    /**
+     * Crea un oggetto di tipo PostazionePresenter con i seguenti parametri
+     * @param prenotazioneDAO il DAO che si occupa della gestione degli oggetti Prenotazione
+     * @param postazioneDAO il DAO che si occupa della gestione degli oggetti Postazione
+     * @param posizioneDAO il DAO che si occupa della gestione degli oggetti Posizione
+     * @param periodoDAO il DAO che si occupa della gestione degli oggetti Periodo
+     */
     public PostazionePresenter(PostazioneDAO postazioneDAO, PeriodoDAO periodoDAO, PosizioneDAO posizioneDAO, PrenotazioneDAO prenotazioneDAO){
         this.postazioneDAO = postazioneDAO;
         this.periodoDAO = periodoDAO;
@@ -138,7 +147,9 @@ public class PostazionePresenter extends presenter {
             }
         }
     }
-
+    /**
+     * Restituisce le posizioni contenute nella basi di dati
+     */
     private void mostraRicercaPostazioni(){
         try {
             ArrayList<Posizione> posizioni = posizioneDAO.doRetrieveAll();
@@ -150,7 +161,11 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Restituisce le postazioni contenute nella basi di dati specificando data e posizione
+     * @param gc GregorianCalendar rappresentante la data
+     * @param p posizione della postazione
+     */
     private void mostraElencoPostazioni(GregorianCalendar gc, Posizione p) {
         try {
             ArrayList<Postazione> postazioni=postazioneDAO.doRetrieveDisponibiliByPosizione(p.getBiblioteca(),p.getZona());
@@ -184,7 +199,10 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Restituisce le postazioni contenute nella base di dati specificando la posizione
+     * @param pos posizione delle postazioni ricercate
+     */
     private void mostraElencoPostazioniAdmin(Posizione pos) {
         try {
             ArrayList<Postazione> postazioni = postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(), pos.getZona());
@@ -198,7 +216,10 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Crea un blocco a tempo indeterminato su una postazione dato il suo identificativo
+     * @param idPos id postazione
+     */
     private void bloccoIndeterminato(String idPos) {
         JSONObject string = new JSONObject();
         try {
@@ -227,7 +248,10 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Sblocca una postazione bloccata a tempo indeterminato dato il suo identificativo
+     * @param idPos id postazione
+     */
     private void sbloccaPostazione(String idPos) {
         JSONObject string = new JSONObject();
         try {
@@ -247,7 +271,11 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Sblocca una postazione bloccata a tempo determinato dato il suo identificativoe il periodo
+     * @param p periodo di blocco
+     * @param idPos id postazione
+     */
     private void sbloccaPostazionePeriodo(String idPos, Periodo p) {
         JSONObject string = new JSONObject();
         try {
@@ -269,7 +297,11 @@ public class PostazionePresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Blocca una postazione a tempo determinato dato il suo identificativo e il periodo
+     * @param per periodo di blocco
+     * @param idPos id postazione
+     */
     private void bloccoDeterminato(String idPos, Periodo per, HttpServletResponse resp) {
         if(PeriodoValidator.validate(per)){
             JSONObject rsp = new JSONObject();
@@ -290,7 +322,10 @@ public class PostazionePresenter extends presenter {
         } else
             pw.write("Periodo non valido");
     }
-
+    /**
+     * Ricerca i blocchi riguardanti una postazione dato il suo identificativo
+     * @param idPos id postazione
+     */
     private void cercaBlocchi(String idPos) {
         try {
             Postazione p=postazioneDAO.doRetrieveById(idPos);

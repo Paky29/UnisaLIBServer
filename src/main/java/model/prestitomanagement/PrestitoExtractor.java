@@ -6,7 +6,10 @@ import utility.SwitchDate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ * Questa classe si occupa di estrarre si occupa di estrarre dal ResultSet i valori riguardanti Prestito
+ * e di creare e restituire un oggetto di tipo Prestito
+ */
 public class PrestitoExtractor {
     public static Prestito extract(ResultSet rs) throws SQLException {
         Prestito p;

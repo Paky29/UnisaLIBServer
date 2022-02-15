@@ -25,7 +25,9 @@ import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+/**
+ * Questa classe si occupa di testare PrenotazionePresenter
+ */
 public class PrenotazionePresenterTest {
 
         private PrenotazionePresenter prenP;
@@ -50,7 +52,9 @@ public class PrenotazionePresenterTest {
                 e.printStackTrace();
             }
         }
-
+    /**
+     * Testa il corretto funzionamento della creazione di una postazione tramite la servlet crea-prenotazione
+     */
     @Test
     public void creaPrenotazione(){
         Utente utente = new Utente.UtenteBuilder().
@@ -96,6 +100,9 @@ public class PrenotazionePresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
+    /**
+     * Testa il corretto funzionamento della creazione di una postazione tramite la servlet crea-prenotazione e inserimento fallito
+     */
     @Test
     public void creaPrenotazioneInserimentiFallito(){
         Utente utente = new Utente.UtenteBuilder().
@@ -127,7 +134,9 @@ public class PrenotazionePresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento di una chiamata a servlet con path sbagliata
+     */
     @Test
     public void prenotazioneWrongPathTest() {
         when(request.getPathInfo()).thenReturn(null);

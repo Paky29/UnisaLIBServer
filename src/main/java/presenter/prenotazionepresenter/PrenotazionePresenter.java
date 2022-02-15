@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione delle prenotazioni
+ */
 @WebServlet(name="prenotazionepresenter", value = "/PrenotazionePresenter/*")
 public class PrenotazionePresenter extends presenter {
     private PrintWriter pw;
@@ -29,7 +32,11 @@ public class PrenotazionePresenter extends presenter {
      utenteDAO = new UtenteDAO();
      prenotazioneDAO = new PrenotazioneDAO();
     }
-
+    /**
+     * Crea un oggetto di tipo PrenotazionePresenter con i seguenti parametri
+     * @param prenotazioneDAO il DAO che si occupa della gestione degli oggetti Prenotazione
+     * @param utenteDAO il DAO che si occupa della gestione degli utenti
+     */
     public PrenotazionePresenter(PrenotazioneDAO prenotazioneDAO, UtenteDAO utenteDAO) {
         this.utenteDAO = utenteDAO;
         this.prenotazioneDAO = prenotazioneDAO;
@@ -55,7 +62,10 @@ public class PrenotazionePresenter extends presenter {
             }
         }
     }
-
+    /**
+     * Crea una prenotazione nella base di dati data una prenotazione lato client
+     * @param prenotazione prenotazione da salvare nella base di dati
+     */
     private void creaPrenotazione(Prenotazione prenotazione){
         try {
             if (prenotazioneDAO.insert(prenotazione)) {

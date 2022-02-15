@@ -11,9 +11,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Prestito e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class PrestitoDAO {
-
+    /**
+     * Inserisce un prestito nella base di dati
+     * @param p il prestito da inserire
+     * @return boolean rappresentante l'esito
+     */
     public boolean insert(Prestito p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             conn.setAutoCommit(false);
@@ -42,7 +49,11 @@ public class PrestitoDAO {
             return true;
         }
     }
-
+    /**
+     * Attiva un prestito nella base di dati
+     * @param p il prestito da attivare
+     * @return boolean rappresentante l'esito
+     */
     public boolean attivaPrestito(Prestito p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("UPDATE prestito p SET p.is_attivo=true WHERE p.data_inizio=? AND p.libro_fk=? AND p.utente_fk=?");
@@ -56,7 +67,11 @@ public class PrestitoDAO {
             return true;
         }
     }
-
+    /**
+     * Conclude un prestito nella base di dati
+     * @param p il prestito da concludere
+     * @return boolean rappresentante l'esito
+     */
     public boolean concludiPrestito(Prestito p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             conn.setAutoCommit(false);
@@ -98,7 +113,11 @@ public class PrestitoDAO {
             return true;
         }
     }
-
+    /**
+     * Valuta un prestito nella base di dati
+     * @param p il prestito da valutare
+     * @return boolean rappresentante l'esito
+     */
     public boolean valutaPrestito(Prestito p) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             conn.setAutoCommit(false);
@@ -161,7 +180,11 @@ public class PrestitoDAO {
             return prestiti;
         }
     }*/
-
+    /**
+     * Recupera la lista di prestiti dato l'isbn di un libro
+     * @param isbn identificato del libro
+     * @return lista di prestiti
+     */
     public ArrayList<Prestito> doRetrieveValidByLibro(String isbn) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
@@ -191,7 +214,11 @@ public class PrestitoDAO {
             return prestiti;
         }
     }*/
-
+    /**
+     * Recupera la lista di prestiti di un utente data l'email
+     * @param email email dell'utente
+     * @return lista di prestiti
+     */
     public ArrayList<Prestito> doRetrieveByUtente(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
@@ -206,7 +233,11 @@ public class PrestitoDAO {
             return prestiti;
         }
     }
-
+    /**
+     * Recupera la lista di prestiti attivi di un utente data l'email
+     * @param email email dell'utente
+     * @return lista di prestiti
+     */
     public Prestito doRetrieveValidByUtente(String email) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +
@@ -222,7 +253,13 @@ public class PrestitoDAO {
         }
     }
 
-
+    /**
+     * Recupera un prestito specificando la data di inizio, l'identificativo del libro e l'email dell'utente che lo ha effettuato
+     * @param dataInizio data d'inizio del prestito
+     * @param emailUtente email dell'utente che ha effettuato il prestito
+     * @param isbnLibro identificativo del libro
+     * @return prestito
+     */
     public Prestito doRetrieveByKey(GregorianCalendar dataInizio, String isbnLibro, String emailUtente) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT p.data_inizio, p.libro_fk, p.utente_fk, p.data_fine, p.data_consegna, p.voto, p.commento, p.is_attivo " +

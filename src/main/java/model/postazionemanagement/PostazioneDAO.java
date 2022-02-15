@@ -8,7 +8,10 @@ import javax.xml.transform.Result;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
-
+/**
+ * Questa classe si occupa di gestire le varie interazioni tra la classe Postazione e la base di dati.
+ * Sono implementati i metodi principali relativi alle operazioni CRUD
+ */
 public class PostazioneDAO {
     public boolean insert(Postazione p) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
@@ -21,7 +24,11 @@ public class PostazioneDAO {
         }
     }
 
-
+    /**
+     * Recupera la postazione dalla base di dati specificando il suo identificativo
+     * @param id identificativo della postazione
+     * @return postazione
+     */
     public Postazione doRetrieveById(String id) throws SQLException{
         GregorianCalendar dataCorrente =new GregorianCalendar();
         try(Connection conn = ConPool.getConnection()){
@@ -44,7 +51,12 @@ public class PostazioneDAO {
             return pst;
         }
     }
-
+    /**
+     * Recupera la lista delle postazioni dalla base di dati specificando biblioteca e zona
+     * @param zona indica la zona in cui si trova la Postazione
+     * @param biblioteca indica la bibliteca in cui si trova la Postazione
+     * @return lista delle postazioni
+     */
     public ArrayList<Postazione> doRetrieveByPosizione(String biblioteca, String zona) throws SQLException{
         GregorianCalendar dataCorrente =new GregorianCalendar();
         try(Connection conn = ConPool.getConnection()) {
@@ -69,7 +81,12 @@ public class PostazioneDAO {
             return new ArrayList<>(pos.values());
         }
     }
-
+    /**
+     * Recupera la lista delle postazioni disponibili dalla base di dati specificando biblioteca e zona
+     * @param zona indica la zona in cui si trova la Postazione
+     * @param biblioteca indica la bibliteca in cui si trova la Postazione
+     * @return lista delle postazioni
+     */
     public ArrayList<Postazione> doRetrieveDisponibiliByPosizione(String biblioteca, String zona) throws SQLException{
         Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try(Connection conn = ConPool.getConnection()) {
@@ -92,7 +109,11 @@ public class PostazioneDAO {
             return new ArrayList<>(pos.values());
         }
     }
-
+    /**
+     * Controlla se una specifica postazione risulta disponibile nella base di dati indicando il suo identificativo
+     * @param idPos identificativo della postazione
+     * @return l'esito della richiesta
+     */
     public int isDisponibile(String idPos) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             boolean isBlock;
@@ -106,7 +127,11 @@ public class PostazioneDAO {
             return -1;
         }
     }
-
+    /**
+     * Setta una postazione in stato di blocco dato il suo identificativo
+     * @param idPos identificativo della postazione
+     * @return l'esito della transazione
+     */
     public boolean bloccaPostazione(String idPos){
         Date dataCorrente = SwitchDate.toDate(new GregorianCalendar());
         try (Connection conn = ConPool.getConnection()) {
@@ -157,7 +182,12 @@ public class PostazioneDAO {
             return false;
         }
     }
-
+    /**
+     * Setta una postazione in stato di blocco determinato dato un periodo e una postazione
+     * @param per periodo del blocco determinato
+     * @param pos postazione da bloccare
+     * @return l'esito della transazione
+     */
     public String bloccoDeterminato(Periodo per, Postazione pos) throws SQLException {
         PeriodoDAO periodoDAO=new PeriodoDAO();
         String resp=null;
@@ -219,7 +249,11 @@ public class PostazioneDAO {
                  return resp;
         }
     }
-
+    /**
+     * Sblocca una postazione in stato di blocco dato il suo identificativo
+     * @param idPos identificativo della postazione
+     * @return l'esito della transazione
+     */
     public boolean sbloccaPostazione(String idPos) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             boolean isBlock = true;
@@ -248,7 +282,12 @@ public class PostazioneDAO {
             return true;
         }
     }
-
+    /**
+     * Sblocca una postazione in stato di blocco determinato dato il suo identificativo
+     * @param idPos identificativo della postazione
+     * @param p periodo del blocco determinato
+     * @return l'esito della transazione
+     */
     public boolean sbloccaPostazione(String idPos,Periodo p) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM blocco b WHERE b.postazione_fk=? AND periodo_fk=?");

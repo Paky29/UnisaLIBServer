@@ -17,7 +17,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Testa i metodi di PeriodoDAO
+ * */
 public class PeriodoDAOTest {
     public PeriodoDAO pdao;
 
@@ -25,7 +27,9 @@ public class PeriodoDAOTest {
     public void setup() throws Exception {
         pdao = new PeriodoDAO();
     }
-
+    /**
+     * Testa il corretto inserimento
+     * */
     @Test
     public void insertTest() {
         GregorianCalendar data = new GregorianCalendar();
@@ -49,7 +53,9 @@ public class PeriodoDAOTest {
         }
 
     }
-
+    /**
+     * Testa l'inserimento di un periodo già esistente
+     * */
     @Test
     public void insertAlreadyExistsPeriodoTest() {
         GregorianCalendar data = new GregorianCalendar();
@@ -66,7 +72,9 @@ public class PeriodoDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO sulle info del periodo
+     * */
     @Test
     public void doRetrieveByInfoTest(){
         GregorianCalendar data = new GregorianCalendar();
@@ -79,7 +87,9 @@ public class PeriodoDAOTest {
         assertEquals(oraInizio, pTest[0].getOraInizio());
         assertEquals(oraFine, pTest[0].getOraFine());
     }
-
+    /**
+     * Testa l'interrogazione del DAO sulle info del periodo
+     * */
     @Test
     public void doRetrieveByInfoPeriodoTest()
     {
@@ -94,6 +104,9 @@ public class PeriodoDAOTest {
         assertEquals(oraInizio, pTest[0].getOraInizio());
         assertEquals(oraFine, pTest[0].getOraFine());
     }
+    /**
+     * Testa l'interrogazione del DAO sulle info di un periodo non esistente
+     * */
     @Test
     public void doRetrieveByInfoPeriodoDoestNotExistTest(){
         GregorianCalendar data = new GregorianCalendar();

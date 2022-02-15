@@ -26,6 +26,9 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Questa classe si occupa di testare LibroPresenter
+ */
 public class LibroPresenterTest {
     private LibroPresenter lp;
     private HttpServletResponse response;
@@ -51,7 +54,9 @@ public class LibroPresenterTest {
             fail("Il file dovrebbe essere presente");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-ricerca-libri lato utente
+     */
     @Test
     public void mostraRicercaLibriUtenteTest(){
         when(request.getPathInfo()).thenReturn("/mostra-ricerca-libri");
@@ -71,7 +76,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-ricerca-libri lato admin
+     */
     @Test
     public void mostraRicercaAdminTest(){
         when(request.getPathInfo()).thenReturn("/mostra-ricerca-libri");
@@ -91,7 +98,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-ricerca-libri senza parametri
+     */
     @Test
     public void mostraRicercaLibriSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/mostra-ricerca-libri");
@@ -105,7 +114,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet mostra-ricerca-libri senza categorie
+     */
     @Test
     public void mostraRicercaLibriSenzaCategorieTest(){
         when(request.getPathInfo()).thenReturn("/mostra-ricerca-libri");
@@ -122,7 +133,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet ricerca-libri
+     */
     @Test
     public void ricercaLibriTest(){
         when(request.getPathInfo()).thenReturn("/ricerca-libri");
@@ -147,7 +160,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet ricerca-libri senza parametri
+     */
     @Test
     public void ricercaLibriSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/ricerca-libri");
@@ -161,7 +176,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet ricerca-libri con libri non presenti
+     */
     @Test
     public void ricercaLibriNonPresentiTest(){
         when(request.getPathInfo()).thenReturn("/ricerca-libri");
@@ -180,7 +197,9 @@ public class LibroPresenterTest {
         }
     }
 
-
+    /**
+     * Testa il corretto funzionamento della servlet ricerca-libri-categoria
+     */
     @Test
     public void ricercaLibriPerCategoriaTest(){
         when(request.getPathInfo()).thenReturn("/ricerca-libri-categoria");
@@ -205,7 +224,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet ricerca-libri-categoria senza parametri
+     */
     @Test
     public void ricercaLibriPerCategoriaSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/ricerca-libri-categoria");
@@ -229,7 +250,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet ricerca-libri-categoria senza parametri in caso di libri non presenti
+     */
     @Test
     public void ricercaLibriNonPresentiPerCategoriaTest(){
         when(request.getPathInfo()).thenReturn("/ricerca-libri-categoria");
@@ -247,7 +270,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet rimuovi-interesse
+     */
     @Test
     public void rimuoviInteresseTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
@@ -273,7 +298,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet rimuovi-interesse in caso di parametri null
+     */
     @Test
     public void rimuoviInteresseParametriNullTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
@@ -297,7 +324,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet rimuovi-interesse in caso di fallimento
+     */
     @Test
     public void rimuoviInteresseFallitaTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
@@ -321,7 +350,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet rimuovi-interesse in caso di assenza di parametri
+     */
     @Test
     public void rimuoviInteresseSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
@@ -342,7 +373,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet rimuovi-interesse in caso di assenza di interessi
+     */
     @Test
     public void rimuoviInteresseUtenteSenzaInteressiTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
@@ -364,7 +397,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet rimuovi-interesse in caso di un libro non aggiunto agli interessi
+     */
     @Test
     public void rimuoviInteresseLibroNonDiInteresseTest(){
         when(request.getPathInfo()).thenReturn("/rimuovi-interesse");
@@ -388,7 +423,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet aggiungi-interesse
+     */
     @Test
     public void aggiungiInteresseTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
@@ -413,7 +450,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet aggiungi-interesse senza parametri
+     */
     @Test
     public void aggiungiInteresseSenzaParametriTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
@@ -434,7 +473,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet aggiungi-interesse in caso di parametri null
+     */
     @Test
     public void aggiungiInteresseParametriNullTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
@@ -457,7 +498,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet aggiungi-interesse in caso di fallimento
+     */
     @Test
     public void aggiungiInteresseFallitaTest(){
         when(request.getPathInfo()).thenReturn("/aggiungi-interesse");
@@ -480,7 +523,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro
+     */
     @Test
     public void creaLibroTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -502,7 +547,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro senza parametri
+     */
     @Test
     public void creaLibroSenzaParametriTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -522,7 +569,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di parametri non corretti
+     */
     @Test
     public void creaLibroParametroNonCorrettoTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -544,7 +593,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di ISBN piu' corto del normale
+     */
     @Test
     public void creaLibroISBNShorterLengthTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -566,7 +617,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di ISBN piu' lungo del normale
+     */
     @Test
     public void creaLibroISBNLongerLengthTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -588,7 +641,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di ISBN con formato errato
+     */
     @Test
     public void creaLibroISBNWrongFormatTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -610,7 +665,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di fallimento
+     */
     @Test
     public void creaLibroFallitaTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -631,7 +688,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di libro già esistente
+     */
     @Test
     public void creaLibroGiaPresenteTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -651,7 +710,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di posizione inesistente
+     */
     @Test
     public void creaLibroPosizioneInesistenteTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -671,7 +732,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-libro in caso di categoria inesistente
+     */
     @Test
     public void creaLibroCategoriaInesistenteTest(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
@@ -691,7 +754,9 @@ public class LibroPresenterTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet informazioni-aggiunta mostrando i dettagli del libro
+     */
     @Test
     public void mostraDettagliLibroTest(){
         Posizione p1=new Posizione(1,"umanistica","piano 1");

@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
+/**
+ * Testa i metodi di PosizioneDAO
+ * */
 public class PosizioneDAOTest {
     PosizioneDAO posizioneDAO;
 
@@ -16,7 +18,9 @@ public class PosizioneDAOTest {
     public void setUp() {
         posizioneDAO = new PosizioneDAO();
     }
-
+    /**
+     * Testa il corretto inserimento
+     * */
     @Test
     public void insertTest() throws SQLException {
         Posizione p = new Posizione("scientifica", "piano 7");
@@ -26,13 +30,17 @@ public class PosizioneDAOTest {
         assertEquals(p.getZona(), p1.getZona());
         posizioneDAO.delete(p.getBiblioteca(), p.getZona());
     }
-
+    /**
+     * Testa l'inserimento di una postazione già esistente
+     * */
     @Test
     public void insertAlreadyExistsPosizioneTest(){
         Posizione p = new Posizione("scientifica", "piano 1");
         assertThrows(SQLException.class,()->posizioneDAO.insert(p));
     }
-
+    /**
+     * Testa l'interrogazione del DAO su biblioteca e zona
+     * */
     @Test
     public void doRetrieveByBibliotecaZonaTest() throws SQLException {
         String biblioteca = "scientifica";
@@ -42,7 +50,9 @@ public class PosizioneDAOTest {
         assertEquals(biblioteca, pTest[0].getBiblioteca());
         assertEquals(zona, pTest[0].getZona());
     }
-
+    /**
+     * Testa l'interrogazione del DAO su biblioteca errata e zona
+     * */
     @Test
     public void doRetrieveByIncorrectBibliotecaZonaTest() throws SQLException {
         String biblioteca = "linguistica";
@@ -50,7 +60,9 @@ public class PosizioneDAOTest {
         Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
         assertNull(p);
     }
-
+    /**
+     * Testa l'interrogazione del DAO su biblioteca corretta e zona errata
+     * */
     @Test
     public void doRetrieveByBibliotecaIncorrectZonaTest() throws SQLException {
         String biblioteca = "scientifica";
@@ -58,7 +70,9 @@ public class PosizioneDAOTest {
         Posizione p = posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona);
         assertNull(p);
     }
-
+    /**
+     * Testa la rimozione di una posizione
+     * */
     @Test
     public void deleteTest() throws SQLException {
         String biblioteca = "scientifica";
@@ -67,7 +81,9 @@ public class PosizioneDAOTest {
         assertNull(posizioneDAO.doRetrieveByBibliotecaZona(biblioteca, zona));
         posizioneDAO.insert(new Posizione(biblioteca, zona));
     }
-
+    /**
+     * Testa l'interrogazione del DAO sulla richiesta di tutte le posizioni
+     * */
     @Test
     public void doRetrieveAllTest() throws SQLException {
         ArrayList<Posizione> posizioni = new ArrayList<>();

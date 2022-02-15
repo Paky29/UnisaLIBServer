@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione dei libri
+ */
 @WebServlet(name="libropresenter", value = "/LibroPresenter/*")
 public class LibroPresenter extends presenter {
     private PrintWriter pw;
@@ -32,7 +35,12 @@ public class LibroPresenter extends presenter {
         utenteDAO=new UtenteDAO();
         posizioneDAO=new PosizioneDAO();
     }
-
+    /**
+     * Crea un oggetto di tipo LibroPresenter con i seguenti parametri
+     * @param libroDAO il DAO che si occupa della gestione degli oggetti Libro
+     * @param utenteDAO il DAO che si occupa della gestione degli oggetti Utente
+     * @param posizioneDAO il DAO che si occupa della gestione degli oggetti Posizione
+     */
     public LibroPresenter(LibroDAO libroDAO, UtenteDAO utenteDAO, PosizioneDAO posizioneDAO) {
         this.libroDAO = libroDAO;
         this.utenteDAO = utenteDAO;
@@ -114,7 +122,10 @@ public class LibroPresenter extends presenter {
             }
         }
     }
-
+    /**
+     * Restituisce le categorie presenti nella base di dati
+     * @param admin controlla se l'utente è admin
+     */
     private void mostraRicercaLibri(boolean admin){
         try {
             ArrayList<String> categorie = libroDAO.doRetrieveAllCategorie();
@@ -130,7 +141,10 @@ public class LibroPresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Restituisce i libri presenti nella base di dati che rispettano la ricerca
+     * @param ricerca input dell'utente da ricercare
+     */
     private void ricercaLibri(String ricerca){
         try {
             ArrayList<Libro> libri = libroDAO.doRetrieveByTitoloAutore(ricerca);
@@ -143,7 +157,10 @@ public class LibroPresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Restituisce i libri presenti nella categoria selezionata
+     * @param categoria categoria specificata dall'utente
+     */
     private void ricercaLibriCategoria(String categoria){
         try {
             ArrayList<Libro> libri = libroDAO.doRetrieveByCategoria(categoria);
@@ -156,7 +173,11 @@ public class LibroPresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Rimuove un libro dagli interessi di un utente
+     * @param isbn identificativo del libro
+     * @param email email dell'utente
+     */
     private void rimuoviLibroFromInteressi(String isbn, String email){
         try {
             Libro l = libroDAO.doRetrieveByCodiceISBN(isbn);
@@ -185,7 +206,11 @@ public class LibroPresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Aggiunge un libro dagli interessi di un utente
+     * @param isbnLibro identificativo del libro
+     * @param emailUtente email dell'utente
+     */
     private void aggiungiLibroToInteressi(String isbnLibro, String emailUtente){
         try {
             Libro l = libroDAO.doRetrieveByCodiceISBN(isbnLibro);
@@ -205,7 +230,9 @@ public class LibroPresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Restituisce le informazioni dei libri
+     */
     private void informazioniLibro(){
         try {
             ArrayList<String> categorie=libroDAO.doRetrieveAllCategorie();
@@ -236,7 +263,10 @@ public class LibroPresenter extends presenter {
             pw.write("Errore del server");
         }
     }
-
+    /**
+     * Crea un libro nella base di dati dopo averlo ricevuto lato client
+     * @param libro oggetto da salvare nella base di dati
+     */
     private void creaLibro(Libro libro){
         if(LibroValidator.validate(libro)){
             try{

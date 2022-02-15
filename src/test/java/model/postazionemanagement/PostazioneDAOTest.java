@@ -22,7 +22,9 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Testa i metodi di PostazioneDAO
+ * */
 public class PostazioneDAOTest {
     public PostazioneDAO postazioneDAO;
     public PosizioneDAO posizioneDAO;
@@ -35,7 +37,9 @@ public class PostazioneDAOTest {
         periodoDAO=new PeriodoDAO();
         prenotazioneDAO=new PrenotazioneDAO();
     }
-
+    /**
+     * Testa il corretto inserimento
+     * */
     @Test
     public void insertTest(){
         Posizione pos = new Posizione(1, "umanistica", "piano 1");
@@ -45,7 +49,9 @@ public class PostazioneDAOTest {
         assertDoesNotThrow(()-> result.set(postazioneDAO.insert(postazione)));
         assertTrue(result.get());
     }
-
+    /**
+     * Testa l'inserimento di una Postazione già esistente
+     * */
     @Test
     @Order(2)
     public void insertPostazioneEsistenteTest(){
@@ -54,7 +60,9 @@ public class PostazioneDAOTest {
 
         assertThrows(SQLException.class,()->postazioneDAO.insert(postazione));
     }
-
+    /**
+     * Testa l'inserimento di una Postazione non presente
+     * */
     @Test
     @Order(3)
     public void insertPosizioneNonPresenteTest() {
@@ -63,7 +71,9 @@ public class PostazioneDAOTest {
 
         assertThrows(SQLException.class,()->postazioneDAO.insert(postazione));
     }
-
+    /**
+     * Testa l'interrogazione del DAO sull'id
+     * */
     @Test
     @Order(4)
     public void doRetrieveByIdTest(){
@@ -74,7 +84,9 @@ public class PostazioneDAOTest {
         assertDoesNotThrow(() -> postazione_test[0]=postazioneDAO.doRetrieveById(postazione.getId()));
         assertEquals(postazione_test[0].getId(), postazione.getId());
     }
-
+    /**
+     * Testa l'interrogazione del DAO su un id non presente
+     * */
     @Test
     @Order(5)
     public void doRetrieveByIdNonPresenteTest(){
@@ -85,7 +97,9 @@ public class PostazioneDAOTest {
         assertDoesNotThrow(() -> postazione_test[0]=postazioneDAO.doRetrieveById(postazione.getId()));
         assertNull(postazione_test[0]);
     }
-
+    /**
+     * Testa l'interrogazione del DAO data una posizione
+     * */
     @Test
     @Order(6)
     public void doRetrieveByPosizioneTest(){
@@ -107,7 +121,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO data una posizione con blocco
+     * */
     @Test
     @Order(6)
     public void doRetrieveByPosizioneConBloccoTest(){
@@ -132,7 +148,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO data una posizione non esistente
+     * */
     @Test
     @Order(7)
     public void doRetrieveByPosizioneNonEsistenteTest(){
@@ -141,7 +159,9 @@ public class PostazioneDAOTest {
         assertDoesNotThrow(()-> postazioni_test.set(postazioneDAO.doRetrieveByPosizione(p.getBiblioteca(), p.getZona())));
         assertTrue(postazioni_test.get().isEmpty());
     }
-
+    /**
+     * Testa l'interrogazione del DAO delle postazioni disponibili data una posizione
+     * */
     @Test
     @Order(8)
     public void doRetrieveDisponibiliByPosizioneTest(){
@@ -163,7 +183,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO delle postazioni disponibili data una posizione con blocco
+     * */
     @Test
     @Order(6)
     public void doRetrieveDisponibiliByPosizioneConBloccoTest(){
@@ -188,7 +210,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa l'interrogazione del DAO delle postazioni disponibili
+     * */
     @Test
     @Order(9)
     public void doRetrieveDisponibiliByPosizioneSenzaPostazioniTest(){
@@ -210,7 +234,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
     }
-
+    /**
+     * Testa il blocco di una postazione
+     * */
     @Test
     @Order(10)
     public void bloccaPostazioneTest(){
@@ -223,7 +249,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa il blocco di una postazione già bloccata
+     * */
     @Test
     @Order(11)
     public void bloccaPostazioneBloccataTest(){
@@ -236,14 +264,18 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa il blocco di una postazione già bloccata
+     * */
     @Test
     @Order(12)
     public void bloccaPostazioneNonPresenteTest(){
         String id="test123";
         assertFalse(postazioneDAO.bloccaPostazione(id));
     }
-
+    /**
+     * Testa il blocco determinato di una postazione
+     * */
     @Test
     @Order(13)
     public void bloccoDeterminatoTest(){
@@ -263,7 +295,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa il blocco determinato di una postazione
+     * */
     @Test
     @Order(13)
     public void bloccoDeterminatoIntervalloTest(){
@@ -283,7 +317,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa il blocco determinato non presente su una postazione
+     * */
     @Test
     @Order(14)
     public void bloccoDeterminatoPostazioneNonPresenteTest(){
@@ -296,7 +332,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa il blocco determinato già presente su una postazione
+     * */
     @Test
     @Order(15)
     public void bloccoDeterminatoPresenteTest(){
@@ -313,7 +351,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa lo sblocco della Postazione
+     * */
     @Test
     @Order(16)
     public void sbloccaPostazioneTest(){
@@ -326,7 +366,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa lo sblocco della Postazione già sbloccata
+     * */
     @Test
     @Order(17)
     public void sbloccaPostazioneSbloccataTest(){
@@ -339,7 +381,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa lo sblocco di una Postazione non presente
+     * */
     @Test
     @Order(18)
     public void sbloccaPostazioneNonPresenteTest(){
@@ -350,7 +394,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa lo sblocco determinato di un Periodo di una Postazione
+     * */
     @Test
     @Order(19)
     public void sbloccoDeterminatoTest(){
@@ -367,7 +413,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa lo sblocco determinato di un Periodo di una Postazione non presente
+     * */
     @Test
     @Order(20)
     public void sbloccoDeterminatoPostazioneNonPresenteTest(){
@@ -379,7 +427,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa se una Postazione è disponibile
+     * */
     @Test
     public void isDisponibileTrueTest(){
         try{
@@ -389,7 +439,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa se una Postazione non è disponibile
+     * */
     @Test
     public void isDisponibileFalseTest(){
         try{
@@ -399,7 +451,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa se una Postazione non presente è disponibile
+     * */
     @Test
     public void isDisponibilePostazioneNonPresenteTest(){
         try{
@@ -409,7 +463,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa lo sblocco determinato di un Periodo di una Blocco non presente
+     * */
     @Test
     public void sbloccoDeterminatoBloccoNonPresenteTest(){
         try {
@@ -423,7 +479,9 @@ public class PostazioneDAOTest {
             fail("Non avrebbe dovuto lanciare l'eccezione:"+e.getLocalizedMessage());
         }
     }
-
+    /**
+     * Testa il blocco determinato di una Postazione sulla quale sono state effettuate precedentemente delle Prenotazioni
+     * */
     @Test
     @AfterAll
     public void bloccoDeterminatoPostazioneConPrenotazioniTest(){

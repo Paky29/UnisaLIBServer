@@ -23,7 +23,10 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-
+/**
+ * Questa classe definisce le operazioni relative
+ * alla gestione degli utenti e delle attività di autenticazione
+ */
 @WebServlet(name="utentepresenter", value = "/UtentePresenter/*")
 public class UtentePresenter extends presenter {
     private UtenteDAO utenteDAO;
@@ -32,7 +35,10 @@ public class UtentePresenter extends presenter {
     public UtentePresenter(){
         this.utenteDAO=new UtenteDAO();
     }
-
+    /**
+     * Crea un oggetto di tipo UtentePresenter con i seguenti parametri
+     * @param utenteDAO il DAO che si occupa della gestione degli utenti
+     */
     public UtentePresenter(UtenteDAO utenteDAO){
         this.utenteDAO=utenteDAO;
     }
@@ -59,7 +65,11 @@ public class UtentePresenter extends presenter {
             }
         }
     }
-
+    /**
+     * Controlla ed eventualmente valida lato server le credenziali inserite dall'utente lato client per il login
+     * @param email email inserita lato client
+     * @param password password inserita lato client
+     */
     public void login(String email, String password){
         Utente u=null;
         String email_regex="[A-z0-9\\.\\+_-]+@(studenti.)*(unisa\\.it)";

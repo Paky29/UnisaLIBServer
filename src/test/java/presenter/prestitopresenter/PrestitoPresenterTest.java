@@ -25,7 +25,9 @@ import java.util.GregorianCalendar;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
-
+/**
+ * Questa classe si occupa di testare PrestitoPresenter
+ */
 public class PrestitoPresenterTest {
     PrestitoDAO prestitoDAO;
     UtenteDAO utenteDAO;
@@ -51,7 +53,9 @@ public class PrestitoPresenterTest {
             fail("File testing.txt non trovato");
         }
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet all-prestiti per visualizzare tutti i prestiti
+     */
     @Test
     public void allPrestitiTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -77,7 +81,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet all-prestiti per visualizzare tutti i prestiti in caso di lista vuota
+     */
     @Test
     public void allPrestitiEmptyTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -98,7 +104,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet lista-prestiti-libro mostrando i prestiti attivi su un libro
+     */
     @Test
     public void cercaPrestitiAttiviPerLibroTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -124,7 +132,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet lista-prestiti-libro mostrando i prestiti attivi su un libro vuoto
+     */
     @Test
     public void cercaPrestitiAttiviPerLibroEmptyTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -147,7 +157,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito con Utente inesistente
+     */
     @Test
     public void creaPrestitoUtenteNotExistTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_emailnotexist@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -173,7 +185,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito nonostante il libro sia già in possesso dell'utente
+     */
     @Test
     public void creaPrestitoLibroInPossessoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -199,7 +213,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito nonostante ci sia già un prestito attivo
+     */
     @Test
     public void creaPrestitoWithPrestitoAttivoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -227,7 +243,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito in caso di errore di inserimento
+     */
     @Test
     public void creaPrestitoInsertErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -256,7 +274,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito con data d'inizio che presenta errori
+     */
     @Test
     public void creaPrestitoDataInizioErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -283,7 +303,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito in caso di libro non disponibile
+     */
     @Test
     public void creaPrestitoLibroNonDisponibileTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -309,7 +331,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet crea-prestito
+     */
     @Test
     public void creaPrestitoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -345,7 +369,9 @@ public class PrestitoPresenterTest {
         }
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet valuta-prestito senza commenti
+     */
     @Test
     public void valutaPrestitoWithoutCommentTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -379,7 +405,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet valuta-prestito con commenti
+     */
     @Test
     public void valutaPrestitoWithCommentTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -413,7 +441,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet valuta-prestito in caso di prestito non esistente
+     */
     @Test
     public void valutaPrestitoNotExistTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email_not_exist@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -441,7 +471,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet valuta-prestito in caso di voto con formato errato
+     */
     @Test
     public void valutaPrestitoVotoWrongFormatTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -466,7 +498,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet valuta-prestito in caso di commento con formato errato
+     */
     @Test
     public void valutaPrestitoCommentoWrongFormatTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -491,7 +525,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet valuta-prestito in caso di fallimento del processo di valutazione
+     */
     @Test
     public void valutaPrestitoValutazioneFailedTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -519,7 +555,9 @@ public class PrestitoPresenterTest {
 
     }
 
-    //cambiare data con una precedente di una settimana alla data corrente
+    /**
+     * Testa il corretto funzionamento della servlet attiva-prestito
+     */
     @Test
     public void attivaPrestitoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -554,7 +592,9 @@ public class PrestitoPresenterTest {
 
     }
 
-    //cambiare data con una precedente di una settimana alla data corrente
+    /**
+     * Testa il corretto funzionamento della servlet attiva-prestito in caso di prestito già attivo
+     */
     @Test
     public void attivaPrestitoAttivoErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -583,7 +623,9 @@ public class PrestitoPresenterTest {
 
     }
 
-    //cambiare data con una precedente di una settimana alla data corrente
+    /**
+     * Testa il corretto funzionamento della servlet attiva-prestito in caso di errore nel processo di attivazione
+     */
     @Test
     public void attivaPrestitoAttivazioneErrorTest() {
         Utente utente =new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -613,7 +655,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet concludi-prestito
+     */
     @Test
     public void concludiPrestitoTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -648,7 +692,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet concludi-prestito con data di consegna non valida
+     */
     @Test
     public void concludiPrestitoDataConsegnaNotValidTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -675,7 +721,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet concludi-prestito
+     */
     @Test
     public void concludiPrestitoDataConsegnaNotNullTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
@@ -702,7 +750,9 @@ public class PrestitoPresenterTest {
 
 
     }
-
+    /**
+     * Testa il corretto funzionamento della servlet concludi-prestito in caso di errori nel processo di conclusione del prestito
+     */
     @Test
     public void concludiPrestitoConclusioneErrorTest() {
         Utente utente=new Utente.UtenteBuilder().email("test_email@studenti.unisa.it").password("Testpword1?").nome("test_nome").cognome("test_cognome").admin(false).nuovo(true).build();
