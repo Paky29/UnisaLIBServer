@@ -152,9 +152,6 @@ public class PrestitoDAOTest {
         } catch (SQLException e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
-
-
-
     }
 
     /**
