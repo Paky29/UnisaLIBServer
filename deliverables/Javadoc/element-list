@@ -1,0 +1,14 @@
+model.libromanagement
+model.posizionemanagement
+model.postazionemanagement
+model.prenotazionemanagement
+model.prestitomanagement
+model.utentemanagement
+presenter.http
+presenter.libropresenter
+presenter.posizionepresenter
+presenter.postazionepresenter
+presenter.prenotazionepresenter
+presenter.prestitopresenter
+presenter.utentepresenter
+utility
