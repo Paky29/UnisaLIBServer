@@ -80,7 +80,7 @@ public class UtentePresenterTest {
             assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            assertEquals("Email o password non valida", linea);
+            assertEquals("Email non valida", linea);
 
         } catch (IOException | SQLException ex ) {
             fail("Non avrebbe dovuto lanciare l'eccezione");

@@ -192,7 +192,11 @@ public class PrestitoDAOTest {
         GregorianCalendar dataConsegna=new GregorianCalendar(2022, 3, 21);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).dataConsegna(dataConsegna).attivo(false).voto(5).commento("ok").build();
 
-        assertThrows(RuntimeException.class, () -> prestitoDAO.valutaPrestito(p));
+        try {
+            assertFalse(prestitoDAO.valutaPrestito(p));
+        } catch (SQLException e) {
+            fail("Non avrebbe dovuto lanciare l'eccezione");
+        }
     }
 
     @Test

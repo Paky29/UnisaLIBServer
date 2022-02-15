@@ -86,11 +86,11 @@ public class PrenotazionePresenterTest {
                     nuovo(false).
                     prenotazioni(array).
                     build();
-            when(utenteDAO.doRetrieveByEmail(utente.getEmail())).thenReturn(utente2);
+            when(utenteDAO.doRetrieveByEmailAll(utente.getEmail())).thenReturn(utente2);
             assertDoesNotThrow(()->prenP.doPost(request,response));
             pw.flush();
             String linea = br.readLine();
-            jsonObject.put("utente", Utente.toJson(utente2));
+            jsonObject.put("Utente", Utente.toJson(utente2));
             assertEquals(jsonObject.toString(), linea);
         } catch (Exception e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");

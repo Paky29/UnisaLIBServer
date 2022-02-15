@@ -496,7 +496,8 @@ public class LibroPresenterTest {
             assertDoesNotThrow(()->lp.doPost(request,response));
             pw.flush();
             String linea = br.readLine();
-            assertEquals("Salvataggio avvenuto con successo",linea);
+            JSONObject obj=new JSONObject(linea);
+            assertEquals("Salvataggio avvenuto con successo",obj.getString("messaggio"));
         } catch (Exception e) {
             fail("Non avrebbe dovuto lanciare l'eccezione");
         }
