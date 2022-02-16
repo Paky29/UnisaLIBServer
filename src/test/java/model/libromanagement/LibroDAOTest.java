@@ -3,12 +3,10 @@ package model.libromanagement;
 import model.posizionemanagement.Posizione;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;

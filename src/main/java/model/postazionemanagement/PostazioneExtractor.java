@@ -2,7 +2,6 @@ package model.postazionemanagement;
 
 import model.posizionemanagement.Posizione;
 import model.posizionemanagement.PosizioneExtractor;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 /**

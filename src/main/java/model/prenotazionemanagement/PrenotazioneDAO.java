@@ -1,16 +1,12 @@
 package model.prenotazionemanagement;
 
 import model.postazionemanagement.Postazione;
-import model.prestitomanagement.Prestito;
 import model.utentemanagement.Utente;
 import utility.ConPool;
 import utility.SwitchDate;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 /**
  * Questa classe si occupa di gestire le varie interazioni tra la classe Prenotazione e la base di dati.
  * Sono implementati i metodi principali relativi alle operazioni CRUD

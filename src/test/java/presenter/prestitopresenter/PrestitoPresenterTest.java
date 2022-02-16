@@ -12,8 +12,6 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import presenter.utentepresenter.UtentePresenter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -359,9 +357,7 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             jsonObject.put("Utente", Utente.toJson(utente_final));
-            System.out.println(jsonObject.toString());
             assertEquals(jsonObject.toString(), linea);
 
         } catch (IOException | SQLException  | JSONException e) {
@@ -394,9 +390,7 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             jsonObject.put("Utente", Utente.toJson(utente_final));
-            System.out.println(jsonObject.toString());
             assertEquals(jsonObject.toString(), linea);
 
         } catch (IOException | SQLException  | JSONException e) {
@@ -430,9 +424,7 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             jsonObject.put("Utente", Utente.toJson(utente_final));
-            System.out.println(jsonObject.toString());
             assertEquals(jsonObject.toString(), linea);
 
         } catch (IOException | SQLException  | JSONException e) {
@@ -461,8 +453,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
-            System.out.println(jsonObject.toString());
             assertEquals("Prestito non trovato", linea);
 
         } catch (IOException | SQLException e) {
@@ -489,7 +479,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Voto o commento non rispettano il formato", linea);
 
         } catch (IOException e) {
@@ -516,7 +505,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Voto o commento non rispettano il formato", linea);
 
         } catch (IOException e) {
@@ -545,7 +533,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Errore del server", linea);
 
         } catch (IOException | SQLException e) {
@@ -582,7 +569,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals(Prestito.toJson(prestiti), linea);
 
         } catch (IOException | SQLException e) {
@@ -613,7 +599,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Prestito attivo o non trovato", linea);
 
         } catch (IOException | SQLException e) {
@@ -646,7 +631,6 @@ public class PrestitoPresenterTest {
 
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Errore del server", linea);
 
         } catch (IOException | SQLException e) {
@@ -683,7 +667,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals(Prestito.toJson(prestiti), linea);
 
         } catch (IOException | SQLException e) {
@@ -712,7 +695,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Data consegna non valida", linea);
 
         } catch (IOException e) {
@@ -741,7 +723,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Prestito concluso o non trovato", linea);
 
         } catch (IOException | SQLException e) {
@@ -772,7 +753,6 @@ public class PrestitoPresenterTest {
             assertDoesNotThrow(() -> prestitoPresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Errore del server", linea);
 
         } catch (IOException | SQLException e) {

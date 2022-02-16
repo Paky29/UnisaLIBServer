@@ -1,16 +1,10 @@
 package model.prestitomanagement;
 
-import model.libromanagement.Libro;
-import model.prenotazionemanagement.PrenotazioneExtractor;
-import model.utentemanagement.Utente;
 import utility.ConPool;
 import utility.SwitchDate;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 /**
  * Questa classe si occupa di gestire le varie interazioni tra la classe Prestito e la base di dati.
  * Sono implementati i metodi principali relativi alle operazioni CRUD

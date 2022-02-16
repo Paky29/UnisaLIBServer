@@ -2,12 +2,10 @@ package model.postazionemanagement;
 
 import utility.ConPool;
 import utility.SwitchDate;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 /**
  * Questa classe si occupa di gestire le varie interazioni tra la classe Periodo e la base di dati.
@@ -41,14 +39,12 @@ public class PeriodoDAO {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT pe.periodo_id, pe.data_p, pe.ora_inizio, pe.ora_fine " +
                     "FROM periodo pe WHERE pe.data_p=? AND pe.ora_inizio=? AND pe.ora_fine=?");
-            System.out.println(oraInizio+oraFine);
             ps.setDate(1, SwitchDate.toDate(date));
             ps.setInt(2, oraInizio);
             ps.setInt(3, oraFine);
 
             Periodo p = null;
             ResultSet rs = ps.executeQuery();
-            System.out.println("non trovato vabbe");
             if(rs.next())
                 p = PeriodoExtractor.extract(rs);
 

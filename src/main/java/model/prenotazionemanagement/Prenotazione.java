@@ -2,17 +2,12 @@ package model.prenotazionemanagement;
 
 import java.lang.reflect.Type;
 import java.util.*;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import model.posizionemanagement.Posizione;
 import model.postazionemanagement.Postazione;
-import model.prestitomanagement.Prestito;
 import model.utentemanagement.Utente;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import presenter.prestitopresenter.PrestitoPresenter;
 import utility.SwitchDate;
 /**
  * Questa classe definisce una Prenotazione. Una prenotazione ha una data, un'ora d'inizio, un'ora di fine, un utente che la prenota

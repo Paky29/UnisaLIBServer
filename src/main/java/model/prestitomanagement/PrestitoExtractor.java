@@ -3,7 +3,6 @@ package model.prestitomanagement;
 import model.libromanagement.LibroDAO;
 import model.utentemanagement.UtenteDAO;
 import utility.SwitchDate;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 /**

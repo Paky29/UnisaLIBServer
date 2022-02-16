@@ -7,13 +7,12 @@ import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Testa i metodi di UtenteDAO
  * */

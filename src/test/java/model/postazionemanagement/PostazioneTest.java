@@ -3,9 +3,7 @@ package model.postazionemanagement;
 import model.posizionemanagement.Posizione;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.GregorianCalendar;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

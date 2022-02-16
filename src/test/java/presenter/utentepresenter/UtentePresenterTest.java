@@ -1,8 +1,5 @@
 package presenter.utentepresenter;
 
-import model.libromanagement.Libro;
-import model.libromanagement.LibroDAO;
-import model.posizionemanagement.PosizioneDAO;
 import model.utentemanagement.Utente;
 import model.utentemanagement.UtenteDAO;
 import org.json.JSONException;
@@ -10,14 +7,10 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import presenter.libropresenter.LibroPresenter;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -119,7 +112,6 @@ public class UtentePresenterTest {
             assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Utente non trovato", linea);
 
         } catch (IOException | SQLException ex ) {
@@ -142,7 +134,6 @@ public class UtentePresenterTest {
             assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Utente non trovato", linea);
 
         } catch (IOException | SQLException ex ) {
@@ -166,7 +157,6 @@ public class UtentePresenterTest {
             assertDoesNotThrow(() -> utentePresenter.doPost(request, response));
             pw.flush();
             String linea = br.readLine();
-            System.out.println(linea);
             assertEquals("Email o password non inserita", linea);
 
         } catch (IOException | SQLException ex ) {

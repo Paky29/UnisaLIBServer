@@ -1,10 +1,7 @@
 package model.postazionemanagement;
 
-import model.posizionemanagement.Posizione;
 import utility.ConPool;
 import utility.SwitchDate;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -153,7 +150,6 @@ public class PostazioneDAO {
             ps.setString(1, idPos);
             if (ps.executeUpdate() != 1) {
                 conn.setAutoCommit(true);
-                System.out.println("fallita la prima query");
                 return false;
             }
             ps = conn.prepareStatement("SELECT COUNT(*) as pren FROM prenotazione p WHERE p.data_p>=? AND p.ora_inizio>? AND p.postazione_fk = ?");

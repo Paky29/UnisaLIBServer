@@ -1,9 +1,6 @@
 package model.postazionemanagement;
 
-import model.libromanagement.Libro;
-import model.posizionemanagement.Posizione;
 import org.junit.Test;
-import presenter.libropresenter.LibroValidator;
 import presenter.postazionepresenter.PeriodoValidator;
 
 import java.util.Calendar;

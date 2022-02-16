@@ -3,7 +3,6 @@ package model.utentemanagement;
 import model.libromanagement.Libro;
 import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

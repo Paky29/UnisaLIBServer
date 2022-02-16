@@ -3,7 +3,6 @@ package model.prenotazionemanagement;
 import model.postazionemanagement.PostazioneDAO;
 import model.utentemanagement.UtenteDAO;
 import utility.SwitchDate;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 /**

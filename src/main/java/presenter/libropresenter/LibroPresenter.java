@@ -10,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +55,6 @@ public class LibroPresenter extends presenter {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = getPath(req);
         pw=resp.getWriter();
-        System.out.println(path);
         switch (path) {
             case "/mostra-ricerca-libri": {
                 String ad = req.getParameter("is_admin");
@@ -149,7 +147,6 @@ public class LibroPresenter extends presenter {
         try {
             ArrayList<Libro> libri = libroDAO.doRetrieveByTitoloAutore(ricerca);
             if (!libri.isEmpty()) {
-                System.out.println(Libro.toJson(libri));
                 pw.write(Libro.toJson(libri));
             } else
                 pw.write("Nessun libro trovato");
@@ -164,7 +161,6 @@ public class LibroPresenter extends presenter {
     private void ricercaLibriCategoria(String categoria){
         try {
             ArrayList<Libro> libri = libroDAO.doRetrieveByCategoria(categoria);
-            System.out.println(categoria);
             if (!libri.isEmpty()) {
                 pw.write(Libro.toJson(libri));
             } else

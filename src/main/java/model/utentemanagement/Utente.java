@@ -3,19 +3,11 @@ package model.utentemanagement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import model.libromanagement.Libro;
-import model.postazionemanagement.Postazione;
 import model.prenotazionemanagement.Prenotazione;
 import model.prestitomanagement.Prestito;
-import org.json.JSONException;
-import org.json.JSONObject;
 /**
  * Questa classe definisce un Utente. Un utente è identificato da un email, ha una password,
  * un nome, un cognome, una matricola, genere ed età.

@@ -1,22 +1,17 @@
 package model.postazionemanagement;
 
-import model.posizionemanagement.Posizione;
-import model.prestitomanagement.Prestito;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.mockito.internal.matchers.Null;
 import utility.SwitchDate;
-
 import java.sql.SQLException;
-import java.time.Period;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Testa i metodi di PeriodoDAO
  * */

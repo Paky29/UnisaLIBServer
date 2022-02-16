@@ -3,12 +3,10 @@ package model.postazionemanagement;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.posizionemanagement.Posizione;
-import model.utentemanagement.Utente;
+
 /**
  * Questa classe definisce una Postazione. Una Postazione ha un identificativo, un valore che ne specifica la disponibilità,
  * una posizione e una lista di blocchi inizialmente vuota

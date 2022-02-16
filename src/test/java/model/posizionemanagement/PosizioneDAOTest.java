@@ -2,10 +2,8 @@ package model.posizionemanagement;
 
 import org.junit.Before;
 import org.junit.Test;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 /**

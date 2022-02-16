@@ -1,10 +1,6 @@
 package presenter.prenotazionepresenter;
 
-import com.google.gson.JsonObject;
-import model.libromanagement.Libro;
-import model.libromanagement.LibroDAO;
 import model.posizionemanagement.Posizione;
-import model.posizionemanagement.PosizioneDAO;
 import model.postazionemanagement.Postazione;
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
@@ -14,12 +10,9 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import presenter.libropresenter.LibroPresenter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 

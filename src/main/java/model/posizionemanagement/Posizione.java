@@ -1,8 +1,6 @@
 package model.posizionemanagement;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import model.postazionemanagement.Postazione;

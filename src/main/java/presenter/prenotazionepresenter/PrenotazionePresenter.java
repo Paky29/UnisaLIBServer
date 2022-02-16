@@ -1,22 +1,17 @@
 package presenter.prenotazionepresenter;
 
-import model.libromanagement.LibroDAO;
-import model.posizionemanagement.PosizioneDAO;
 import model.prenotazionemanagement.Prenotazione;
 import model.prenotazionemanagement.PrenotazioneDAO;
 import model.utentemanagement.Utente;
 import model.utentemanagement.UtenteDAO;
-import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 /**
  * Questa classe definisce le operazioni relative
@@ -73,12 +68,8 @@ public class PrenotazionePresenter extends presenter {
                 JSONObject jsonObject = new JSONObject();
 
                 jsonObject.put("Utente", Utente.toJson(utenteAggiornato));
-                System.out.println("Json successo");
                 pw.write(jsonObject.toString());
-                System.out.println("Scritto in risposta oggetto");
-
             } else {
-                System.out.println("Errore Salvataggio");
                 pw.write("Salvataggio non andato a buon fine");
             }
         } catch (Exception e) {

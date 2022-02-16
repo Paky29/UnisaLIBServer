@@ -4,13 +4,10 @@ import model.libromanagement.Libro;
 import model.posizionemanagement.Posizione;
 import model.utentemanagement.Utente;
 import org.junit.Test;
-
-import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+
 
 public class PrestitoTest {
     @Test

@@ -7,10 +7,8 @@ import model.utentemanagement.Utente;
 import org.junit.Before;
 import org.junit.Test;
 import utility.SwitchDate;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -138,13 +136,10 @@ public class PrestitoDAOTest {
 
         try{
             prestitoDAO.insert(p);
-            System.out.println(p.getLibro().getnCopie());
             Prestito pre_conclusione=prestitoDAO.doRetrieveByKey(dataInizio, lib.getIsbn(), utente.getEmail());
-            System.out.println(pre_conclusione.getLibro().getnCopie());
             AtomicBoolean success = new AtomicBoolean(false);
             assertDoesNotThrow(() -> success.set(prestitoDAO.concludiPrestito(p_concluso)));
             Prestito prestito_test=prestitoDAO.doRetrieveByKey(dataInizio, lib.getIsbn(), utente.getEmail());
-            System.out.println(prestito_test.getLibro().getnCopie());
             assertFalse(prestito_test.isAttivo());
             assertTrue(SwitchDate.equalsDate(p_concluso.getDataConsegna(), prestito_test.getDataConsegna()));
             assertEquals(-1,pre_conclusione.getLibro().getnCopie()-prestito_test.getLibro().getnCopie());
@@ -361,7 +356,6 @@ public class PrestitoDAOTest {
         Libro lib = new Libro.LibroBuilder().isbn("0000000000").titolo("titolo_test").autore("test_autore").editore("test_editore").annoPubbl(2021).nCopie(5).urlCopertina("test_url").categoria("test").posizione(pos).build();
         GregorianCalendar dataInizio=new GregorianCalendar(2022, 1, 21);
         Prestito p = new Prestito.PrestitoBuilder().utente(utente).libro(lib).dataInizio(dataInizio).attivo(false).voto(5).commento("test").build();
-
 
         try {
             prestitoDAO.insert(p);

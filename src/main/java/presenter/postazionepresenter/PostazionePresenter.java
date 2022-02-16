@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import presenter.http.presenter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +62,6 @@ public class PostazionePresenter extends presenter {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = getPath(req);
         pw = resp.getWriter();
-        System.out.println(path);
         switch (path) {
             case "/": {
                 break;
@@ -173,7 +171,6 @@ public class PostazionePresenter extends presenter {
                 ArrayList<Prenotazione> prenotazioni = new ArrayList<>();
                 JSONArray pos = new JSONArray();
                 for (Postazione pt : postazioni) {
-                    System.out.println(pt.getId()+gc.toString());
                     prenotazioni.addAll(prenotazioneDAO.doRetrieveValidByPostazioneDate(pt, gc.get(Calendar.DATE), gc.get(Calendar.MONTH), gc.get(Calendar.YEAR)));
                     JSONObject obj=new JSONObject();
                     obj.put("postazione",Postazione.toJson(pt));
@@ -189,8 +186,6 @@ public class PostazionePresenter extends presenter {
                 response.put("postazioni", pos);
                 response.put("prenotazioni", pren);
                 pw.write(response.toString());
-                if(prenotazioni.isEmpty())
-                    System.out.println("non ci sono prenotazioni");
             }
             else
                 pw.write("Nessuna postazione trovata");
@@ -207,7 +202,6 @@ public class PostazionePresenter extends presenter {
         try {
             ArrayList<Postazione> postazioni = postazioneDAO.doRetrieveByPosizione(pos.getBiblioteca(), pos.getZona());
             if (!(postazioni==null || postazioni.isEmpty())) {
-                System.out.println("okokokookok");
                 pw.write(Postazione.toJson(postazioni));
             } else
                 pw.write("Non ci sono postazioni");
@@ -280,7 +274,6 @@ public class PostazionePresenter extends presenter {
         JSONObject string = new JSONObject();
         try {
             Periodo periodo=periodoDAO.doRetrieveByInfo(p);
-            System.out.println(idPos+" "+p.getId());
             if(postazioneDAO.sbloccaPostazione(idPos,periodo)){
                 try{
                     string.put("messaggio", "sblocco effettuato con successo");
@@ -308,7 +301,6 @@ public class PostazionePresenter extends presenter {
             try {
                 Postazione pos = postazioneDAO.doRetrieveById(idPos);
                 if (pos.isDisponibile()) {
-                    System.out.println("dentro");
                     String str = postazioneDAO.bloccoDeterminato(per, pos);
                     rsp.put("messaggio", str);
                     pw.write(rsp.toString());
@@ -331,7 +323,6 @@ public class PostazionePresenter extends presenter {
             Postazione p=postazioneDAO.doRetrieveById(idPos);
             if(p!=null){
                 JSONObject string = new JSONObject();
-                System.out.println(Postazione.toJson(p));
                 string.put("postazione",Postazione.toJson(p));
                 pw.write(string.toString());
             }

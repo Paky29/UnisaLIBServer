@@ -1,7 +1,6 @@
 package model.postazionemanagement;
 
 import utility.SwitchDate;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 /**

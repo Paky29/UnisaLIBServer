@@ -2,9 +2,7 @@ package presenter.libropresenter;
 
 import model.libromanagement.Libro;
 import model.posizionemanagement.Posizione;
-import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -21,7 +19,6 @@ public class LibroValidatorTest {
     public void LibroISBNVuoto(){
         Posizione p=new Posizione(1,"umanistica","piano 1");
         Libro l= new Libro.LibroBuilder().annoPubbl(1980).autore("alessandro manzoni").categoria("lettere").editore("Mondadori").posizione(p).urlCopertina("http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg").titolo("Promessi Sposi").isbn("").nCopie(5).build();
-        System.out.println(l.getIsbn());
         assertFalse(LibroValidator.validate(l));
     }
 

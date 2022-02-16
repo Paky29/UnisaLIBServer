@@ -1,18 +1,15 @@
 package model.prenotazionemanagement;
 
-
 import model.posizionemanagement.Posizione;
 import model.postazionemanagement.Postazione;
 import model.utentemanagement.Utente;
 import org.junit.Before;
 import org.junit.Test;
 import utility.SwitchDate;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 /**

@@ -7,14 +7,12 @@ import model.prenotazionemanagement.PrenotazioneDAO;
 import model.prestitomanagement.Prestito;
 import model.prestitomanagement.PrestitoDAO;
 import utility.ConPool;
-import utility.SwitchDate;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+
 /**
  * Questa classe si occupa di gestire le varie interazioni tra la classe Utente e la base di dati.
  * Sono implementati i metodi principali relativi alle operazioni CRUD

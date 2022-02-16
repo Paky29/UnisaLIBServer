@@ -1,7 +1,6 @@
 package model.posizionemanagement;
 
 import utility.ConPool;
-
 import java.sql.*;
 import java.util.ArrayList;
 /**
